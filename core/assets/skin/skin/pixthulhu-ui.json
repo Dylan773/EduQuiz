@@ -111,8 +111,8 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {
 		checkboxOn: checkbox-on
 		checkboxOff: checkbox-off
-		font: subtitle
-		fontColor: field
+		font: font
+		fontColor: white
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
