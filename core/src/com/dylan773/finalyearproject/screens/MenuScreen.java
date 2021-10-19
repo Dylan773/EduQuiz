@@ -24,7 +24,6 @@ public class MenuScreen extends ScreenAdapter {
     private Table table;
     private final EducationGame game;
 
-
     // Constructor
     /**
      *
@@ -40,6 +39,9 @@ public class MenuScreen extends ScreenAdapter {
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
 
+        // TODO - debug
+        //table.setDebug(true);
+
         constructContent();
     }
 
@@ -50,7 +52,7 @@ public class MenuScreen extends ScreenAdapter {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.menuBackground)));
 
         // Title Label
-        Label gameLabel = new Label("Edu Quiz", Assets.SKIN);
+        Label gameLabel = new Label("Edu Quiz", Assets.SKIN, "title");
         table.add(gameLabel).pad(0, 0, 20, 0).row();
 
 
