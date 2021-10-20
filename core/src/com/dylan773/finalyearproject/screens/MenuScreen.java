@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.Assets;
+import com.dylan773.finalyearproject.AudioController;
 import com.dylan773.finalyearproject.EducationGame;
 
 /**
@@ -22,13 +23,11 @@ import com.dylan773.finalyearproject.EducationGame;
 
 //TODO - Change title font and colour
 public class MenuScreen extends ScreenAdapter {
-
-
     // Fields
-    private Stage stage;
-    private Table table;
-    private final EducationGame game;
-    private OptionWindow optionWindow = new OptionWindow("", Assets.SKIN);
+    private final Stage stage;
+    private final Table table;
+    private EducationGame game;
+    private final OptionWindow optionWindow = new OptionWindow("", Assets.SKIN);
 
     // Constructor
     /**
@@ -36,7 +35,6 @@ public class MenuScreen extends ScreenAdapter {
      */
     public MenuScreen(EducationGame game) {
         this.game = game;
-
         table = new Table();
         table.setFillParent(true);
 
@@ -45,6 +43,7 @@ public class MenuScreen extends ScreenAdapter {
         stage.addActor(optionWindow);
         Gdx.input.setInputProcessor(stage);
 
+        AudioController.playMainMenu();
         // TODO - debug
         //table.setDebug(true);
 
@@ -52,7 +51,7 @@ public class MenuScreen extends ScreenAdapter {
     }
 
     /**
-     *
+     * 
      */
     public void constructContent() {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.menuBackground)));
@@ -74,8 +73,8 @@ public class MenuScreen extends ScreenAdapter {
         addButton("Options").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //game.setScreen(new OptionsScreen(game));
                 optionWindow.setVisible(true);
+                AudioController.playButtonSound(); // TODO - FIND A BETTER IMPLEMENTATION THAN THIS
             }
         });
 
@@ -95,7 +94,6 @@ public class MenuScreen extends ScreenAdapter {
     private TextButton addButton(String name) {
         TextButton button = new TextButton(name, Assets.SKIN);
         table.add(button).width(400f).padBottom(20f).row();
-
         //TODO - button sound
         return button;
     }
@@ -153,32 +151,45 @@ public class MenuScreen extends ScreenAdapter {
 
 
             // Game Music Control
-            Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
+            final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
+            musicSlider.setValue(AudioController.getMusicVolume());
             musicSlider.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-
+                    AudioController.setMusicVolume(musicSlider.getValue());
+                    AudioController.playButtonSound();
                 }
             });
 
             // Game Sound Effect's Control
-            Slider sfxSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
+            final Slider sfxSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
+            sfxSlider.setValue(AudioController.getSFXVolume());
             sfxSlider.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-
+                    AudioController.setSFXVolume(sfxSlider.getValue());
+                    AudioController.playButtonSound();
                 }
             });
 
             // Master Audio Mute
-            CheckBox muteCheck = new CheckBox("Mute", Assets.SKIN);
+            final CheckBox muteCheck = new CheckBox("Mute", Assets.SKIN);
+            muteCheck.setChecked(AudioController.getIsMuted());
+            muteCheck.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    AudioController.setMute(muteCheck.isChecked());
+                }
+            });
 
             // Add each actor to the window
+            //TODO - cant add on same row if i want to change size
             this.add(titleLabel).colspan(2).row();
             this.add(audioLabel).padBottom(10f).colspan(2).row();
-            this.add(musicLabel).padBottom(5f);
-            this.add(musicSlider).padBottom(5f).row();
-            this.add(sfxLabel, sfxSlider).row();
+            this.add(musicLabel).right().padBottom(5f);
+            this.add(musicSlider).fillX().padBottom(5f).row();
+            this.add(sfxLabel).right().padBottom(5f);
+            this.add(sfxSlider).fillX().padBottom(5f).row();
             this.add(muteCheck).padBottom(157f).colspan(2).row();
             this.add(menuExit).colspan(2);
         }
