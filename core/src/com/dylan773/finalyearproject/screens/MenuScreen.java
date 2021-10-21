@@ -13,9 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dylan773.finalyearproject.Assets;
-import com.dylan773.finalyearproject.AudioController;
-import com.dylan773.finalyearproject.EducationGame;
+import com.dylan773.finalyearproject.utilities.Assets;
+import com.dylan773.finalyearproject.utilities.AudioController;
+import com.dylan773.finalyearproject.utilities.EducationGame;
 
 /**
  *
