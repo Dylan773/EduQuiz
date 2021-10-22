@@ -1,4 +1,4 @@
-package com.dylan773.finalyearproject.screens;
+package com.dylan773.finalyearproject.render.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -21,7 +21,7 @@ import com.dylan773.finalyearproject.utilities.EducationGame;
  *
  */
 
-//TODO - Change title font and colour
+//TODO - END the main menu screen when a new game is started (currently keeps playing)
 public class MenuScreen extends ScreenAdapter {
     // Fields
     private final Stage stage;
@@ -33,6 +33,8 @@ public class MenuScreen extends ScreenAdapter {
     /**
      * @param game
      */
+
+    // No create method in screen so use a constructor instead
     public MenuScreen(EducationGame game) {
         this.game = game;
         table = new Table();
@@ -44,7 +46,6 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         AudioController.playMainMenu();
-        // TODO - debug
         //table.setDebug(true);
 
         constructContent();
@@ -54,7 +55,7 @@ public class MenuScreen extends ScreenAdapter {
      * 
      */
     public void constructContent() {
-        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.menuBackground)));
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MENU_BACKGROUND)));
 
         // Title Label
         Label gameLabel = new Label("Edu Quiz", Assets.SKIN, "title");
@@ -62,19 +63,23 @@ public class MenuScreen extends ScreenAdapter {
 
         // Play Game Button
         addButton("Play Game").addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y)
-//            {
-//                game.setScreen(new OptionsScreen(game));
-//            }
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                //TODO - setScreen doesnt dispose the menu screen
+                game.setScreen(new GameScreen(game));
+                //AudioController.stopNowPlaying();
+                Gdx.input.setInputProcessor(null);
+            }
         });
 
         // Option Window Button
         addButton("Options").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+//                optionWindow.setVisible(true);
+//                AudioController.playButtonSound(); // TODO - FIND A BETTER IMPLEMENTATION THAN THIS
                 optionWindow.setVisible(true);
-                AudioController.playButtonSound(); // TODO - FIND A BETTER IMPLEMENTATION THAN THIS
             }
         });
 
@@ -83,6 +88,7 @@ public class MenuScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
+                game.dispose();
             }
         });
     }
@@ -98,8 +104,22 @@ public class MenuScreen extends ScreenAdapter {
         return button;
     }
 
+//    public static Label addLabel(String name, String styleName) {
+//
+//        return new Label(name, Assets.SKIN, styleName, Color.w);
+//    }
+
     @Override
     public void show() {
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void hide() {
+        super.hide();
+        AudioController.stopNowPlaying();
     }
 
     @Override
@@ -113,11 +133,6 @@ public class MenuScreen extends ScreenAdapter {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 optionWindow.setVisible(false);
         }
-
-//        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-//        stage.draw();
     }
 
     @Override
@@ -125,16 +140,18 @@ public class MenuScreen extends ScreenAdapter {
         stage.getViewport().update(width, height, true); // surprised this worked
     }
 
+    //TODO - work out if this is required
     @Override
     public void dispose() {
-        //stage.dispose();
+        stage.dispose();
     }
 
     /**
      *
      */
-    private static class OptionWindow extends Window { //TODO - Set the values of the sliders and checkbox to the same value as the audio, so they dont reset back to 0 each time
-        public OptionWindow(String title, Skin skin) {
+    //TODO - move to seperate class
+    private static class OptionWindow extends Window {
+        OptionWindow(String title, Skin skin) {
             super(title, skin);
             this.setResizable(false);
             this.setMovable(false);
@@ -143,6 +160,7 @@ public class MenuScreen extends ScreenAdapter {
             //this.top();
             this.setPosition(150, 50); // TODO - I dont like this hard coded, center using a different method
 
+            // TODO - Create a addLabel method to remove this
             Label titleLabel = new Label("OPTIONS", Assets.SKIN, "title");
             Label audioLabel = new Label("Audio", Assets.SKIN, "subtitle");
             Label musicLabel = new Label("Music Volume:", Assets.SKIN);

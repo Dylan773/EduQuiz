@@ -88,6 +88,10 @@ public class AudioController {
         return nowPlaying;
     }
 
+    public static void stopNowPlaying() {
+        nowPlaying.stop();
+    }
+
     /**
      * Accepts a Music object and plays that audio file on loop, only if the application is not muted.
      * @param music The music object to be played.

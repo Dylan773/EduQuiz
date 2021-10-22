@@ -15,11 +15,23 @@ public class Assets {
     public static final Skin SKIN = new Skin(Gdx.files.internal("skin/skin/pixthulhu-ui.json"));
 
     // Main Menu Background Image
-    public static final Texture menuBackground = new Texture("images/Hidden Canyon_b.png");
+    public static final Texture MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png");
 
     public static final Music
     MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3"));
     //MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Cleyton RX - Underwater.mp3"));
 
     public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
+
+
+    /**
+     * Disposes all assets, freeing up and preventing memory leaks.
+     */
+    public static void disposeAssets() {
+        SKIN.dispose();
+        MENU_BACKGROUND.dispose();
+        MAIN_MENU_MUSIC.dispose();
+        SFX_BUTTON.dispose();
+
+    }
 }

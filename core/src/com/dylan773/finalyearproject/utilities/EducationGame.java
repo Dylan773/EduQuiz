@@ -3,7 +3,8 @@ package com.dylan773.finalyearproject.utilities;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.dylan773.finalyearproject.screens.MenuScreen;
+import com.dylan773.finalyearproject.render.screens.GameScreen;
+import com.dylan773.finalyearproject.render.screens.MenuScreen;
 
 // TODO - change this as a loading screen
 
@@ -13,18 +14,20 @@ import com.dylan773.finalyearproject.screens.MenuScreen;
 public class EducationGame extends Game {
 
 	// Fields
-
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
 
 	@Override
 	public void create () {
 		setScreen(new MenuScreen(this));
-
+		//setScreen(new GameScreen());
 		//TODO - Create a loading scree that transitions into the main menu
 	}
 
 	@Override
 	public void render () {
-		screen.render(Gdx.graphics.getDeltaTime());
+		super.render();
+		//screen.render(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override
@@ -32,14 +35,17 @@ public class EducationGame extends Game {
 		super.resize(width, height);
 	}
 
+	/**
+	 * Calls disposeAssets from the Assets class to dispose of all assets once this application has closed.
+	 */
 	@Override
 	public void dispose () {
-
+		Assets.disposeAssets();
 	}
 
 	@Override
 	public void setScreen(Screen screen) {
-		screen.dispose(); // Disposes the current scene
+		//dispose();//TODO - Redundant?
 		super.setScreen(screen); // Sets the new screen to the screen provided
 	}
 }
