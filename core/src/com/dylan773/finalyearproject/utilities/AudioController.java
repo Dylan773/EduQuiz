@@ -5,6 +5,9 @@ import com.badlogic.gdx.audio.Sound;
 import static com.dylan773.finalyearproject.utilities.Assets.MAIN_MENU_MUSIC;
 import static com.dylan773.finalyearproject.utilities.Assets.SFX_BUTTON;
 
+/**
+ *
+ */
 public class AudioController {
     //================
     // Fields
