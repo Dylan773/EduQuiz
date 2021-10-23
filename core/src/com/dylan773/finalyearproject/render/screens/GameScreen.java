@@ -7,12 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.dylan773.finalyearproject.utilities.Assets;
+import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.utilities.EducationGame;
 
 public class GameScreen extends ScreenAdapter {
@@ -22,13 +18,18 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
     private EducationGame game;
     private final Stage stage;
+    private Player player;
     //private final Table table;
 
     public GameScreen(EducationGame game) {
         this.game = game;
         stage = new Stage();
+
+        //TODO - works here too
+        //levelOne = new TmxMapLoader().load("levels/one.tmx");
+
         //TODO - enable for user input on this screen
-        //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
+        Gdx.input.setInputProcessor(stage); // Set this screen for inputs
     }
 
     @Override
@@ -39,6 +40,10 @@ public class GameScreen extends ScreenAdapter {
 
         renderer.setView(camera);
         renderer.render(); // renders everything, can also render certain layers
+
+//        renderer.getBatch().begin();
+//        player.draw(renderer.getBatch());
+//        renderer.getBatch().end();
 
 
     }
@@ -53,12 +58,15 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         // Load the map
-        levelOne = new TmxMapLoader().load("maps/level one/map.tmx");
+        levelOne = new TmxMapLoader().load("levels/one.tmx");
 
+        //levelTwo = new TmxMapLoader().load("maps/level two/map two.tmx");
         // Create the renderer
         renderer = new OrthogonalTiledMapRenderer(levelOne);
 
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(); // Resize is called after this method, camera is updated there
+
+        //player = new Player(new Sprite(new Texture("")));
     }
 
     @Override

@@ -22,6 +22,7 @@ public class EducationGame extends Game {
 		setScreen(new MenuScreen(this));
 		//setScreen(new GameScreen());
 		//TODO - Create a loading scree that transitions into the main menu
+		// TODO - Javadoc @ annotations
 	}
 
 	@Override
@@ -45,7 +46,6 @@ public class EducationGame extends Game {
 
 	@Override
 	public void setScreen(Screen screen) {
-		//dispose();//TODO - Redundant?
 		super.setScreen(screen); // Sets the new screen to the screen provided
 	}
 }

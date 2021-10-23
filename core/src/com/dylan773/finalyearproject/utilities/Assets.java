@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
- *
+ * @author Dylan Brand
  */
 public class Assets {
 
@@ -25,7 +25,9 @@ public class Assets {
 
 
     /**
-     * Disposes all assets, freeing up and preventing memory leaks.
+     * <h2>Disposes all assets in this application.</h2>
+     * Memory management method that is called to dispose all loaded resources and free up any memory
+     * that inactive resources were using. Also preventing memory leak.
      */
     public static void disposeAssets() {
         SKIN.dispose();

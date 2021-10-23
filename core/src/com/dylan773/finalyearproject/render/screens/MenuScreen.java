@@ -17,6 +17,8 @@ import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.EducationGame;
 
+import static com.dylan773.finalyearproject.utilities.Utilities.*;
+
 /**
  *
  */
@@ -30,6 +32,7 @@ public class MenuScreen extends ScreenAdapter {
     private final OptionWindow optionWindow = new OptionWindow("", Assets.SKIN);
 
     // Constructor
+
     /**
      * @param game
      */
@@ -45,80 +48,69 @@ public class MenuScreen extends ScreenAdapter {
         stage.addActor(optionWindow);
         Gdx.input.setInputProcessor(stage);
 
-        AudioController.playMainMenu();
+        AudioController.playMainMenu(); // Plays the main menu music for this application
         //table.setDebug(true);
 
         constructContent();
     }
 
     /**
-     * 
+     *
      */
     public void constructContent() {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MENU_BACKGROUND)));
+        table.add(addLabel("Edu Quiz", "title")).padBottom(20f).row();
 
-        // Title Label
-        Label gameLabel = new Label("Edu Quiz", Assets.SKIN, "title");
-        table.add(gameLabel).pad(0, 0, 20, 0).row();
-
-        // Play Game Button
-        addButton("Play Game").addListener(new ClickListener() {
+        // Play Game Button Controls
+        addMenuButton("Play Game").addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
+            public void clicked(InputEvent event, float x, float y) {
                 //TODO - setScreen doesnt dispose the menu screen
                 game.setScreen(new GameScreen(game));
                 //AudioController.stopNowPlaying();
-                Gdx.input.setInputProcessor(null);
+                //Gdx.input.setInputProcessor(null);
             }
         });
 
-        // Option Window Button
-        addButton("Options").addListener(new ClickListener() {
+        // Options Button Controls
+        addMenuButton("Options").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                optionWindow.setVisible(true);
-//                AudioController.playButtonSound(); // TODO - FIND A BETTER IMPLEMENTATION THAN THIS
                 optionWindow.setVisible(true);
+                AudioController.playButtonSound();
             }
         });
 
-        // Exit Game Button
-        addButton("Exit Game").addListener(new ClickListener() {
+        // Exit Game Button Controls
+        addMenuButton("Exit Game").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                //TODO - setScreen doesnt dispose the menu screen
                 Gdx.app.exit();
-                game.dispose();
             }
         });
     }
 
+
     /**
-     * @param name
-     * @return
+     * <h2>Instantiates a new TextButton to be used on this applications Main Menu</h2>
+     * Creates a new TextButton, setting it's width to 400f, bottom padding of 20f and calls the row() method
+     * to separate this button to the next actor.
+     *
+     * @param name The text (String) to be displayed on the TextButton.
+     * @return This TextButton.
      */
-    private TextButton addButton(String name) {
+    private TextButton addMenuButton(String name) {
         TextButton button = new TextButton(name, Assets.SKIN);
         table.add(button).width(400f).padBottom(20f).row();
-        //TODO - button sound
+
         return button;
     }
 
-//    public static Label addLabel(String name, String styleName) {
-//
-//        return new Label(name, Assets.SKIN, styleName, Color.w);
-//    }
 
-    @Override
-    public void show() {
-    }
-
-    /**
-     *
-     */
     @Override
     public void hide() {
-        super.hide();
+        //super.hide();
         AudioController.stopNowPlaying();
     }
 
@@ -140,11 +132,11 @@ public class MenuScreen extends ScreenAdapter {
         stage.getViewport().update(width, height, true); // surprised this worked
     }
 
-    //TODO - work out if this is required
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
+//    //TODO - work out if this is required
+//    @Override
+//    public void dispose() {
+//        stage.dispose();
+//    }
 
     /**
      *
