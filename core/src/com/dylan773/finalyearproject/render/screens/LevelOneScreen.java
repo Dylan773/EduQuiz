@@ -11,25 +11,27 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.utilities.EducationGame;
 
-public class GameScreen extends ScreenAdapter {
+public class LevelOneScreen extends ScreenAdapter {
     // Fields
-    private TiledMap levelOne, levelTwo, levelThree;
-    private OrthogonalTiledMapRenderer renderer;
+    private TiledMap levelOne;
+    private OrthogonalTiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
+
     private EducationGame game;
     private final Stage stage;
     private Player player;
+    //private MenuBar menuBar = new MenuBar();
     //private final Table table;
 
-    public GameScreen(EducationGame game) {
+    public LevelOneScreen(EducationGame game) {
         this.game = game;
         stage = new Stage();
-
+        //stage.addActor(menuBar);
         //TODO - works here too
         //levelOne = new TmxMapLoader().load("levels/one.tmx");
 
         //TODO - enable for user input on this screen
-        Gdx.input.setInputProcessor(stage); // Set this screen for inputs
+        //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
     }
 
     @Override
@@ -38,14 +40,8 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clears the screen so it can draw from fresh
 
-        renderer.setView(camera);
-        renderer.render(); // renders everything, can also render certain layers
-
-//        renderer.getBatch().begin();
-//        player.draw(renderer.getBatch());
-//        renderer.getBatch().end();
-
-
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render(); // renders everything, can also render certain layers
     }
 
     @Override
@@ -60,18 +56,17 @@ public class GameScreen extends ScreenAdapter {
         // Load the map
         levelOne = new TmxMapLoader().load("levels/one.tmx");
 
-        //levelTwo = new TmxMapLoader().load("maps/level two/map two.tmx");
         // Create the renderer
-        renderer = new OrthogonalTiledMapRenderer(levelOne);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(levelOne);
 
         camera = new OrthographicCamera(); // Resize is called after this method, camera is updated there
 
-        //player = new Player(new Sprite(new Texture("")));
+        // TODO - add player class
     }
 
     @Override
     public void hide() {
-
+        Gdx.input.setInputProcessor(null); // Disable input events when this screen is hidden
     }
 
     @Override
@@ -88,8 +83,6 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         // Dispose all resources once done
 //        levelOne.dispose();
-//        levelTwo.dispose();
-//        levelThree.dispose();
 //        renderer.dispose();
     }
 }

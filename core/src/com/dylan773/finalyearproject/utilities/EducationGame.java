@@ -1,9 +1,7 @@
 package com.dylan773.finalyearproject.utilities;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.dylan773.finalyearproject.render.screens.GameScreen;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
 
 // TODO - change this as a loading screen

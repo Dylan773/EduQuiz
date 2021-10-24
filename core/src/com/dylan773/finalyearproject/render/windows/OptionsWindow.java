@@ -22,11 +22,9 @@ public class OptionsWindow extends Window {
      * <h2>Options Window Constructor</h2>
      * Constructs the Options window to be displayed.<br>
      * The {@link #setVisible(boolean)} method can be called to set the visibility of this window to the user.
-     * @param title The title of this window.
-     * @param skin
      */
-    public OptionsWindow(String title, Skin skin) {
-        super(title, skin);
+    public OptionsWindow() {
+        super("", Assets.SKIN);
 
         //TODO - Better implementation? - Creates a window with the skin background then adds an image on top???
         this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));

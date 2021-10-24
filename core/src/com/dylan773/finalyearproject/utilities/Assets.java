@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * <h1>Assets for this application</h1>
- * Stores all required assets for this application, whilst providing classes with easy access to the relevant assets.
+ * Stores the necessary assets for this application, whilst providing classes with easy access to the relevant assets.
  *
  * @author Dylan Brand
  */
@@ -37,13 +37,12 @@ public class Assets {
     /*
      * METHODS
      */
-
     /**
      * <h2>Disposes all assets in this application.</h2>
      * Memory management method that is called to dispose all loaded resources and free up any memory
      * that inactive resources were using. Also preventing memory leak.
-     * <p></p>
-     * <p>
+     * <br>
+     *
      * This method SHOULD only be called when the application is closed.
      */
     public static void disposeAssets() {

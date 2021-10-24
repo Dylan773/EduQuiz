@@ -3,6 +3,7 @@ package com.dylan773.finalyearproject.render.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,15 +24,18 @@ import static com.dylan773.finalyearproject.utilities.Utilities.*;
  */
 //TODO - END the main menu screen when a new game is started (currently keeps playing)
 public class MenuScreen extends ScreenAdapter {
-    // Fields
+
+    /*
+     * Fields
+     */
     private Stage stage;
     private Table table;
     private EducationGame game;
-    private OptionsWindow optionsWindow = new OptionsWindow("", Assets.SKIN);
+    private OptionsWindow optionsWindow = new OptionsWindow();
 
-
-    // Constructor
-
+    /*
+     * Constructor
+     */
     /**
      * <h2>Main Menu Constructor</h2>
      *
@@ -41,25 +45,21 @@ public class MenuScreen extends ScreenAdapter {
         this.game = game;
         table = new Table();
         table.setFillParent(true);
-        //testWindow.setVisible(false); // By default this options window is not visible
 
         stage = new Stage();
         stage.addActor(table);
-        //stage.addActor(optionWindow);
-
         stage.addActor(optionsWindow);
         Gdx.input.setInputProcessor(stage);
 
-
         //table.setDebug(true);
 
-        constructContent();
+        constructContent(); // Constructs the table to be displayed
         AudioController.playMainMenu(); // Plays the main menu music for this application
     }
 
     /**
      * <h2>Constructs the content to be displayed on this applications main menu</h2>
-     * Uses a {@link #table} to arrange actors to be displayed.
+     * Uses a {@link #table} to arrange actors to be displayed on the main menu screen.
      */
     public void constructContent() {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MENU_BACKGROUND)));
@@ -69,10 +69,7 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO - setScreen doesnt dispose the menu screen
-                game.setScreen(new GameScreen(game));
-                //AudioController.stopNowPlaying();
-                //Gdx.input.setInputProcessor(null);
+                game.setScreen(new LevelOneScreen(game));
             }
         });
 
@@ -89,14 +86,16 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Exit Game").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO - setScreen doesnt dispose the menu screen
                 Gdx.app.exit();
             }
         });
+
+        table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
+                "default")).padTop(20f);
     }
 
     /**
-     * <h2>Instantiates a new TextButton to be used on this applications Main Menu</h2>
+     * <h2>Instantiates a new TextButton to be used on this application's Main Menu</h2>
      * Creates a new TextButton, setting it's width to 400f, bottom padding of 20f and calls the row() method
      * to separate this button to the next actor. And adds this button to the {@link #table}.
      *
@@ -110,10 +109,13 @@ public class MenuScreen extends ScreenAdapter {
         return button;
     }
 
-
+    /**
+     * Disables all input events and stops the Menu Screen music when this screen is hidden.<br>
+     * E.g.This Menu Screen will be hidden when the user enters the game screen.
+     */
     @Override
     public void hide() {
-        //super.hide();
+        Gdx.input.setInputProcessor(null);
         AudioController.stopNowPlaying();
     }
 
