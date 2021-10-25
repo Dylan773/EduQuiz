@@ -1,10 +1,9 @@
-package com.dylan773.finalyearproject.utilities;
+package com.dylan773.finalyearproject;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
-
-// TODO - change this as a loading screen
+import com.dylan773.finalyearproject.utilities.Assets;
 
 /**
  *
@@ -12,15 +11,18 @@ import com.dylan773.finalyearproject.render.screens.MenuScreen;
 public class EducationGame extends Game {
 
 	// Fields
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+	/**
+	 * Default height and width for this application.
+	 */
+	public static final int
+			WIDTH = 1280,
+			HEIGHT = 720;
 
 	@Override
 	public void create () {
 		setScreen(new MenuScreen(this));
 		//setScreen(new GameScreen());
 		//TODO - Create a loading scree that transitions into the main menu
-		// TODO - Javadoc @ annotations
 	}
 
 	@Override
@@ -40,6 +42,7 @@ public class EducationGame extends Game {
 	@Override
 	public void dispose () {
 		Assets.disposeAssets();
+		// level 1,2,3 dispose
 	}
 
 	@Override
