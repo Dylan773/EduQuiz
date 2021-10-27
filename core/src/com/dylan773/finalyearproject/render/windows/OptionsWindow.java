@@ -26,9 +26,8 @@ public class OptionsWindow extends Window {
     public OptionsWindow() {
         super("", Assets.SKIN);
 
-        //TODO - Better implementation? - Creates a window with the skin background then adds an image on top???
         this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
-        this.setResizable(true);
+        this.setResizable(false);
         this.setMovable(false);
         this.setVisible(false); // By default, this window is initially hidden
         this.setSize(1000f, 600f);

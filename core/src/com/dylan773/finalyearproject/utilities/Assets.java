@@ -24,7 +24,8 @@ public class Assets {
     // Images/Textures
     public static final Texture
             MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png"),
-            OPTIONS_BACKGROUND = new Texture("images/background.png");
+            OPTIONS_BACKGROUND = new Texture("images/background.png"),
+            PLAYER_SPRITE = new Texture("images/spellun-sprite.png");
 
     // Music
     public static final Music

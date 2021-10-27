@@ -23,20 +23,18 @@ public class LevelOneScreen extends ScreenAdapter {
     private Player player;
     //private MenuBar menuBar = new MenuBar();
 
-    // TODO - temporary, i think. Used to set the camera projection
-    float
-            width = Gdx.graphics.getWidth(),
-            height = Gdx.graphics.getHeight();
 
     public LevelOneScreen(EducationGame game) {
         this.game = game;
         stage = new Stage();
         //stage.addActor(menuBar);
-        //TODO - works here too
-        //levelOne = new TmxMapLoader().load("levels/one.tmx");
 
         //TODO - enable for user input on this screen
         //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
+
+        Player player = new Player();
+        constructContent();
+        //focusOnPlayer();
     }
 
     /**
@@ -51,10 +49,13 @@ public class LevelOneScreen extends ScreenAdapter {
 
         // Initialise the camera
         camera = new OrthographicCamera(); // Resize is called after this method, camera is updated there
-        camera.setToOrtho(false, width, height ); //TODO - change this to player position later
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() ); //TODO - change this to player position later
     }
 
-    
+//    public void focusOnPlayer() {
+//        camera.lookAt(100, 100, 0);
+//    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen so it can draw from fresh
@@ -69,12 +70,10 @@ public class LevelOneScreen extends ScreenAdapter {
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
+
+        //focusOnPlayer(); // Moves the camera position to the player
     }
 
-    @Override
-    public void show() {
-        constructContent();
-    }
 
     @Override
     public void hide() {

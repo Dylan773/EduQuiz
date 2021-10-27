@@ -48,7 +48,7 @@ public class MenuScreen extends ScreenAdapter {
         stage = new Stage();
         stage.addActor(table);
         stage.addActor(optionsWindow);
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
 
@@ -109,8 +109,7 @@ public class MenuScreen extends ScreenAdapter {
     }
 
     /**
-     * Disables all input events and stops the Menu Screen music when this screen is hidden.<br>
-     * E.g.This Menu Screen will be hidden when the user enters the game screen.
+     * Disables all input events and stops the Menu Screen music when this screen is hidden.
      */
     @Override
     public void hide() {
@@ -124,7 +123,7 @@ public class MenuScreen extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
 
-        // Whilst the options window is visible, if the user has pressed the ESC key, this window will be closed/hidden.
+        // Whilst the options window is visible, if the user has pressed the ESC key, the window will be closed/hidden.
         if (optionsWindow.isVisible()) { // TODO - is this the right place???
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 optionsWindow.setVisible(false);
@@ -133,7 +132,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true); // surprised this worked
+        stage.getViewport().update(width, height, true);
     }
 
 //    //TODO - not sure if this is required
