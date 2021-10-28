@@ -1,4 +1,4 @@
-package com.dylan773.finalyearproject;
+package com.dylan773.finalyearproject.utilities;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
