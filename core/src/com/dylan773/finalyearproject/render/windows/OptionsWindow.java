@@ -74,7 +74,7 @@ public class OptionsWindow extends Window {
         this.add(musicSlider).fillX().padBottom(5f).row();
         this.add(addLabel("SFX Volume:", "default")).right().padBottom(5f);
         this.add(sfxSlider).fillX().padBottom(5f).row();
-        this.add(muteCheck).padBottom(130f).colspan(2).row();
+        this.add(muteCheck).colspan(2).padBottom(130f).row();
 
         // Label exception, has orange text
         Label menuExit = new Label("Press ESC to Exit", Assets.SKIN, "font", Color.ORANGE);

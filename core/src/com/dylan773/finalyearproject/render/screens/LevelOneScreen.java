@@ -16,12 +16,13 @@ public class LevelOneScreen extends ScreenAdapter {
     // Fields
     private TiledMap levelOneMap;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
-    private OrthographicCamera camera;
+    private OrthographicCamera camera = new OrthographicCamera(); // Defines the view
+
+    private FitViewport viewport;
 
     private EducationGame game;
     private final Stage stage;
-    private Player player;
-    //private MenuBar menuBar = new MenuBar();
+    //private Player player;
 
 
     public LevelOneScreen(EducationGame game) {
@@ -32,8 +33,8 @@ public class LevelOneScreen extends ScreenAdapter {
         //TODO - enable for user input on this screen
         //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
 
-        Player player = new Player();
         constructContent();
+        //player = new Player();
         //focusOnPlayer();
     }
 
@@ -43,26 +44,37 @@ public class LevelOneScreen extends ScreenAdapter {
     public void constructContent() {
         // Load the map
         levelOneMap = new TmxMapLoader().load("levels/one.tmx");
-
         // Create the renderer
         tiledMapRenderer = new OrthogonalTiledMapRenderer(levelOneMap);
+        // Resize is called after this method, camera is updated there
 
-        // Initialise the camera
-        camera = new OrthographicCamera(); // Resize is called after this method, camera is updated there
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() ); //TODO - change this to player position later
+        // Sets the size of the camera
+        camera.setToOrtho(false, 1920, 1080);
+        viewport = new FitViewport(1920, 1080, camera);
+
+
+        //TODO - set camera to player position
+        //Gdx.input.setInputProcessor(player); // Sets the input to the player
     }
 
 //    public void focusOnPlayer() {
 //        camera.lookAt(100, 100, 0);
 //    }
 
+
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen so it can draw from fresh
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen before rendering the next frame
         //Gdx.gl.glClearColor(0, 0, 0, 1);
 
-        tiledMapRenderer.setView(camera); // Set the renderer's view to the camera
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Automatically updates the camera //camera.update();
+        tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
         tiledMapRenderer.render(); // renders everything, can also render certain layers
+//        // Player
+//        tiledMapRenderer.getBatch().begin();
+//        //player.setPosition(playerX, playerY);
+//        player.draw(tiledMapRenderer.getBatch()); // Draws the player
+//        tiledMapRenderer.getBatch().end();
     }
 
     @Override
@@ -73,7 +85,6 @@ public class LevelOneScreen extends ScreenAdapter {
 
         //focusOnPlayer(); // Moves the camera position to the player
     }
-
 
     @Override
     public void hide() {
@@ -95,5 +106,6 @@ public class LevelOneScreen extends ScreenAdapter {
         // Dispose all resources once done
         levelOneMap.dispose();
         tiledMapRenderer.dispose();
+        //player.getTexture().dispose();
     }
 }

@@ -5,15 +5,18 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.EducationGame;
+
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -21,7 +24,6 @@ import static com.dylan773.finalyearproject.utilities.Utilities.*;
  *
  * @author Dylan Brand
  */
-//TODO - END the main menu screen when a new game is started (currently keeps playing)
 public class MenuScreen extends ScreenAdapter {
 
     /*
@@ -51,7 +53,6 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
-
         constructContent(); // Constructs the table to be displayed
         AudioController.playMainMenu(); // Plays the main menu music for this application
     }
@@ -91,6 +92,9 @@ public class MenuScreen extends ScreenAdapter {
 
         table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
                 "default")).padTop(20f);
+
+        // Game Info Button - Added directly to the stage, not table
+        stage.addActor(gameInfoButton());
     }
 
     /**
@@ -99,7 +103,7 @@ public class MenuScreen extends ScreenAdapter {
      * to separate this button to the next actor. And adds this button to the {@link #table}.
      *
      * @param name The text to be displayed on the TextButton.
-     * @return This TextButton.
+     * @return The TextButton.
      */
     private TextButton addMenuButton(String name) {
         TextButton button = new TextButton(name, Assets.SKIN);
@@ -124,9 +128,11 @@ public class MenuScreen extends ScreenAdapter {
         stage.draw();
 
         // Whilst the options window is visible, if the user has pressed the ESC key, the window will be closed/hidden.
-        if (optionsWindow.isVisible()) { // TODO - is this the right place???
+        if (optionsWindow.isVisible()) {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 optionsWindow.setVisible(false);
+
+
         }
     }
 
@@ -140,6 +146,24 @@ public class MenuScreen extends ScreenAdapter {
 //    public void dispose() {
 //        stage.dispose();
 //    }
+
+    /**
+     * A TextButton that will display a game info window once clicked.
+     */
+    private TextButton gameInfoButton() {
+        TextButton infoButton = new TextButton("?", Assets.SKIN);
+        infoButton.setSize(100f, 100f);
+        infoButton.setPosition(1150,25);
+        //infoButton.setDisabled(true);
+        infoButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //Gdx.app.exit();
+            }
+        });
+
+        return infoButton;
+    }
 
 
 }
