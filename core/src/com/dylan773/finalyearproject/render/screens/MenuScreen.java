@@ -66,30 +66,31 @@ public class MenuScreen extends ScreenAdapter {
         table.add(addLabel("Edu Quiz", "title")).padBottom(20f).row();
 
         // Play Game Button Controls
-        addMenuButton("Play Game").addListener(new ClickListener() {
+        addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new LevelOneScreen(game));
             }
         });
 
         // Options Button Controls
-        addMenuButton("Options").addListener(new ClickListener() {
+        addMenuButton("Options").addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 optionsWindow.setVisible(true); // Displays the options window to the user
                 AudioController.playButtonSound();
             }
         });
 
         // Exit Game Button Controls
-        addMenuButton("Exit Game").addListener(new ClickListener() {
+        addMenuButton("Exit Game").addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
+        public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+            Gdx.app.exit();
+        }
+    });
 
+        // Game Author Label
         table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
                 "default")).padTop(20f);
 

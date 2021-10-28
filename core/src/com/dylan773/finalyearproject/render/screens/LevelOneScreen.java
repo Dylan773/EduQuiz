@@ -18,7 +18,7 @@ public class LevelOneScreen extends ScreenAdapter {
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera = new OrthographicCamera(); // Defines the view
 
-    private FitViewport viewport;
+    private FitViewport viewport; //TODO - change viewport type
 
     private EducationGame game;
     private final Stage stage;
