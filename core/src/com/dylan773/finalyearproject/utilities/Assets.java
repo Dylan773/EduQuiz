@@ -41,7 +41,7 @@ public class Assets {
     /**
      * <h2>Disposes all assets in this application.</h2>
      * Memory management method that is called to dispose all loaded resources and free up any memory
-     * that inactive resources were using. Also preventing memory leak.
+     * that inactive resources were using. Also reduces memory leak.
      * <br>
      *
      * This method SHOULD only be called when the application is closed.

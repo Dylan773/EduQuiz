@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="120" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
- <tileset firstgid="1" name="landscape" tilewidth="16" tileheight="16" tilecount="819" columns="21">
-  <image source="../textures/map one/Floor.png" width="336" height="624"/>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="120" height="70" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="5">
+ <tileset firstgid="1" name="terrain" tilewidth="16" tileheight="16" tilecount="120" columns="8">
+  <image source="../textures/map one/basictiles(2).png" width="128" height="240"/>
  </tileset>
- <layer id="1" name="Tile Layer 1" width="120" height="70">
+ <tileset firstgid="121" name="things" tilewidth="16" tileheight="16" tilecount="96" columns="12">
+  <image source="../textures/map one/things-1.png" width="192" height="128"/>
+ </tileset>
+ <layer id="1" name="Background" width="120" height="70">
   <data encoding="base64" compression="zlib">
-   eJzt2UuSgzAMBFCOziXY5bBTsyBFObIl2ZKN5F50hSEhY+nxMeFzHMcnR85FWV33LoFv7sA3b1bZwhe+CHyRuit88wa+uXMWy/DNlWePyf5f/vare5A5Td8JtvCFb4S8tY5m7+EbPs8ewzdX2N57+17re5Axd39Zux7f/20k2z0+s7ofWSJ2HfGVOF+/4xEFx7uNq5Ux5Ux8H3zHbEvnMk0/q2vw7Qxfc1sTF2vjx/em86Xq7K254iqxFZtZ+Jbn6J75VSRfpxpMXUuf0fkW5WzZu7fEyZeyOwTL7s61ay98xa5lau93u1Jmo5/d1VdRQ8209p6JrdS4MWfe1ldhrHE1t+UMmXve2hi38BUat2xb5iexzsRfYg1ft1qG/TS+1HwZvua1cH2llrtta97MNukywbflNmzZYUhuA99uW4nrkLPmOSB13i7GkSpOvhLHp7/al7vfabne64jPLvcI4ttyLpe7bHv8BXNptgfRzuPGvqUf1TvKWWUriXS/uH7HBF/atWWqse1yl+4bzHq2/g19W57cPnAUr64ZuT+KeOxqfQXnxJ59wM3S6veNqMduMWZN3c1+CF2PYr2Lb816Q1+pk8SV8uP2Dxfb2nua+98NfGsmPXG1vQ2l73Hz56uyHCUTx/zsc8172JW7xmrnD/BV2bbWDdsabN/sTWbfwfkz5XoSf3e5jNoW49nW1+h/Wjh8bS2/j6sXvnNsjY9Z+AatzbonEXsAX/hGrc26H9LfqBXPuOAbwLfXbIY1fOU1ejvs0ONdfeG81naWL5z38F35P7PlzXMQ+M7r36pe41yd2xfxt4VvvETyxb7l36+Z978rfsvMlDf0DI7xbVc/X9gxVr19yzMixMYWdu+O9l4XnnGifTa/erzImC088+R6vMIzV2CaLzDNFepamtH2D1mX9Fo=
+   eJztzrEJAAAIBLHfwv03dQJrEXOQ/ipJAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8MbX9BQAAAAAAcFkDYQLyRQ==
   </data>
  </layer>
- <layer id="3" name="wall" width="120" height="70" visible="0">
+ <layer id="5" name="Path" width="120" height="70">
   <data encoding="base64" compression="zlib">
-   eJzt1sEJADEMA0H3/3e/qeIusJmpQLAfzQAAAAAAAAAAABV7ewCf2tG4TuM+jfs07tvR+QU6v0HjPo379G3Tt03fNn27/Ksubdu0BQAAAAAAAAAAAAAAAAAAAOBPB8y2EE0=
+   eJzt0bEJADAMwLDs/f/fzoUcUIwEvsAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP85S3Rsf33u8LfN3zZf2/xt87fN3zZ/2/xt8xcAAF4XpyECoA==
+  </data>
+ </layer>
+ <objectgroup id="8" name="Spawn">
+  <object id="4" name="Spawn Po" x="143.333" y="991.667" width="16" height="16"/>
+ </objectgroup>
+ <layer id="9" name="Walls" width="120" height="70">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1jEKgDAURMFocv97eEstUlj4rQTJMgOLkCrwCNgaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArGdc2x42/rwUn9mL8z7Hmo75rfqSQd9s+mar+t7/u1hX1de7zqBvNn2z6ZtN32z6ZusvAwCgdgIjFwD6
   </data>
  </layer>
 </map>

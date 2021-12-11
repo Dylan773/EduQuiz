@@ -14,7 +14,7 @@ public class EducationGame extends Game {
 	/**
 	 * Default height and width for this application.
 	 */
-	public static final int
+	public final int
 			WIDTH = 1280,
 			HEIGHT = 720;
 

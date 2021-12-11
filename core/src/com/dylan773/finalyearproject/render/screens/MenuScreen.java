@@ -6,12 +6,11 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.dylan773.finalyearproject.render.levels.LevelThreeScreen;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
@@ -31,8 +30,9 @@ public class MenuScreen extends ScreenAdapter {
      */
     private Stage stage;
     private Table table;
-    private EducationGame game;
+    private final EducationGame game;
     private OptionsWindow optionsWindow = new OptionsWindow();
+
 
     /*
      * Constructor
@@ -49,7 +49,7 @@ public class MenuScreen extends ScreenAdapter {
 
         stage = new Stage();
         stage.addActor(table);
-        stage.addActor(optionsWindow);
+        stage.addActor(optionsWindow); // Add the option window to the stage
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
@@ -69,7 +69,8 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new LevelOneScreen(game));
+                //game.setScreen(new LevelOneScreen(game));
+                game.setScreen(new LevelThreeScreen(game)); // TODO - level three screen works
             }
         });
 
@@ -120,7 +121,14 @@ public class MenuScreen extends ScreenAdapter {
     public void hide() {
         Gdx.input.setInputProcessor(null);
         AudioController.stopNowPlaying();
+        //TODO - this may need to be changed/moved if the constructor doesnt play re-play this track when the main menu is revisited
     }
+
+//    @Override
+//    public void show() {
+//        super.show();
+//        AudioController.playMainMenu();
+//    }
 
     @Override
     public void render(float delta) {
@@ -128,13 +136,14 @@ public class MenuScreen extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
 
+        // Nested if statement
         // Whilst the options window is visible, if the user has pressed the ESC key, the window will be closed/hidden.
         if (optionsWindow.isVisible()) {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 optionsWindow.setVisible(false);
-
-
         }
+
+
     }
 
     @Override
@@ -147,6 +156,8 @@ public class MenuScreen extends ScreenAdapter {
 //    public void dispose() {
 //        stage.dispose();
 //    }
+
+
 
     /**
      * A TextButton that will display a game info window once clicked.
@@ -165,6 +176,4 @@ public class MenuScreen extends ScreenAdapter {
 
         return infoButton;
     }
-
-
 }
