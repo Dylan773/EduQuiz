@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.EducationGame;
+import com.dylan773.finalyearproject.utilities.Assets;
 
 //TODO - at a future date, set the camera for the player so the entire map isn't visible on screen
 public class LevelOneScreen extends ScreenAdapter {
@@ -38,7 +39,7 @@ public class LevelOneScreen extends ScreenAdapter {
         //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
 
         constructContent();
-        player = new Player(40, 40); // x/y = starting position on map
+        player = new Player(40, 40, Assets.KNIGHT_SPRITE); // x/y = starting position on map
         //focusOnPlayer();
     }
 

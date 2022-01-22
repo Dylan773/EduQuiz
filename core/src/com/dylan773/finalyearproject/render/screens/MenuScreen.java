@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.dylan773.finalyearproject.render.levels.HistoryLevel;
 import com.dylan773.finalyearproject.render.levels.LevelThreeScreen;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
@@ -37,6 +38,7 @@ public class MenuScreen extends ScreenAdapter {
     /*
      * Constructor
      */
+
     /**
      * <h2>Main Menu Constructor</h2>
      *
@@ -62,15 +64,15 @@ public class MenuScreen extends ScreenAdapter {
      * Uses a {@link #table} to arrange actors to be displayed on the main menu screen.
      */
     public void constructContent() {
-        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MENU_BACKGROUND)));
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MAIN_MENU_BACKGROUND)));
         table.add(addLabel("Edu Quiz", "title")).padBottom(20f).row();
 
         // Play Game Button Controls
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //game.setScreen(new LevelOneScreen(game));
-                game.setScreen(new LevelThreeScreen(game)); // TODO - level three screen works
+                //game.setScreen(new HistoryLevel(game));
+                game.setScreen(new LevelThreeScreen(game));
             }
         });
 
@@ -86,10 +88,10 @@ public class MenuScreen extends ScreenAdapter {
         // Exit Game Button Controls
         addMenuButton("Exit Game").addListener(new ChangeListener() {
             @Override
-        public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-            Gdx.app.exit();
-        }
-    });
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
 
         // Game Author Label
         table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
@@ -142,8 +144,6 @@ public class MenuScreen extends ScreenAdapter {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 optionsWindow.setVisible(false);
         }
-
-
     }
 
     @Override
@@ -158,14 +158,13 @@ public class MenuScreen extends ScreenAdapter {
 //    }
 
 
-
     /**
      * A TextButton that will display a game info window once clicked.
      */
     private TextButton gameInfoButton() {
         TextButton infoButton = new TextButton("?", Assets.SKIN);
         infoButton.setSize(100f, 100f);
-        infoButton.setPosition(1150,25);
+        infoButton.setPosition(1150, 25);
         //infoButton.setDisabled(true);
         infoButton.addListener(new ChangeListener() {
             @Override

@@ -7,29 +7,24 @@ import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.render.screens.GameScene;
 import com.dylan773.finalyearproject.utilities.Assets;
 
-/**
- *
- */
-public class LevelThreeScreen extends GameScene {
+//TODO - change the map load directory to sort out names
 
-    private TiledMap levelThree = new TmxMapLoader().load
-            //("levels/one.tmx");
-    ("levels/history/history.tmx");
+public class HistoryLevel extends GameScene {
+    private boolean collisionLayer;
+    /*
+     * Fields
+     */
+    private TiledMap map = new TmxMapLoader().load("levels/geography/village.tmx");
     private Player player = new Player(40, 40, Assets.KNIGHT_SPRITE);
     private EducationGame game;
 
-
-    /**
-     * <h2>Level One Constructor</h2>
-     *
-     * @param game
-     */
-    public LevelThreeScreen(EducationGame game) {
+    public HistoryLevel(EducationGame game) {
         this.game = game;
-        //player = new Player()
-        constructContent(levelThree, player);
-        //constructContent();
+        constructContent(map, player);
     }
 
-
+//    public void checkCollision() {
+//        collisionLayer = map.getLayers().;
+//        if (map.getLayers().get("TerrainEdge"));
+//    }
 }

@@ -4,12 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
+
+import java.util.Iterator;
 
 /**
  * <h1>Abstract class that provides a base for extending classes to implement a game level</h1>
@@ -18,9 +23,7 @@ import com.dylan773.finalyearproject.entities.Player;
  */
 public abstract class GameScene extends ScreenAdapter {
 
-    //==============
     // FIELDS
-    //==============
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera = new OrthographicCamera(); // Defines the view
     private FillViewport viewport;
@@ -39,9 +42,8 @@ public abstract class GameScene extends ScreenAdapter {
 //        //focusOnPlayer();
 //    }
 
-    //==============
+
     // METHODS
-    //==============
     /**
      * <h2>TiledMap Renderer and Logic</h2>
      * This method accepts a TiledMap object, assigning logic for that TiledMap to be displayed on the game scene.<br>
@@ -50,7 +52,8 @@ public abstract class GameScene extends ScreenAdapter {
      * Accepts a TiledMap object, rendering that TiledMap.
      * @param tiledMap The TiledMap to be rendered onto the game scene.
      */
-    protected void constructContent(TiledMap tiledMap) { // rename?
+
+    protected void constructContent(TiledMap tiledMap, Player player) { // rename?
         //TODO - Create a stage with a TiledMap and menu bar
 //        stage = new Stage();
 //        stage.addActor(menuBar);
@@ -64,13 +67,22 @@ public abstract class GameScene extends ScreenAdapter {
         //camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
         //viewport = new FillViewport(game.WIDTH, game.HEIGHT, camera);
 
-        player = new Player(40, 40); // x/y = starting position on map
-
+        //player = new Player(40, 40); // x/y = starting position on map //TODO - this needs to change if different types od sprites
+        this.player = player;
         //TODO - set camera to player position
+
+
+    }
+
+    public void checkCollision(TiledMap tiledMap) {
+
+        MapObjects collisionObject = tiledMap.getLayers().get("Collision").getObjects();
+
+
     }
 
 //    public void focusOnPlayer() {
-//        camera.lookAt(100, 100, 0);
+//        camera.lookAt(player.getPosX(), player.getPosY(), 0);
 //    }
 
     /**
@@ -94,6 +106,7 @@ public abstract class GameScene extends ScreenAdapter {
         tiledMapRenderer.render(); // renders the map, can also render certain layers
 
         drawSprite(); // Draws the sprite for this level
+        //focusOnPlayer();
     }
 
 
@@ -103,7 +116,7 @@ public abstract class GameScene extends ScreenAdapter {
         camera.viewportHeight = height;
         camera.update();
 
-        //focusOnPlayer(); // Moves the camera position to the player
+        //focusOnPlayer(); // Moves the camera position to the player - move to Render?
     }
 
     @Override
