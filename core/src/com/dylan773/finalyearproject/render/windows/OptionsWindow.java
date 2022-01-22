@@ -22,7 +22,8 @@ public class OptionsWindow extends WindowBuilder {
 
     /**
      * <h2>Options Window Constructor</h2>
-     * Constructs the Options window to be displayed.<br>
+     * Constructs the Options window to be displayed.
+     * <p>
      * The {@link #setVisible(boolean)} method can be called to set the visibility of this window to the user.
      */
     public OptionsWindow() {
