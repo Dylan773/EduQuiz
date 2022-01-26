@@ -1,4 +1,4 @@
-package com.dylan773.finalyearproject.render.screens;
+package com.dylan773.finalyearproject.render.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -8,23 +8,28 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.EducationGame;
+import com.dylan773.finalyearproject.utilities.Assets;
 
+//TODO - at a future date, set the camera for the player so the entire map isn't visible on screen
 public class LevelOneScreen extends ScreenAdapter {
     // Fields
     private TiledMap levelOneMap;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera = new OrthographicCamera(); // Defines the view
-
-    private FitViewport viewport; //TODO - change viewport type
+    private FillViewport viewport;
 
     private EducationGame game;
-    private final Stage stage;
-    //private Player player;
+    private Stage stage;
+    private Player player;
+    private TiledMap blockedLayer;
 
-
+    /**
+     * <h2>Level One Constructor</h2>
+     * @param game
+     */
     public LevelOneScreen(EducationGame game) {
         this.game = game;
         stage = new Stage();
@@ -34,7 +39,7 @@ public class LevelOneScreen extends ScreenAdapter {
         //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
 
         constructContent();
-        //player = new Player();
+        player = new Player(40, 40, Assets.KNIGHT_SPRITE); // x/y = starting position on map
         //focusOnPlayer();
     }
 
@@ -50,32 +55,37 @@ public class LevelOneScreen extends ScreenAdapter {
 
         // Sets the size of the camera
         camera.setToOrtho(false, 1920, 1080);
-        viewport = new FitViewport(1920, 1080, camera);
-
+        viewport = new FillViewport(1920, 1080, camera);
 
         //TODO - set camera to player position
-        //Gdx.input.setInputProcessor(player); // Sets the input to the player
     }
 
 //    public void focusOnPlayer() {
 //        camera.lookAt(100, 100, 0);
 //    }
 
+    /**
+     * Draws the sprite using the {@link #tiledMapRenderer}.
+     * Calls the player's draw method...
+     */
+    public void drawSprite() {
+        tiledMapRenderer.getBatch().begin();
+        player.draw(tiledMapRenderer.getBatch()); // Draws the sprite/player
+        //player.setPosition(x, y);
+        tiledMapRenderer.getBatch().end();
+    }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen before rendering the next frame
-        //Gdx.gl.glClearColor(0, 0, 0, 1);
 
-        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Automatically updates the camera //camera.update();
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Automatically updates the camera
         tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
-        tiledMapRenderer.render(); // renders everything, can also render certain layers
-//        // Player
-//        tiledMapRenderer.getBatch().begin();
-//        //player.setPosition(playerX, playerY);
-//        player.draw(tiledMapRenderer.getBatch()); // Draws the player
-//        tiledMapRenderer.getBatch().end();
+        tiledMapRenderer.render(); // renders the map, can also render certain layers
+
+        drawSprite(); // Draws the sprite for this level
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -105,7 +115,7 @@ public class LevelOneScreen extends ScreenAdapter {
     public void dispose() {
         // Dispose all resources once done
         levelOneMap.dispose();
-        tiledMapRenderer.dispose();
-        //player.getTexture().dispose();
+//        tiledMapRenderer.dispose(); // these shouldnt be disposed
+//        player.getTexture().dispose();
     }
 }

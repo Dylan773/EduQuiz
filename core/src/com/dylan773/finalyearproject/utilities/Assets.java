@@ -14,18 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public class Assets {
 
-    /*
-     * FIELDS
-     */
+
+     // FIELDS
 
     // Game Skin
     public static final Skin SKIN = new Skin(Gdx.files.internal("skin/skin/pixthulhu-ui.json"));
 
     // Images/Textures
     public static final Texture
-            MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png"),
+            MAIN_MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png"),
             OPTIONS_BACKGROUND = new Texture("images/background.png"),
-            PLAYER_SPRITE = new Texture("images/spellun-sprite.png");
+            KNIGHT_SPRITE = new Texture("images/spellun-sprite.png");
 
     // Music
     public static final Music
@@ -35,13 +34,12 @@ public class Assets {
     // Sound
     public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
 
-    /*
-     * METHODS
-     */
+
+     // METHODS
     /**
      * <h2>Disposes all assets in this application.</h2>
      * Memory management method that is called to dispose all loaded resources and free up any memory
-     * that inactive resources were using. Also preventing memory leak.
+     * that inactive resources were using. Also reduces memory leak.
      * <br>
      *
      * This method SHOULD only be called when the application is closed.
@@ -51,7 +49,7 @@ public class Assets {
         SKIN.dispose();
 
         // Textures
-        MENU_BACKGROUND.dispose();
+        MAIN_MENU_BACKGROUND.dispose();
         OPTIONS_BACKGROUND.dispose();
 
         // Audio
