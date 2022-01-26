@@ -27,7 +27,7 @@ public class LevelThreeScreen extends GameScene {
     public LevelThreeScreen(EducationGame game) {
         this.game = game;
         //player = new Player()
-        constructContent(levelThree, player);
+        createGameLevel(levelThree, player);
         //constructContent();
     }
 

@@ -32,7 +32,7 @@ public class OptionsWindow extends WindowBuilder {
     }
 
     /**
-     * Overrides the abstract constructContent method from the parent class.
+     * Overrides the abstract buildWindow() method from the {@link #WindowBuilder}  parent class.
      */
     @Override
     protected void buildWindow() {

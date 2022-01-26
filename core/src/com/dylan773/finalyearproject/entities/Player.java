@@ -10,16 +10,14 @@ import com.dylan773.finalyearproject.utilities.Assets;
 
 public class Player extends Sprite {
 
-    //**************
-    // FIELDS
-    //**************
+    /*
+     * FIELDS
+     */
 
     /**
      * The x and y position for this sprite (player).
      */
-    private float
-            posX,
-            posY;
+    private float posX, posY;
 
     /**
      * The movement speed for this player, 100 pixels/second.
@@ -34,8 +32,8 @@ public class Player extends Sprite {
 
     //TODO - remove the setting of the player position from the constructor
     /*
-    /* CONSTRUCTOR
-    /*
+     * CONSTRUCTOR
+     */
 
     /**
      * <h2>Player class constructor</h2>
@@ -93,29 +91,6 @@ public class Player extends Sprite {
      *
      * @see com.badlogic.gdx.Input.Keys
      */
-//    public void update(float x, float y) {
-//        setPosition(x, y); // Sets the player position
-//
-//        boolean collideX = false,
-//                collideY = false;
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-//            posY += Gdx.graphics.getDeltaTime() * SPEED;
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            posY -= Gdx.graphics.getDeltaTime() * SPEED;
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            posX -= Gdx.graphics.getDeltaTime() * SPEED;
-//        }
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-//            posX += Gdx.graphics.getDeltaTime() * SPEED;
-//            //setX(posX += Gdx.graphics.getDeltaTime() * playerSpeed);
-//        }
-//    }
     public void update(float x, float y) {
         setPosition(x, y); // Sets the player position
 
@@ -140,7 +115,6 @@ public class Player extends Sprite {
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             posX += Gdx.graphics.getDeltaTime() * SPEED;
-            //setX(posX += Gdx.graphics.getDeltaTime() * playerSpeed);
         }
     }
 
@@ -163,34 +137,4 @@ public class Player extends Sprite {
 //                return true;
 //        return false;
 //    }
-
-
-    /**
-     * @param x
-     */
-    public void setPlayerX(float x) {
-        setX(x);
-    }
-
-    /**
-     * @param y
-     */
-    public void setPlayerY(float y) {
-        posY = y;
-    }
-
-    /**
-     * @return
-     */
-    public float getPosX() {
-        return posX;
-    }
-
-    /**
-     * @return
-     */
-    public float getPosY() {
-        return posY;
-    }
-
 }

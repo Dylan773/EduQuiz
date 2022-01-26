@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
@@ -53,7 +51,7 @@ public abstract class GameScene extends ScreenAdapter {
      * @param tiledMap The TiledMap to be rendered onto the game scene.
      */
 
-    protected void constructContent(TiledMap tiledMap, Player player) { // rename?
+    protected void createGameLevel(TiledMap tiledMap, Player player) { // rename?
         //TODO - Create a stage with a TiledMap and menu bar
 //        stage = new Stage();
 //        stage.addActor(menuBar);
@@ -143,6 +141,4 @@ public abstract class GameScene extends ScreenAdapter {
     @Override
     public void dispose() {
     }
-
-    //public abstract void constructContent();
 }

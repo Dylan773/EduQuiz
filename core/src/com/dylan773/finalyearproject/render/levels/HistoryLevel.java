@@ -20,7 +20,7 @@ public class HistoryLevel extends GameScene {
 
     public HistoryLevel(EducationGame game) {
         this.game = game;
-        constructContent(map, player);
+        createGameLevel(map, player);
     }
 
 //    public void checkCollision() {
