@@ -14,9 +14,8 @@ public class EducationGame extends Game {
 	/**
 	 * Default height and width for this application.
 	 */
-	public final int
-			WIDTH = 1280,
-			HEIGHT = 720;
+	public final int WIDTH = 1280, HEIGHT = 720;
+	public static final float PPM = 100; //pixels per meter
 
 	@Override
 	public void create () {

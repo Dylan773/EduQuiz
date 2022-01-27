@@ -35,9 +35,6 @@ public class LevelOneScreen extends ScreenAdapter {
         stage = new Stage();
         //stage.addActor(menuBar);
 
-        //TODO - enable for user input on this screen
-        //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
-
         constructContent();
         player = new Player(40, 40, Assets.KNIGHT_SPRITE); // x/y = starting position on map
         //focusOnPlayer();

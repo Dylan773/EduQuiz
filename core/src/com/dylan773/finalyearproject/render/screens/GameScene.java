@@ -4,15 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
-
-import java.util.Iterator;
+import com.dylan773.finalyearproject.entities.PlayerTest;
 
 /**
  * <h1>Abstract class that provides a base for extending classes to implement a game level</h1>
@@ -27,19 +28,9 @@ public abstract class GameScene extends ScreenAdapter {
     private FillViewport viewport;
     private EducationGame game = new EducationGame();
     private Stage stage;
-    private Player player;
+    private Sprite player;
 
-
-//    public GameScene(EducationGame game) {
-//        this.game = game;
-//        stage = new Stage();
-//        //stage.addActor(menuBar); // TODO - menu bar
-//
-//        //TODO - enable for user input on this screen
-//        //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
-//        //focusOnPlayer();
-//    }
-
+    private PlayerTest playerTest;
 
     // METHODS
     /**
@@ -50,8 +41,9 @@ public abstract class GameScene extends ScreenAdapter {
      * Accepts a TiledMap object, rendering that TiledMap.
      * @param tiledMap The TiledMap to be rendered onto the game scene.
      */
+    protected void createGameLevel(TiledMap tiledMap, Sprite player) {
+        this.player = player; //TODO - set camera to player position
 
-    protected void createGameLevel(TiledMap tiledMap, Player player) { // rename?
         //TODO - Create a stage with a TiledMap and menu bar
 //        stage = new Stage();
 //        stage.addActor(menuBar);
@@ -60,53 +52,43 @@ public abstract class GameScene extends ScreenAdapter {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // Resize is called after this method, camera is updated there
 
         // Sets the size of the camera
-        camera.setToOrtho(false, 1920, 1080);
-        viewport = new FillViewport(1920, 1080, camera);
-        //camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
-        //viewport = new FillViewport(game.WIDTH, game.HEIGHT, camera);
-
-        //player = new Player(40, 40); // x/y = starting position on map //TODO - this needs to change if different types od sprites
-        this.player = player;
-        //TODO - set camera to player position
-
-
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
     }
 
-    public void checkCollision(TiledMap tiledMap) {
 
-        MapObjects collisionObject = tiledMap.getLayers().get("Collision").getObjects();
-
-
+    public OrthographicCamera getCamera() {
+        return camera;
     }
-
-//    public void focusOnPlayer() {
-//        camera.lookAt(player.getPosX(), player.getPosY(), 0);
-//    }
 
     /**
      * Draws the sprite using the {@link #tiledMapRenderer}.
      * Calls the player's draw method...
      */
-    protected void drawSprite() {
+    private void drawSprite(Sprite sprite) {
         tiledMapRenderer.getBatch().begin();
-        player.draw(tiledMapRenderer.getBatch()); // Draws the sprite/player
+        sprite.draw(tiledMapRenderer.getBatch()); // Draws the sprite/player
         //player.setPosition(x, y);
         tiledMapRenderer.getBatch().end();
     }
 
     @Override
     public void render(float delta) {
+        //tiledMapRenderer.getBatch().begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen before rendering the next frame
-        //Gdx.gl.glClearColor(0, 0, 0, 1);
 
-        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Automatically updates the camera
-        tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
+        tiledMapRenderer.getBatch().setProjectionMatrix(camera.combined);
+        //camera.lookAt(playerTest.pos.x, playerTest.pos.y, 0);
+        camera.update();
+
+        //tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
+        tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight);
         tiledMapRenderer.render(); // renders the map, can also render certain layers
 
-        drawSprite(); // Draws the sprite for this level
-        //focusOnPlayer();
+        drawSprite(player); // Draws the sprite for this level
+        //tiledMapRenderer.getBatch().end();
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -117,10 +99,14 @@ public abstract class GameScene extends ScreenAdapter {
         //focusOnPlayer(); // Moves the camera position to the player - move to Render?
     }
 
-    @Override
-    public void hide() {
-        Gdx.input.setInputProcessor(null); // Disable input events when this screen is hidden
+    private void focusOnPlayer() {
+
     }
+
+//    @Override
+//    public void hide() {
+//        Gdx.input.setInputProcessor(null); // Disable input events when this screen is hidden
+//    }
 
     /**
      * Use this to pause the game when the user views options/how to play?
@@ -142,3 +128,15 @@ public abstract class GameScene extends ScreenAdapter {
     public void dispose() {
     }
 }
+
+
+
+//    public GameScene(EducationGame game) {
+//        this.game = game;
+//        stage = new Stage();
+//        //stage.addActor(menuBar); // TODO - menu bar
+//
+//        //TODO - enable for user input on this screen
+//        //Gdx.input.setInputProcessor(stage); // Set this screen for inputs
+//        //focusOnPlayer();
+//    }

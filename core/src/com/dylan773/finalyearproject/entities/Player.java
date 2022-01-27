@@ -5,15 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.dylan773.finalyearproject.render.levels.HistoryTest;
 import com.dylan773.finalyearproject.utilities.Assets;
 
 public class Player extends Sprite {
-
     /*
      * FIELDS
      */
-
     /**
      * The x and y position for this sprite (player).
      */
@@ -25,31 +23,14 @@ public class Player extends Sprite {
     private final float SPEED = 100;
 
 
-    //*****************************************
-    private TiledMapTileLayer collisionLayer;
-    private String collisionKey = "blocked";
-
-
-    //TODO - remove the setting of the player position from the constructor
     /*
      * CONSTRUCTOR
      */
-
     /**
      * <h2>Player class constructor</h2>
      */
-    public Player(float x, float y) { //delete both floats
-        super(Assets.KNIGHT_SPRITE);
-        setSize(50f, 50f); // Default size of player - CHANGE BACK TO 70
-
-        posX = x; // Assigns this player's posX value to the x parameter value
-        posY = y; // Assigns this player's posY value to the y parameter value
-    }
-
-    /**
-     * <h2>Player class constructor</h2>
-     */
-    public Player(float x, float y, Texture texture) { //delete both floats
+    public Player(float x, float y, Texture texture) {
+        //TODO - remove the setting of the player position from the constructor
         super(texture);
         setSize(50f, 50f); // Default size of player - CHANGE BACK TO 70
 
@@ -57,13 +38,9 @@ public class Player extends Sprite {
         posY = y; // Assigns this player's posY value to the y parameter value
     }
 
-    public Player(TiledMapTileLayer collisionLayer) {
-        super(Assets.KNIGHT_SPRITE);
-        this.collisionLayer = collisionLayer;
-    }
-
-    // METHODS
-
+    /*
+     * METHODS
+     */
     /**
      * <h2>Draws the player sprite</h2>
      * Accepts a batch, to draw a Texture and calls the {@link #update(float, float)} method that is responsible for player movement controls.
@@ -78,7 +55,6 @@ public class Player extends Sprite {
         super.draw(batch);
     }
 
-    //TODO - Replace with switch statement?
 
     /**
      * <h2>Player movement</h2>
@@ -117,6 +93,16 @@ public class Player extends Sprite {
             posX += Gdx.graphics.getDeltaTime() * SPEED;
         }
     }
+
+    public void setPosY(float y) {
+        posY = y;
+    }
+
+    public void setPosX(float x) {
+        posX = x;
+    }
+
+
 
     /**
      * write javadoc
