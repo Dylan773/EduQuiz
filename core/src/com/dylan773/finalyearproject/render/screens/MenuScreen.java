@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.render.levels.HistoryLevel;
+import com.dylan773.finalyearproject.render.levels.HistoryTest;
 import com.dylan773.finalyearproject.render.levels.LevelThreeScreen;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
@@ -71,8 +72,8 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //game.setScreen(new HistoryLevel(game));
-                game.setScreen(new LevelThreeScreen(game));
+                game.setScreen(new HistoryTest(game));
+                //game.setScreen(new LevelThreeScreen(game));
             }
         });
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="120" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="120" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="309">
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="337" source="water.tsx"/>
  <layer id="1" name="Water" width="120" height="68" locked="1">
@@ -12,7 +12,7 @@
    <property name="collision" value="blocked"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer id="2" name="Terrain" width="120" height="68">
@@ -25,4 +25,14 @@
    eJzt20lPwkAAxfE2iqJ4MSqud1e8orhcXer3/yLuwsHnoaEx4hLGtPPm/0teaAIhDS8MZWaaZQAAAAAAwEWRj4/n8smvg4c7Oo5e9Tt7qOMjpacc062FaqdnyrlyoVzSrwU6TcvHeM3vLgAA6XpThsqo7hPBv1jUdV5HWeJ6z0o557Klx21lh36tFfRr41l5UV4zenU0r07bygLdWlpXrxvKpvJU98kAv/DVuhxzwD4mreEw1/+zmPaZ0GU62EvhjXV3X4zTAAAAAACk64B5ATv3yoPyqAzo186MOp1VWsot/dpZUaeryhrdWmOvDgBgGjHtF0Ka2Pf3N7F/p+k6jKbeD8tewDCaej8sewGn183jux+2XA9wug8w9Bj6+f3qnsf5rqtlPber7Cn7ued6QOgxtKljclX1+rCv4xPl1HQ9IPQYGtuYfKXzvFZuIjnfpij/g3T53AAAAAAAAAAAiMI7Yp8onw==
   </data>
  </layer>
+ <objectgroup id="8" name="z">
+  <object id="287" x="440.182" y="240.727" width="1.54545" height="64.0909"/>
+  <object id="288" x="440.182" y="304.091" width="1.21504" height="11.2304" rotation="-45"/>
+  <object id="289" x="448.125" y="310.938" width="44" height="0.875"/>
+ </objectgroup>
+ <objectgroup id="9" name="objects">
+  <object id="308" name="spawn" x="392.667" y="718.667">
+   <point/>
+  </object>
+ </objectgroup>
 </map>
