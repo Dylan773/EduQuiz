@@ -7,6 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
  */
 public abstract class WindowBuilder extends Window {
 
+    /**
+     *
+     * @param width The width of the window.
+     * @param height The height of the window.
+     */
     public WindowBuilder(float width, float height) {
         super("", Assets.SKIN);
         //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));

@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dylan773.finalyearproject.render.levels.HistoryLevel;
 import com.dylan773.finalyearproject.render.levels.HistoryTest;
-import com.dylan773.finalyearproject.render.levels.LevelThreeScreen;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
@@ -56,15 +54,15 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
-        constructContent(); // Constructs the table to be displayed
-        AudioController.playMainMenu(); // Plays the main menu music for this application
+        initialiseScreen(); // Constructs the table to be displayed
+        AudioController.playMainMenu(); // Plays the main menu music on loop
     }
 
     /**
      * <h2>Constructs the content to be displayed on this applications main menu</h2>
      * Uses a {@link #table} to arrange actors to be displayed on the main menu screen.
      */
-    public void constructContent() {
+    public void initialiseScreen() {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MAIN_MENU_BACKGROUND)));
         table.add(addLabel("Edu Quiz", "title")).padBottom(20f).row();
 
@@ -139,7 +137,6 @@ public class MenuScreen extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
 
-        // Nested if statement
         // Whilst the options window is visible, if the user has pressed the ESC key, the window will be closed/hidden.
         if (optionsWindow.isVisible()) {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))

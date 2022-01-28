@@ -1,5 +1,6 @@
 package com.dylan773.finalyearproject.render.windows;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -11,6 +12,7 @@ import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
 import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
+import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 
 /**
  * <h1>Game Options Window</h1>
@@ -38,7 +40,8 @@ public class OptionsWindow extends WindowBuilder {
     protected void buildWindow() {
         //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
         this.setVisible(false);
-        this.setPosition(150, 50); // TODO - I dont like this hard coded, center using a different method
+        //this.setPosition(150, 50);
+        this.setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight())); // TODO - figure this out
 
         // Game Music Control
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);

@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
-import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.entities.PlayerTest;
 
 /**
@@ -29,6 +27,7 @@ public abstract class GameScene extends ScreenAdapter {
     private EducationGame game = new EducationGame();
     private Stage stage;
     private Sprite player;
+    public Vector3 desiredCamPos = new Vector3();
 
     private PlayerTest playerTest;
 

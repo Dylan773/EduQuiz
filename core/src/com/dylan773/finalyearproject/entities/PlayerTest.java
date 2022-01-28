@@ -14,10 +14,6 @@ import com.dylan773.finalyearproject.utilities.Assets;
 public class PlayerTest extends Sprite {
     public World world; // The Box2D world.
     public Body body; // The Box2D body.
-    public Fixture top, bottom, left, right;
-
-    public boolean blockedTop, blockedBottom, blockedRight, blockedLeft;
-
     public HistoryTest historyMap;
     /*
      * Fields
@@ -65,13 +61,6 @@ public class PlayerTest extends Sprite {
 
         Body body = w.createBody(bdef);
 
-        // Create fixtures inside of the body.
-        top = body.createFixture(defineSensorFixture(width, height, 0f, 1f, false));     // Top
-        bottom = body.createFixture(defineSensorFixture(width, height, 0f, -1f, false));    // Bottom
-
-        left = body.createFixture(defineSensorFixture(width, height, -1.2f, 0f, true));     // Left
-        right = body.createFixture(defineSensorFixture(width, height, 1.2f, 0f, true));     // Right
-
         FixtureDef fixtureDef = new FixtureDef();
 
         // Box around the player
@@ -83,24 +72,6 @@ public class PlayerTest extends Sprite {
         body.createFixture(fixtureDef);
 
         return body;
-    }
-
-    private FixtureDef defineSensorFixture(Float width, Float height, Float x, Float y, Boolean isVertical) {
-        FixtureDef def = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        float _width = width, _height = height;
-
-        if (isVertical)
-            _width *= 0.1f;
-        else
-            _height *= 0.1f;
-
-        shape.setAsBox(_width * 0.5f, _height * 0.5f, new Vector2((width * x) * 0.5f, (height * y) * 0.5f), 0f);
-
-        def.shape = shape;
-        def.isSensor = true;
-
-        return def;
     }
 
     /**

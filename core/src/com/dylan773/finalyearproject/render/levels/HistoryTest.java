@@ -8,10 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.dylan773.finalyearproject.EducationGame;
-import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.entities.PlayerTest;
 import com.dylan773.finalyearproject.render.screens.GameScene;
-import com.dylan773.finalyearproject.utilities.Assets;
+
 
 
 //TODO - change the map load directory to sort out names
@@ -45,7 +44,7 @@ public class HistoryTest extends GameScene {
 
         //TiledMapObject.parseTiledObjectLayer(world, map.getLayers().get(4).getObjects());
 
-        for (MapObject object : map.getLayers().get("Collision").getObjects().getByType(RectangleMapObject.class)) {
+        for (MapObject object : map.getLayers().get("Collision").getObjects()) {
             Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
 
             bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -60,24 +59,13 @@ public class HistoryTest extends GameScene {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-//
-                checkCollision(contact.getFixtureA(), true);
-                checkCollision(contact.getFixtureB(), true);
+
             }
 
             @Override
             public void endContact(Contact contact) {
                 System.out.println("contact end");
 
-                checkCollision(contact.getFixtureA(), false);
-                checkCollision(contact.getFixtureB(), false);
-
-
-                playerTest.blockedTop = false;
-                playerTest.blockedBottom = false;
-                playerTest.blockedRight = false;
-                playerTest.blockedLeft  = false;
-                //set the blocked booleans to false
             }
 
             @Override
@@ -103,26 +91,7 @@ public class HistoryTest extends GameScene {
         //createGameLevelTest(map, playerTest); // abstract method from parent
     }
 
-    /**
-     *
-     * @param fixture
-     * @param value
-     */
-    private void checkCollision(Fixture fixture, Boolean value) {
-        if (fixture == playerTest.top)
-            playerTest.blockedTop = value;
 
-        if (fixture == playerTest.bottom)
-            playerTest.blockedBottom = value;
-
-        if (fixture == playerTest.right)
-            playerTest.blockedRight = value;
-
-        if (fixture == playerTest.left)
-            playerTest.blockedLeft = value;
-
-        //left, right, bottom
-    }
 
     @Override
     public void render(float delta) {
@@ -132,7 +101,13 @@ public class HistoryTest extends GameScene {
         debugRenderer = new Box2DDebugRenderer();
         debugRenderer.render(world, getCamera().combined);
 
-        getCamera().position.set(playerTest.pos, 0);
+        //getCamera().position.set(playerTest.pos, 0);
+        desiredCamPos.set(playerTest.pos, 0);
+
+        // linear interoperation - creates a delay on the camera position to player.
+        getCamera().position.lerp(desiredCamPos, 0.08f);
+
+
         //getCamera().zoom -= .1;
 //        getCamera().position.x +=1;
 //        getCamera().position.y +=1;
