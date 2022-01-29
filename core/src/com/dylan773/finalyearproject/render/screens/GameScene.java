@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
-import com.dylan773.finalyearproject.entities.PlayerTest;
+
+import javafx.scene.control.Tab;
 
 /**
  * <h1>Abstract class that provides a base for extending classes to implement a game level</h1>
@@ -29,7 +32,10 @@ public abstract class GameScene extends ScreenAdapter {
     private Sprite player;
     public Vector3 desiredCamPos = new Vector3();
 
-    private PlayerTest playerTest;
+    Table table;
+
+
+
 
     // METHODS
     /**
@@ -44,19 +50,27 @@ public abstract class GameScene extends ScreenAdapter {
         this.player = player; //TODO - set camera to player position
 
         //TODO - Create a stage with a TiledMap and menu bar
-//        stage = new Stage();
-//        stage.addActor(menuBar);
+
+
+
 
         // Create the renderer
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // Resize is called after this method, camera is updated there
 
-        // Sets the size of the camera
+        // Sets the size and zoom of the game camera
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = 0.7f; // Sets the zoom of the game camera
+
+        // Assigns the viewport with the width/height of the screen and the camera
         viewport = new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
+
     }
 
-
+    /**
+     * Returns the GameScreen's camera.
+     * @return The GameScreen camera.
+     */
     public OrthographicCamera getCamera() {
         return camera;
     }
@@ -78,28 +92,25 @@ public abstract class GameScene extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clears the screen before rendering the next frame
 
         tiledMapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        //camera.lookAt(playerTest.pos.x, playerTest.pos.y, 0);
         camera.update();
 
-        //tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera()); // Set the renderer's view to the camera
         tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight);
         tiledMapRenderer.render(); // renders the map, can also render certain layers
 
         drawSprite(player); // Draws the sprite for this level
         //tiledMapRenderer.getBatch().end();
+
+        // TODO - NEW (lerp doesnt work this way)
+//        desiredCamPos.set(player.getX(), player.getY(), 0);
+//        camera.position.lerp(desiredCamPos, 0.8f);
     }
+
 
     @Override
     public void resize(int width, int height) {
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
-
-        //focusOnPlayer(); // Moves the camera position to the player - move to Render?
-    }
-
-    private void focusOnPlayer() {
-
     }
 
 //    @Override
