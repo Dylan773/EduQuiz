@@ -14,9 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public class Assets {
 
-
-     // FIELDS
-
     // Game Skin
     public static final Skin SKIN = new Skin(Gdx.files.internal("skin/skin/pixthulhu-ui.json"));
 

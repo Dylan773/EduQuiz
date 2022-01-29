@@ -54,4 +54,23 @@ public class Utilities {
     public static float centreObject(float length, float containerLength) {
         return (containerLength / 2) - (length / 2);
     }
+
+    /**
+     * If value is greater than max, returns max. If less than mix, returns min. If neither, returns value.
+     */
+    public static float clamp(float min, float max, float value) {
+        return  value > max ? max : value < min ? min : value;
+    }
+
+    public static float lerp(float a, float b, float f) {
+        return a + f * (b - a);
+    }
+
+
+
+    public static float debugValue = 1f;
+    public static void debugMod(float f) {
+        debugValue += f;
+        System.out.println("Debug value is now : " + debugValue);
+    }
 }

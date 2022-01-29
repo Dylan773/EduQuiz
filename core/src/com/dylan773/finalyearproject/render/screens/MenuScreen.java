@@ -10,12 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dylan773.finalyearproject.render.levels.HistoryTest;
+import com.dylan773.finalyearproject.level.LevelFactory;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.EducationGame;
 
+import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -30,21 +31,16 @@ public class MenuScreen extends ScreenAdapter {
      */
     private Stage stage;
     private Table table;
-    private final EducationGame game;
     private OptionsWindow optionsWindow = new OptionsWindow();
 
 
     /*
      * Constructor
      */
-
     /**
      * <h2>Main Menu Constructor</h2>
-     *
-     * @param game The game object passed to this Main Menu screen.
      */
-    public MenuScreen(EducationGame game) { // No create method in screen so use a constructor instead
-        this.game = game;
+    public MenuScreen() { // No create method in screen so use a constructor instead
         table = new Table();
         table.setFillParent(true);
 
@@ -70,7 +66,7 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new HistoryTest(game));
+                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.History));
                 //game.setScreen(new LevelThreeScreen(game));
             }
         });
@@ -120,8 +116,7 @@ public class MenuScreen extends ScreenAdapter {
      */
     @Override
     public void hide() {
-        Gdx.input.setInputProcessor(null);
-        AudioController.stopNowPlaying();
+        //AudioController.stopNowPlaying();
         //TODO - this may need to be changed/moved if the constructor doesnt play re-play this track when the main menu is revisited
     }
 

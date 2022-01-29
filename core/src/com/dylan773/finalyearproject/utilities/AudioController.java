@@ -154,7 +154,9 @@ public class AudioController {
     /**
      * Played when user enters a game
      */
-    public static void playGame() {
-        //TODO - code
+    public static void playHistoryLevel() {
+        //TODO - code (add this method in the constructor of each class)
+        //nowPlaying = ...
+        playOnLoop(nowPlaying);
     }
 }

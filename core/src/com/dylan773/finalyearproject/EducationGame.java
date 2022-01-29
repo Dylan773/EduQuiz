@@ -16,11 +16,12 @@ public class EducationGame extends Game {
 	 */
 	public final int WIDTH = 1280, HEIGHT = 720;
 	public static final float PPM = 100; //pixels per meter
+	public static EducationGame CLIENT;
 
 	@Override
 	public void create () {
-		setScreen(new MenuScreen(this));
-		//setScreen(new GameScreen());
+		CLIENT = this;
+		setScreen(new MenuScreen());
 		//TODO - Create a loading scree that transitions into the main menu
 	}
 
