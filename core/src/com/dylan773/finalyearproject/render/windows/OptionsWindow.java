@@ -1,14 +1,18 @@
 package com.dylan773.finalyearproject.render.windows;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
+import com.dylan773.finalyearproject.utilities.WindowBuilder;
+
 import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
+import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 
 /**
  * <h1>Game Options Window</h1>
@@ -16,25 +20,29 @@ import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
  *
  * @author Dylan Brand
  */
-public class OptionsWindow extends Window {
+public class OptionsWindow extends WindowBuilder {
 
     /**
      * <h2>Options Window Constructor</h2>
-     * Constructs the Options window to be displayed.<br>
+     * Constructs the Options window to be displayed.
+     * <p>
      * The {@link #setVisible(boolean)} method can be called to set the visibility of this window to the user.
      */
     public OptionsWindow() {
-        super("", Assets.SKIN);
+        super(1000f, 600f);
+        buildWindow();
+    }
 
-        this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
-        this.setResizable(false);
-        this.setMovable(false);
-        this.setVisible(false); // By default, this window is initially hidden
-        this.setSize(1000f, 600f);
-        this.setPosition(150, 50); // TODO - I dont like this hard coded, center using a different method
-        this.top();
+    /**
+     * Overrides the abstract buildWindow() method from the {@link #WindowBuilder}  parent class.
+     */
+    @Override
+    protected void buildWindow() {
+        //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
+        this.setVisible(false);
+        //this.setPosition(150, 50);
+        this.setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight())); // TODO - figure this out
 
-        // TODO - why do these all have to be final???
         // Game Music Control
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
         musicSlider.setValue(AudioController.getMusicVolume());
@@ -81,4 +89,3 @@ public class OptionsWindow extends Window {
         this.add(menuExit).colspan(2);
     }
 }
-

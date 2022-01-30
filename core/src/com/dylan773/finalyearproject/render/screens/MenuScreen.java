@@ -6,17 +6,17 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.dylan773.finalyearproject.level.LevelFactory;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.EducationGame;
 
+import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -31,45 +31,43 @@ public class MenuScreen extends ScreenAdapter {
      */
     private Stage stage;
     private Table table;
-    private EducationGame game;
     private OptionsWindow optionsWindow = new OptionsWindow();
+
 
     /*
      * Constructor
      */
     /**
      * <h2>Main Menu Constructor</h2>
-     *
-     * @param game The game object passed to this Main Menu screen.
      */
-    public MenuScreen(EducationGame game) { // No create method in screen so use a constructor instead
-        this.game = game;
+    public MenuScreen() { // No create method in screen so use a constructor instead
         table = new Table();
         table.setFillParent(true);
 
         stage = new Stage();
         stage.addActor(table);
-        stage.addActor(optionsWindow);
+        stage.addActor(optionsWindow); // Add the option window to the stage
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
-        constructContent(); // Constructs the table to be displayed
-        AudioController.playMainMenu(); // Plays the main menu music for this application
+        initialiseScreen(); // Constructs the table to be displayed
+        AudioController.playMainMenu(); // Plays the main menu music on loop
     }
 
     /**
      * <h2>Constructs the content to be displayed on this applications main menu</h2>
      * Uses a {@link #table} to arrange actors to be displayed on the main menu screen.
      */
-    public void constructContent() {
-        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MENU_BACKGROUND)));
+    public void initialiseScreen() {
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MAIN_MENU_BACKGROUND)));
         table.add(addLabel("Edu Quiz", "title")).padBottom(20f).row();
 
         // Play Game Button Controls
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new LevelOneScreen(game));
+                //CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.History));
+                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.Museum));
             }
         });
 
@@ -85,10 +83,10 @@ public class MenuScreen extends ScreenAdapter {
         // Exit Game Button Controls
         addMenuButton("Exit Game").addListener(new ChangeListener() {
             @Override
-        public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-            Gdx.app.exit();
-        }
-    });
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
 
         // Game Author Label
         table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
@@ -118,9 +116,15 @@ public class MenuScreen extends ScreenAdapter {
      */
     @Override
     public void hide() {
-        Gdx.input.setInputProcessor(null);
-        AudioController.stopNowPlaying();
+        //AudioController.stopNowPlaying();
+        //TODO - this may need to be changed/moved if the constructor doesnt play re-play this track when the main menu is revisited
     }
+
+//    @Override
+//    public void show() {
+//        super.show();
+//        AudioController.playMainMenu();
+//    }
 
     @Override
     public void render(float delta) {
@@ -132,8 +136,6 @@ public class MenuScreen extends ScreenAdapter {
         if (optionsWindow.isVisible()) {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 optionsWindow.setVisible(false);
-
-
         }
     }
 
@@ -148,13 +150,14 @@ public class MenuScreen extends ScreenAdapter {
 //        stage.dispose();
 //    }
 
+
     /**
      * A TextButton that will display a game info window once clicked.
      */
     private TextButton gameInfoButton() {
         TextButton infoButton = new TextButton("?", Assets.SKIN);
         infoButton.setSize(100f, 100f);
-        infoButton.setPosition(1150,25);
+        infoButton.setPosition(1150, 25);
         //infoButton.setDisabled(true);
         infoButton.addListener(new ChangeListener() {
             @Override
@@ -165,6 +168,4 @@ public class MenuScreen extends ScreenAdapter {
 
         return infoButton;
     }
-
-
 }
