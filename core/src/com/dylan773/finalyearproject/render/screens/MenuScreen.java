@@ -66,8 +66,8 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.History));
-                //game.setScreen(new LevelThreeScreen(game));
+                //CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.History));
+                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.Museum));
             }
         });
 

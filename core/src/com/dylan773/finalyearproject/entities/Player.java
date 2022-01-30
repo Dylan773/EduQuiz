@@ -137,7 +137,7 @@ public class Player extends Sprite {
      * @return
      */
     private boolean boundCheck(int x, int y) {
-        return ((TiledMapTileLayer) level.getMap().getLayers().get("Terrain")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
+        return ((TiledMapTileLayer) level.getMap().getLayers().get("Floor")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
     }
 
 
