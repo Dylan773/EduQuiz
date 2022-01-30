@@ -2,45 +2,82 @@ package com.dylan773.finalyearproject.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.dylan773.finalyearproject.render.levels.HistoryTest;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.utilities.Assets;
+import com.dylan773.finalyearproject.utilities.Utilities;
+
 
 public class Player extends Sprite {
+    public World world; // The Box2D world.
+    public Body body; // The Box2D body.
+    public GameLevel level;
     /*
-     * FIELDS
+     * Fields
      */
     /**
      * The x and y position for this sprite (player).
      */
-    private float posX, posY;
+    public Vector2 pos = new Vector2(450f, 350f);
 
     /**
      * The movement speed for this player, 100 pixels/second.
      */
-    private final float SPEED = 100;
-
+    public float speed = 100;
 
     /*
-     * CONSTRUCTOR
+     * Constructor
      */
-    /**
-     * <h2>Player class constructor</h2>
-     */
-    public Player(float x, float y, Texture texture) {
-        //TODO - remove the setting of the player position from the constructor
-        super(texture);
-        setSize(50f, 50f); // Default size of player - CHANGE BACK TO 70
+    public Player(GameLevel level) {
+        super(Assets.KNIGHT_SPRITE);
 
-        posX = x; // Assigns this player's posX value to the x parameter value
-        posY = y; // Assigns this player's posY value to the y parameter value
+        // Sprite properties
+        setSize(40f, 40f); // Default size of player - CHANGE BACK TO 70
+        setOrigin(getWidth() / 2, getHeight() / 2);
+
+        this.world = level.getWorld();
+        this.level = level;
+        definePlayer();
     }
 
-    /*
-     * METHODS
+    /**
+     *
      */
+    public void definePlayer() { body = createBox2DPlayerBody(world, getWidth(), getWidth()); }
+
+    /**
+     *
+     * @param w
+     * @param width
+     * @param height
+     * @return
+     */
+    public Body createBox2DPlayerBody(World w, Float width, Float height) {
+        // Create the main body
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(pos);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+
+        Body body = w.createBody(bdef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+
+        // Box around the player
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(getWidth() / 2, getHeight() / 2);
+
+        fixtureDef.shape = polygonShape;
+        fixtureDef.density = 10;
+        body.createFixture(fixtureDef);
+
+        return body;
+    }
+
     /**
      * <h2>Draws the player sprite</h2>
      * Accepts a batch, to draw a Texture and calls the {@link #update(float, float)} method that is responsible for player movement controls.
@@ -51,10 +88,11 @@ public class Player extends Sprite {
      */
     @Override
     public void draw(Batch batch) {
-        update(posX, posY); // Uses the posX/posY values to set the player position when drawn
+        update(pos.x, pos.y); // Uses the posX/posY values to set the player position when drawn
         super.draw(batch);
     }
 
+    //TODO - Replace with switch statement?
 
     /**
      * <h2>Player movement</h2>
@@ -68,59 +106,43 @@ public class Player extends Sprite {
      * @see com.badlogic.gdx.Input.Keys
      */
     public void update(float x, float y) {
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && boundCheck(0, 1)) {
+            pos.y += Gdx.graphics.getDeltaTime() * speed();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && boundCheck(0, -1)) {
+            pos.y -= Gdx.graphics.getDeltaTime() * speed();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && boundCheck(-1, 0)) {
+            pos.x -= Gdx.graphics.getDeltaTime() * speed();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && boundCheck(1, 0)) {
+            pos.x += Gdx.graphics.getDeltaTime() * speed();
+        }
         setPosition(x, y); // Sets the player position
-
-        boolean collideX = false,
-                collideY = false;
-
-        float
-                oldX = getX(),
-                oldY = getY();
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            posY += Gdx.graphics.getDeltaTime() * SPEED;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            posY -= Gdx.graphics.getDeltaTime() * SPEED;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            posX -= Gdx.graphics.getDeltaTime() * SPEED;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            posX += Gdx.graphics.getDeltaTime() * SPEED;
-        }
+        body.setTransform(pos.x + (getWidth()/ 2), pos.y  + (getHeight()/2), 0);
     }
 
-    public void setPosY(float y) {
-        posY = y;
+    private float speed() {
+        return (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) ? speed * Utilities.debugValue : speed;
     }
-
-    public void setPosX(float x) {
-        posX = x;
-    }
-
-
 
     /**
-     * write javadoc
      *
      * @param x
      * @param y
+     * @return
      */
-//    public boolean isCellBlocked(float x, float y) {
-//        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()),
-//                (int) y / collisionLayer.getHeight());
-//
-//        return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(collisionKey);
-//    }
+    private boolean boundCheck(int x, int y) {
+        return ((TiledMapTileLayer) level.getMap().getLayers().get("Floor")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
+    }
 
-//    public boolean collisionRight() {
-//        for (float inc = 0; inc <= getHeight(); inc += collisionLayer.getTileHeight() / 2)
-//            if (isCellBlocked(getX(), getWidth() + inc))
-//                return true;
-//        return false;
-//    }
+
+    //TODO - change collision layer from terrain?
+    private boolean abstractBoundCheck(int x, int y, TiledMap tiledMap) {
+        return ((TiledMapTileLayer) tiledMap.getLayers().get("Terrain")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
+    }
 }
