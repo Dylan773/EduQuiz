@@ -13,10 +13,10 @@ public class DesktopLauncher {
 		config.title = "Edu Quiz";
 
 		// Detects the users resolution
-		Dimension a = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension res = Toolkit.getDefaultToolkit().getScreenSize();
 
-		config.height = a.height;
-		config.width = a.width;
+		config.height = res.height;
+		config.width = res.width;
 
 		new LwjglApplication(new EducationGame(), config);
 	}

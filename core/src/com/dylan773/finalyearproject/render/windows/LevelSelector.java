@@ -1,5 +1,7 @@
 package com.dylan773.finalyearproject.render.windows;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 
 public class LevelSelector extends WindowBuilder {
     private static final ArrayList<LevelFactory.Level> LEVEL_LIST = new ArrayList<>();
@@ -29,8 +32,20 @@ public class LevelSelector extends WindowBuilder {
 
     @Override
     protected void buildWindow() {
-        Label lblTitle = new Label("Level Selector", SKIN, "title");
-        add(lblTitle).padBottom(10f).center().row();
+        setVisible(false);
+
+        Label lblTitle = new Label("Level Selector", SKIN, "subtitle");
+        add(lblTitle).padBottom(20f).padTop(20f).center();
+
+        TextButton btnClose = new TextButton("X", SKIN, "arcade");
+        btnClose.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                playButtonSound();
+                setVisible(false);
+            }
+        });
+        add(btnClose).row();
 
         //TODO - play correct audio dynamically
 
@@ -57,16 +72,20 @@ public class LevelSelector extends WindowBuilder {
                     if (it.isChecked())
                         LEVEL_LIST.add(LevelFactory.Level.valueOf(it.getText().toString()));
                 });
+
                 if (LEVEL_LIST.size() == 0)
                     lblError.setText("Select at least one level");
                 else
                     CLIENT.setScreen(LevelFactory.newLevel(LEVEL_LIST.get(0)));
+                playButtonSound();
             }
         });
 
+
         //padTop(20f);
+
         add(textButton).expandY().bottom().row();
-        //debug();
+        debug();
         add(lblError).padTop(10f);
     }
 
@@ -77,4 +96,10 @@ public class LevelSelector extends WindowBuilder {
     public static ArrayList<LevelFactory.Level> getLevelList() {
         return LEVEL_LIST;
     }
+
+
+//        if (optionsWindow.isVisible()) {
+//        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+//            optionsWindow.setVisible(false);
+//    }
 }

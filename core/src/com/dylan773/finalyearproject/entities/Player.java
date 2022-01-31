@@ -28,7 +28,7 @@ public class Player extends Sprite {
     /**
      * The movement speed for this player, 100 pixels/second.
      */
-    public float speed = 100;
+    public float speed = 100f;
 
     /*
      * Constructor
@@ -144,5 +144,21 @@ public class Player extends Sprite {
     //TODO - change collision layer from terrain?
     private boolean abstractBoundCheck(int x, int y, TiledMap tiledMap) {
         return ((TiledMapTileLayer) tiledMap.getLayers().get("Terrain")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
+    }
+
+    /**
+     * <h2> Stops the player's ability to move.</h2>
+     * Should only be called when the game session is in a paused state.
+     */
+    public void pauseMovement() {
+        speed = 0f;
+    }
+
+    /**
+     * <h2>Enables the player's ability to move, at the default speed.</h2>
+     * Should be called when the game sessions has left the paused state.
+     */
+    public void resumeMovement() {
+        speed = 100f;
     }
 }

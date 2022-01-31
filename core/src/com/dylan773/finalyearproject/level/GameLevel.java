@@ -18,19 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
-import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.render.windows.GameBar;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
-import com.dylan773.finalyearproject.render.windows.QuestionWindow;
-import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.Utilities;
 
 
-import java.io.InputStream;
 import java.util.Objects;
 
-import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
@@ -56,7 +51,7 @@ public class GameLevel extends ScreenAdapter {
 
     private FillViewport viewport;
 
-    private Stage stage;
+    private static Stage stage;
     Table table; // the table only has the text in
 
     protected TiledMap map;
@@ -68,8 +63,8 @@ public class GameLevel extends ScreenAdapter {
     protected Player player;
 
     //TODO
-    private QuestionWindow questionWindow = new QuestionWindow();
-    private static OptionsWindow optionsWindow = new OptionsWindow();
+    //private QuestionWindow questionWindow = new QuestionWindow();
+    private static OptionsWindow optionsWindow = new OptionsWindow(); // TODO
     private GameBar gameBar = new GameBar();
 
 
@@ -107,20 +102,25 @@ public class GameLevel extends ScreenAdapter {
     }
 
     private void stageInit() {
-        stage = new Stage(); //TODO
-        stage.addActor(gameBar);
+        stage = new Stage();
 
+        // Table config
         table = new Table();
         table.setVisible(false);
+        table.setFillParent(true);
 
+        // GameBar config
+        stage.addActor(gameBar);
+        gameBar.setY(50f); // Changes the Y position of the window's bottom edge.
 
-        //Label pause = new Label("Game Menu\n(ESC)", SKIN, "font", Color.ORANGE);
-        Label pause = new Label("Paused\nESC to resume", SKIN, "font", Color.ORANGE);
+        // Label config
+        Label pause = new Label("Paused\nESC to resume", SKIN, "subtitle", Color.ORANGE);
         pause.setAlignment(Align.center);
         table.add(pause).padBottom(Value.percentHeight(10f));
 
-        table.setFillParent(true);
+
         stage.addActor(table);
+        stage.addActor(new OptionsWindow()); // TODO - here?
         stage.addActor(optionsWindow);
     }
 
@@ -138,7 +138,7 @@ public class GameLevel extends ScreenAdapter {
                         Utilities.debugMod(-0.1f);
                         break;
                     case Input.Keys.ESCAPE:
-                        gameBar.setVisible(!gameBar.isVisible());
+                        gameBar.setVisible(!gameBar.isVisible()); //Invert settings
                         table.setVisible(gameBar.isVisible());
                         break;
                 }
@@ -251,23 +251,43 @@ public class GameLevel extends ScreenAdapter {
 
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
+
+        if (gameBar.isVisible())
+            pause();
+        else
+            resume();
     }
 
+    /**
+     *
+     */
     private void renderWorld() {
         tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight);
         // renders the map, can also render certain layers
         tiledMapRenderer.render();
     }
 
+    /**
+     *
+     */
     private void renderPlayer() { drawSprite(player); }
 
+    /**
+     *
+     */
     private void processCollisions() { world.step(1 / 60f, 6, 2); }
 
+    /**
+     *
+     */
     private void renderDebug() {
         if (renderHitBoxes)
             debugRenderer.render(world, getCamera().combined);
     }
 
+    /**
+     *
+     */
     private void processCameraMovement() {
         desiredCamPos.set(player.pos, 0);
         // linear interoperation - Moves the camera towards the desired position by a percentage every frame.
@@ -285,12 +305,14 @@ public class GameLevel extends ScreenAdapter {
     }
 
 
+    //============================================================================
     /**
      * Use this to pause the game when the user views options/how to play?
      */
     @Override
     public void pause() {
         //super.pause();
+        player.pauseMovement();
     }
 
     /**
@@ -299,7 +321,9 @@ public class GameLevel extends ScreenAdapter {
     @Override
     public void resume() {
         //super.resume();
+        player.resumeMovement();
     }
+    //===============================================================================
 
     @Override
     public void dispose() {
@@ -311,7 +335,7 @@ public class GameLevel extends ScreenAdapter {
     //#endregion
     //#region get
 
-    public Stage getStage() {
+    public static Stage getStage() {
         return stage;
     }
 
@@ -340,36 +364,13 @@ public class GameLevel extends ScreenAdapter {
     }
 
     //TODO - move this
+
+    /**
+     * Sets the {@link OptionsWindow}'s visibility in the game screen.
+     * @param value The boolean value that determines the window's visibility.
+     */
     public static void setOptionWindowVisibility(boolean value) {
         optionsWindow.setVisible(value);
     }
     //#endregion get
-
-
-//    private static class QuestionWindow extends Window {
-//
-//        private String questionText = "";
-//
-//        /**
-//         *
-//         */
-//        public QuestionWindow() {
-//            super("", Assets.SKIN);
-//            this.setResizable(false);
-//            this.setMovable(false);
-//            this.align(0);
-//            this.setSize(Gdx.graphics.getWidth(), 140f);
-//
-//            buildWindow();
-//        }
-//
-//        protected void buildWindow() {
-//            this.setVisible(true);
-//
-//            TextField textField = new TextField("fdsdfsf", Assets.SKIN);
-//
-//            this.add(addLabel("", "subtitle")).padBottom(50f).row();
-//            this.add(textField);
-//        }
-//    }
 }

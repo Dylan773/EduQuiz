@@ -10,14 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dylan773.finalyearproject.level.LevelFactory;
 import com.dylan773.finalyearproject.render.windows.LevelSelector;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
-import com.dylan773.finalyearproject.EducationGame;
-
-import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
@@ -54,6 +50,9 @@ public class MenuScreen extends ScreenAdapter {
         //table.setDebug(true);
         initialiseScreen(); // Constructs the table to be displayed
         AudioController.playMainMenu(); // Plays the main menu music on loop
+
+        // Clears the previously loaded game levels everytime the user visits this main menu
+        LevelSelector.getLevelList().clear();
     }
 
     /**
@@ -68,9 +67,7 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-//                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.Museum));
-//                AudioController.playHistoryLevel();
-                stage.addActor(new LevelSelector());
+                stage.addActor(new LevelSelector()); // Gets created upon button activation.
             }
         });
 
@@ -137,25 +134,10 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clears the screen so it can draw from fresh
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
-
-        // Whilst the options window is visible, if the user has pressed the ESC key, the window will be closed/hidden.
-        if (optionsWindow.isVisible()) {
-            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-                optionsWindow.setVisible(false);
-        }
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-//    //TODO - not sure if this is required
-//    @Override
-//    public void dispose() {
-//        stage.dispose();
-//    }
-
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
     /**
      * A TextButton that will display a game info window once clicked.
@@ -163,7 +145,7 @@ public class MenuScreen extends ScreenAdapter {
     private TextButton gameInfoButton() {
         TextButton infoButton = new TextButton("?", SKIN);
         infoButton.setSize(100f, 100f);
-        infoButton.setPosition(1150, 25);
+        //infoButton.setPosition(1150, 25); // TODO - change
         //infoButton.setDisabled(true);
         infoButton.addListener(new ChangeListener() {
             @Override

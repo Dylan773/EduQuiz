@@ -6,11 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
+
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.AudioController.*;
 import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
 
 /**
@@ -30,6 +34,7 @@ public class OptionsWindow extends WindowBuilder {
     public OptionsWindow() {
         super(1000f, 600f);
         buildWindow();
+
     }
 
     /**
@@ -37,33 +42,32 @@ public class OptionsWindow extends WindowBuilder {
      */
     @Override
     protected void buildWindow() {
-        //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
-        this.setVisible(false);
+        setVisible(false); // Not shown by default.
 
         // Game Music Control
-        final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
+        final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, SKIN);
         musicSlider.setValue(AudioController.getMusicVolume());
         musicSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 AudioController.setMusicVolume(musicSlider.getValue());
-                AudioController.playButtonSound();
+                playButtonSound();
             }
         });
 
         // Game Sound Effect's Control
-        final Slider sfxSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
+        final Slider sfxSlider = new Slider(0.0f, 1.0f, 0.1f, false, SKIN);
         sfxSlider.setValue(AudioController.getSFXVolume());
         sfxSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 AudioController.setSFXVolume(sfxSlider.getValue());
-                AudioController.playButtonSound();
+                playButtonSound();
             }
         });
 
         // Master Audio Mute Control
-        final CheckBox muteCheck = new CheckBox("Mute", Assets.SKIN);
+        final CheckBox muteCheck = new CheckBox("Mute", SKIN);
         muteCheck.setChecked(AudioController.getIsMuted());
         muteCheck.addListener(new ChangeListener() {
             @Override
@@ -72,17 +76,28 @@ public class OptionsWindow extends WindowBuilder {
             }
         });
 
+        TextButton btnClose = new TextButton("Close", SKIN);
+        btnClose.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                playButtonSound();
+                setVisible(false);
+            }
+        });
+
         // Add each actor to the window
-        this.add(addLabel("OPTIONS", "title")).colspan(2).row();
-        this.add(addLabel("Audio", "subtitle")).padBottom(10f).colspan(2).row();
-        this.add(addLabel("Music Volume:", "default")).right().padBottom(5f);
-        this.add(musicSlider).fillX().padBottom(5f).row();
-        this.add(addLabel("SFX Volume:", "default")).right().padBottom(5f);
-        this.add(sfxSlider).fillX().padBottom(5f).row();
-        this.add(muteCheck).colspan(2).padBottom(130f).row();
+        add(addLabel("OPTIONS", "title")).colspan(2).row();
+        add(addLabel("Audio", "subtitle")).padBottom(10f).colspan(2).row();
+        add(addLabel("Music Volume:", "default")).right().padBottom(5f);
+        add(musicSlider).fillX().padBottom(5f).row();
+        add(addLabel("SFX Volume:", "default")).right().padBottom(5f);
+        add(sfxSlider).fillX().padBottom(5f).row();
+        add(muteCheck).colspan(2).padBottom(70f).row();
+
+        add(btnClose).colspan(2);
 
         // Label exception, has orange text
-        Label menuExit = new Label("Press ESC to Exit", Assets.SKIN, "font", Color.ORANGE);
-        this.add(menuExit).colspan(2);
+//        Label menuExit = new Label("Press ESC to Exit", SKIN, "font", Color.ORANGE);
+//        this.add(menuExit).colspan(2);
     }
 }
