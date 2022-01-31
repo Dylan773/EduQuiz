@@ -11,12 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.level.LevelFactory;
+import com.dylan773.finalyearproject.render.windows.LevelSelector;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.EducationGame;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -66,8 +68,9 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.History));
-                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.Museum));
+//                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.Museum));
+//                AudioController.playHistoryLevel();
+                stage.addActor(new LevelSelector());
             }
         });
 
@@ -93,7 +96,9 @@ public class MenuScreen extends ScreenAdapter {
                 "default")).padTop(20f);
 
         // Game Info Button - Added directly to the stage, not table
-        stage.addActor(gameInfoButton());
+//        stage.addActor(gameInfoButton());
+        table.row();
+        table.add(gameInfoButton()).right().bottom();
     }
 
     /**
@@ -105,7 +110,7 @@ public class MenuScreen extends ScreenAdapter {
      * @return The TextButton.
      */
     private TextButton addMenuButton(String name) {
-        TextButton button = new TextButton(name, Assets.SKIN);
+        TextButton button = new TextButton(name, SKIN);
         table.add(button).width(400f).padBottom(20f).row();
 
         return button;
@@ -126,6 +131,7 @@ public class MenuScreen extends ScreenAdapter {
 //        AudioController.playMainMenu();
 //    }
 
+    // TODO - abstract this?
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clears the screen so it can draw from fresh
@@ -155,7 +161,7 @@ public class MenuScreen extends ScreenAdapter {
      * A TextButton that will display a game info window once clicked.
      */
     private TextButton gameInfoButton() {
-        TextButton infoButton = new TextButton("?", Assets.SKIN);
+        TextButton infoButton = new TextButton("?", SKIN);
         infoButton.setSize(100f, 100f);
         infoButton.setPosition(1150, 25);
         //infoButton.setDisabled(true);

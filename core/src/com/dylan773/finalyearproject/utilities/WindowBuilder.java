@@ -1,6 +1,9 @@
 package com.dylan773.finalyearproject.utilities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+
+import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 
 /**
  * Abstract class that
@@ -13,13 +16,17 @@ public abstract class WindowBuilder extends Window {
      * @param height The height of the window.
      */
     public WindowBuilder(float width, float height) {
-        super("", Assets.SKIN);
+        super("", Assets.SKIN, "round");
         //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
-        this.setResizable(false);
-        this.setMovable(false);
-        this.setSize(width, height);
-        this.top();
-        //this.setVisible(false); // By default, this window is initially hidden TODO - mess around with this
+        setResizable(false);
+        setMovable(false);
+        setSize(width, height);
+        setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight()));
+        setVisible(false); // By default, this window is initially hidden
+        padTop(0f);
+        //debug();
+
+        // TODO - title table
     }
 
     /**

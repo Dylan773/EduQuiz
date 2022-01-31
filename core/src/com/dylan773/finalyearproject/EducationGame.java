@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.utilities.Assets;
@@ -14,8 +15,7 @@ public class EducationGame extends Game {
 	/**
 	 * Default height and width for this application.
 	 */
-	public final int WIDTH = 1280, HEIGHT = 720;
-	public static final float PPM = 100; //pixels per meter
+	public static final int WIDTH = 1280, HEIGHT = 720;
 	public static EducationGame CLIENT;
 
 	@Override
@@ -23,6 +23,7 @@ public class EducationGame extends Game {
 		CLIENT = this;
 		setScreen(new MenuScreen());
 		//TODO - Create a loading scree that transitions into the main menu
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject.level;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,19 +14,25 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.render.windows.GameBar;
+import com.dylan773.finalyearproject.render.windows.OptionsWindow;
+import com.dylan773.finalyearproject.render.windows.QuestionWindow;
+import com.dylan773.finalyearproject.utilities.Assets;
+import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.Utilities;
+
 
 import java.io.InputStream;
 import java.util.Objects;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
-import static com.dylan773.finalyearproject.utilities.Utilities.clamp;
-import static com.dylan773.finalyearproject.utilities.Utilities.lerp;
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
  * Abstract view of a level.
@@ -50,8 +57,7 @@ public class GameLevel extends ScreenAdapter {
     private FillViewport viewport;
 
     private Stage stage;
-    Table table;
-    private GameBar gameBar = new GameBar();
+    Table table; // the table only has the text in
 
     protected TiledMap map;
     protected World world;
@@ -61,6 +67,11 @@ public class GameLevel extends ScreenAdapter {
 
     protected Player player;
 
+    //TODO
+    private QuestionWindow questionWindow = new QuestionWindow();
+    private static OptionsWindow optionsWindow = new OptionsWindow();
+    private GameBar gameBar = new GameBar();
+
 
     //#region construction
     public GameLevel(String mapPath) {
@@ -69,6 +80,8 @@ public class GameLevel extends ScreenAdapter {
         renderInit();
         stageInit();
         inputInit();
+
+        AudioController.playLevelTheme(this);
     }
 
     /**
@@ -94,8 +107,21 @@ public class GameLevel extends ScreenAdapter {
     }
 
     private void stageInit() {
-        stage = new Stage();
-        //stage.addActor(menuBar); // TODO - menu bar
+        stage = new Stage(); //TODO
+        stage.addActor(gameBar);
+
+        table = new Table();
+        table.setVisible(false);
+
+
+        //Label pause = new Label("Game Menu\n(ESC)", SKIN, "font", Color.ORANGE);
+        Label pause = new Label("Paused\nESC to resume", SKIN, "font", Color.ORANGE);
+        pause.setAlignment(Align.center);
+        table.add(pause).padBottom(Value.percentHeight(10f));
+
+        table.setFillParent(true);
+        stage.addActor(table);
+        stage.addActor(optionsWindow);
     }
 
     private void inputInit() {
@@ -112,7 +138,8 @@ public class GameLevel extends ScreenAdapter {
                         Utilities.debugMod(-0.1f);
                         break;
                     case Input.Keys.ESCAPE:
-                        CLIENT.setScreen(new MenuScreen());
+                        gameBar.setVisible(!gameBar.isVisible());
+                        table.setVisible(gameBar.isVisible());
                         break;
                 }
 
@@ -177,10 +204,12 @@ public class GameLevel extends ScreenAdapter {
      * in order to render it.
      */
     private void renderInit() {
-        //TODO - Create a stage with a TiledMap and menu bar
+
+        // TODO - look this up
+        // RGB number / 255
+        Gdx.gl.glClearColor(0.07843137255f,0.04705882353f,0.1098039216f, 0f);
 
         // Create the renderer
-        // Resize is called after this method, camera is updated there
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
         // Configure the camera
@@ -219,6 +248,9 @@ public class GameLevel extends ScreenAdapter {
 
         processCollisions();
         processCameraMovement();
+
+        stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
+        stage.draw();
     }
 
     private void renderWorld() {
@@ -227,13 +259,9 @@ public class GameLevel extends ScreenAdapter {
         tiledMapRenderer.render();
     }
 
-    private void renderPlayer() {
-        drawSprite(player);
-    }
+    private void renderPlayer() { drawSprite(player); }
 
-    private void processCollisions() {
-        world.step(1 / 60f, 6, 2);
-    }
+    private void processCollisions() { world.step(1 / 60f, 6, 2); }
 
     private void renderDebug() {
         if (renderHitBoxes)
@@ -310,5 +338,38 @@ public class GameLevel extends ScreenAdapter {
     public OrthographicCamera getCamera() {
         return camera;
     }
+
+    //TODO - move this
+    public static void setOptionWindowVisibility(boolean value) {
+        optionsWindow.setVisible(value);
+    }
     //#endregion get
+
+
+//    private static class QuestionWindow extends Window {
+//
+//        private String questionText = "";
+//
+//        /**
+//         *
+//         */
+//        public QuestionWindow() {
+//            super("", Assets.SKIN);
+//            this.setResizable(false);
+//            this.setMovable(false);
+//            this.align(0);
+//            this.setSize(Gdx.graphics.getWidth(), 140f);
+//
+//            buildWindow();
+//        }
+//
+//        protected void buildWindow() {
+//            this.setVisible(true);
+//
+//            TextField textField = new TextField("fdsdfsf", Assets.SKIN);
+//
+//            this.add(addLabel("", "subtitle")).padBottom(50f).row();
+//            this.add(textField);
+//        }
+//    }
 }

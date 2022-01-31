@@ -25,20 +25,21 @@ public class Assets {
 
     // Music
     public static final Music
-            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3"));
-    //MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Cleyton RX - Underwater.mp3"));
+            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3")),
+            MUSEUM_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/End credits Lofi .mp3"));
 
     // Sound
     public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
 
 
-     // METHODS
+    // METHODS
+
     /**
-     * <h2>Disposes all assets in this application.</h2>
+     * <h2>Disposes all assets in this application.</h2>S
      * Memory management method that is called to dispose all loaded resources and free up any memory
      * that inactive resources were using. Also reduces memory leak.
      * <br>
-     *
+     * <p>
      * This method SHOULD only be called when the application is closed.
      */
     public static void disposeAssets() {

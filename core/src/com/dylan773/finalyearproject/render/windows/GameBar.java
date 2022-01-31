@@ -4,60 +4,45 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.dylan773.finalyearproject.EducationGame;
+import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
+import static com.dylan773.finalyearproject.EducationGame.CLIENT;
+import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
+
+
 /**
  *
  */
-public class GameBar extends WindowBuilder {
-    private EducationGame game = new EducationGame();
+public class GameBar extends Window {
 
     /**
      *
      */
     public GameBar() {
-        super(Gdx.graphics.getWidth(), 250);
+        super("", Assets.SKIN, "noBG");
+        //super("", Assets.SKIN);
         buildWindow();
-
-
-
     }
 
-    @Override
     protected void buildWindow() {
-//        this.setVisible(false);
-//        this.setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight())); // TODO - figure this out
+        this.setVisible(false);
+        this.setResizable(false);
+        this.setMovable(false);
+        this.align(0);
+        this.setSize(Gdx.graphics.getWidth(), 140f);
+
+        // Horizontal group for button placement
         HorizontalGroup group = new HorizontalGroup();
+        group.space(150f); // Space between elements.
+        group.center(); // Centre elements.
 
-        //
-//        addGameBarButton("How to Play").addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//
-//            }
-//        });
-//
-//        //
-//        addGameBarButton("Options").addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//
-//            }
-//        });
-//
-//        //
-//        addGameBarButton("Exit").addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                game.setScreen(new MenuScreen(game));
-//            }
-//        });
-
-        TextButton btnHTP = new TextButton("How to Play", Assets.SKIN);
+        TextButton btnHTP = new TextButton("Help", Assets.SKIN);
         TextButton btnOptions = new TextButton("Options", Assets.SKIN);
         TextButton btnExit = new TextButton("Exit", Assets.SKIN);
 
@@ -75,8 +60,35 @@ public class GameBar extends WindowBuilder {
      */
     private TextButton addGameBarButton(String name) {
         TextButton textButton = new TextButton(name, Assets.SKIN);
-        this.add(textButton).padRight(20f);
+        textButton.setWidth(200f);
+        this.add(textButton).padRight(100f);
 
         return textButton;
     }
 }
+
+//        //
+//        addGameBarButton("Help").addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//
+//            }
+//        });
+//
+//        //
+//        addGameBarButton("Options").addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                optionsWindow.setVisible(true);
+//
+//                //GameLevel.setOptionWindowVisibility(true);
+//            }
+//        });
+//
+//        //
+//        addGameBarButton("Exit").addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                CLIENT.setScreen(new MenuScreen());
+//            }
+//        });

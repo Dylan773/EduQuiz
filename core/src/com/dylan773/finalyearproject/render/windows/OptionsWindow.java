@@ -1,21 +1,20 @@
 package com.dylan773.finalyearproject.render.windows;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
-
 import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
-import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 
 /**
- * <h1>Game Options Window</h1>
+ * <h1>This applications Options Window</h1>
  * This window is responsible for the handling of this application's settings.
  *
  * @author Dylan Brand
@@ -40,8 +39,6 @@ public class OptionsWindow extends WindowBuilder {
     protected void buildWindow() {
         //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
         this.setVisible(false);
-        //this.setPosition(150, 50);
-        this.setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight())); // TODO - figure this out
 
         // Game Music Control
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, Assets.SKIN);
@@ -76,7 +73,7 @@ public class OptionsWindow extends WindowBuilder {
         });
 
         // Add each actor to the window
-        this.add(addLabel("OPTIONS", "title")).padTop(40f).colspan(2).row();
+        this.add(addLabel("OPTIONS", "title")).colspan(2).row();
         this.add(addLabel("Audio", "subtitle")).padBottom(10f).colspan(2).row();
         this.add(addLabel("Music Volume:", "default")).right().padBottom(5f);
         this.add(musicSlider).fillX().padBottom(5f).row();
