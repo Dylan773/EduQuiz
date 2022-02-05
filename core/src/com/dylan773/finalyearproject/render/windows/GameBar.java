@@ -4,52 +4,47 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
-import com.dylan773.finalyearproject.utilities.AudioController;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 
-
 /**
+ * <h1>In-game option bar</h1>
+ * A transparent window consisting of three buttons, enabling the user to manipulate application behaviour
+ * during the game state.
  *
+ * @author Dylan Brand
  */
 public class GameBar extends Window {
 
-    //private Dialog exitDialog;
-
     /**
-     *
+     * <h2>GameBar Constructor</h2>
+     * Creates this application's in-game toolbar, calling it's super() and {@link #initWindow()}.
      */
     public GameBar() {
         super("", SKIN, "noBG");
-        buildWindow();
+        initWindow();
     }
 
     /**
-     *
+     * Constructs the GameBar window.
      */
-    protected void buildWindow() {
+    protected void initWindow() {
         setVisible(false);
         setResizable(false);
         setMovable(false);
         setSize(Gdx.graphics.getWidth(), 140f);
         align(0);
 
-
+        // Horizontal group for button placement.
         HorizontalGroup group = new HorizontalGroup();
         group.space(150f); // Space between elements.
         group.center(); // Centre elements.
 
-        //debug();
-
-
-        //initExitDialog();
-
-        // Help button
+        // Button for game help information
         TextButton btnHelp = new TextButton("Help", SKIN);
         btnHelp.addListener(new ChangeListener() {
             @Override
@@ -58,16 +53,18 @@ public class GameBar extends Window {
             }
         });
 
+        // Button for game option controls
         TextButton btnOptions = new TextButton("Options", SKIN);
         btnOptions.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
-                GameLevel.setOptionWindowVisibility(true);
+                //GameLevel.setOptionWindowVisibility(true);
+                GameLevel.getStage().addActor(new OptionsWindow());
             }
         });
 
-        // Exit level button
+        // Button for level exit control
         TextButton btnExit = new TextButton("Exit", SKIN);
         btnExit.addListener(new ChangeListener() {
             @Override
@@ -85,17 +82,17 @@ public class GameBar extends Window {
         add(group);
     }
 
-    private void initExitDialog() {
-    }
-
-
     /**
      * <h2>Private inner class for the game exit dialog.</h2>
+     * Prompts the user with a dialog, confirming if they want to exit the current game session.
      */
-    private static class ExitDialog extends Dialog { // TODO - this might be shit
+    private static class ExitDialog extends Dialog { // TODO - this might be crap
 
         /**
-         *
+         * A round dialog window, displaying two buttons with a YES or NO option. <p>
+         * <p>
+         * Yes - Returns the user to the application main menu. <br>
+         * No - Returns the user to the current game session.
          */
         public ExitDialog() {
             super("", SKIN, "round");
@@ -103,11 +100,11 @@ public class GameBar extends Window {
             setResizable(false);
             getBackground().setMinWidth(370f);
 
-
             // Dialog config
             Label label = new Label("Are you sure?", SKIN, "subtitle");
             text(label);
 
+            // Dialog buttons
             button("Yes", true);
             button("No", false);
         }
@@ -116,8 +113,7 @@ public class GameBar extends Window {
         protected void result(Object object) {
             if (object.equals(true))
                 CLIENT.setScreen(new MenuScreen());
-            else
-                hide();
+            else hide();
         }
     }
 }

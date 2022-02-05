@@ -1,7 +1,6 @@
 package com.dylan773.finalyearproject.render.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +13,7 @@ import com.dylan773.finalyearproject.render.windows.LevelSelector;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
+import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
@@ -44,7 +44,7 @@ public class MenuScreen extends ScreenAdapter {
 
         stage = new Stage();
         stage.addActor(table);
-        stage.addActor(optionsWindow); // Add the option window to the stage
+        //stage.addActor(optionsWindow); // Add the option window to the stage
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
@@ -52,7 +52,7 @@ public class MenuScreen extends ScreenAdapter {
         AudioController.playMainMenu(); // Plays the main menu music on loop
 
         // Clears the previously loaded game levels everytime the user visits this main menu
-        LevelSelector.getLevelList().clear();
+        getLevelList().clear();
     }
 
     /**
@@ -75,7 +75,8 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Options").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                optionsWindow.setVisible(true); // Displays the options window to the user
+                //optionsWindow.setVisible(true); // Displays the options window to the user
+                stage.addActor(new OptionsWindow());
                 AudioController.playButtonSound();
             }
         });
@@ -122,19 +123,18 @@ public class MenuScreen extends ScreenAdapter {
         //TODO - this may need to be changed/moved if the constructor doesnt play re-play this track when the main menu is revisited
     }
 
-//    @Override
-//    public void show() {
-//        super.show();
-//        AudioController.playMainMenu();
-//    }
 
-    // TODO - abstract this?
+    /**
+     *
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clears the screen so it can draw from fresh
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
     }
+
 
     @Override
     public void resize(int width, int height) { stage.getViewport().update(width, height, true); }

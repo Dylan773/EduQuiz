@@ -158,9 +158,7 @@ public class AudioController {
     /**
      * Sets {@link #nowPlaying} volume to the current music volume.
      */
-    public static void assertCorrectVolume() {
-        nowPlaying.setVolume(musicVolume);
-    }
+    public static void assertCorrectVolume() { nowPlaying.setVolume(musicVolume); }
 
     /**
      * Plays this applications Main Menu Music, only if the application is not muted.

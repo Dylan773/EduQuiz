@@ -1,18 +1,12 @@
 package com.dylan773.finalyearproject.render.windows;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
-
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.*;
 import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
@@ -33,16 +27,15 @@ public class OptionsWindow extends WindowBuilder {
      */
     public OptionsWindow() {
         super(1000f, 600f);
-        buildWindow();
-
+        initWindow();
     }
 
     /**
      * Overrides the abstract buildWindow() method from the {@link #WindowBuilder}  parent class.
      */
     @Override
-    protected void buildWindow() {
-        setVisible(false); // Not shown by default.
+    protected void initWindow() {
+        setVisible(true); // Not shown by default. //TODO - change
 
         // Game Music Control
         final Slider musicSlider = new Slider(0.0f, 1.0f, 0.1f, false, SKIN);
@@ -95,9 +88,5 @@ public class OptionsWindow extends WindowBuilder {
         add(muteCheck).colspan(2).padBottom(70f).row();
 
         add(btnClose).colspan(2);
-
-        // Label exception, has orange text
-//        Label menuExit = new Label("Press ESC to Exit", SKIN, "font", Color.ORANGE);
-//        this.add(menuExit).colspan(2);
     }
 }

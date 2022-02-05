@@ -32,5 +32,5 @@ public abstract class WindowBuilder extends Window {
     /**
      * Abstract method that can be overridden by extending (child) classes to construct the respective window.
      */
-    protected abstract void buildWindow();
+    protected abstract void initWindow();
 }

@@ -26,6 +26,7 @@ public class Assets {
     // Music
     public static final Music
             MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3")),
+//            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Track 2 (Party Tonight).wav")),
             MUSEUM_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/End credits Lofi .mp3"));
 
     // Sound
