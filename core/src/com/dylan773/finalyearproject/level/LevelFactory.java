@@ -4,7 +4,7 @@ package com.dylan773.finalyearproject.level;
 public class LevelFactory {
 
     public enum Level {
-        History
+        History,
     }
 
     /**

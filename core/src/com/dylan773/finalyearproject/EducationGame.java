@@ -15,7 +15,6 @@ public class EducationGame extends Game {
 	/**
 	 * Default height and width for this application.
 	 */
-	public static final int WIDTH = 1280, HEIGHT = 720;
 	public static EducationGame CLIENT;
 
 	@Override
@@ -23,7 +22,7 @@ public class EducationGame extends Game {
 		CLIENT = this;
 		setScreen(new MenuScreen());
 		//TODO - Create a loading scree that transitions into the main menu
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode()); // TODO - activate when finished
 	}
 
 	@Override

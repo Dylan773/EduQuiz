@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
@@ -27,6 +28,7 @@ public class OptionsWindow extends WindowBuilder {
      */
     public OptionsWindow() {
         super(1000f, 600f);
+//        super(GAME_WIDTH, GAME_HEIGHT);
         initWindow();
     }
 
@@ -79,14 +81,20 @@ public class OptionsWindow extends WindowBuilder {
         });
 
         // Add each actor to the window
-        add(addLabel("OPTIONS", "title")).colspan(2).row();
-        add(addLabel("Audio", "subtitle")).padBottom(10f).colspan(2).row();
-        add(addLabel("Music Volume:", "default")).right().padBottom(5f);
+        addLabel("OPTIONS", "title").colspan(2).row();
+        addLabel("Audio", "subtitle").padBottom(10f).colspan(2).row();
+        addLabel("Music Volume:", "default").right().padBottom(5f);
         add(musicSlider).fillX().padBottom(5f).row();
-        add(addLabel("SFX Volume:", "default")).right().padBottom(5f);
+        addLabel("SFX Volume:", "default").right().padBottom(5f);
         add(sfxSlider).fillX().padBottom(5f).row();
         add(muteCheck).colspan(2).padBottom(70f).row();
-
         add(btnClose).colspan(2);
+
     }
+
+    public void setV() {
+
+    }
+
+
 }

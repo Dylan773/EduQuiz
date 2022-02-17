@@ -5,6 +5,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import xmlwise.Plist;
+import xmlwise.XmlParseException;
+
+import java.util.Map;
 
 /**
  * <h1>Assets for this application</h1>
@@ -32,14 +36,21 @@ public class Assets {
     // Sound
     public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
 
+    public static Map<String, ?> questions;
 
+    static {
+        try {
+            questions = Plist.fromXml(Gdx.files.internal("questions/questiondata.plist").readString());
+        } catch (XmlParseException e) {
+            e.printStackTrace();
+        }
+    }
     // METHODS
 
     /**
-     * <h2>Disposes all assets in this application.</h2>S
+     * <h2>Disposes all assets in this application.</h2>
      * Memory management method that is called to dispose all loaded resources and free up any memory
      * that inactive resources were using. Also reduces memory leak.
-     * <br>
      * <p>
      * This method SHOULD only be called when the application is closed.
      */

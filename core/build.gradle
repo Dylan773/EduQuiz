@@ -8,3 +8,7 @@ eclipse.project.name = appName + "-core"
 repositories {
     mavenCentral()
 }
+
+dependencies {
+    compile 'xmlwise:xmlwise:1.2.11'                                // Xml and Plist loading library.
+}

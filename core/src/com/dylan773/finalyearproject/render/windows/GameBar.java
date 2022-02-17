@@ -50,6 +50,7 @@ public class GameBar extends Window {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
+                GameLevel.getStage().addActor(new GameControls()); // TODO - does this add multiple actors of the same type everytime its clicked?
             }
         });
 
@@ -60,7 +61,7 @@ public class GameBar extends Window {
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
                 //GameLevel.setOptionWindowVisibility(true);
-                GameLevel.getStage().addActor(new OptionsWindow());
+                GameLevel.getStage().addActor(new OptionsWindow()); //TODO - change this (might add multiple windows to the stage).
             }
         });
 

@@ -158,7 +158,9 @@ public class AudioController {
     /**
      * Sets {@link #nowPlaying} volume to the current music volume.
      */
-    public static void assertCorrectVolume() { nowPlaying.setVolume(musicVolume); }
+    public static void assertCorrectVolume() {
+        nowPlaying.setVolume(musicVolume);
+    }
 
     /**
      * Plays this applications Main Menu Music, only if the application is not muted.
@@ -191,12 +193,11 @@ public class AudioController {
      */
     public static void playLevelTheme(GameLevel level) {
         if (levelTheme != null)
-            levelTheme.dispose();
+            levelTheme.dispose(); // Dispose the currently loaded music file.
 
         if (level.getMap().getProperties().containsKey(THEME_KEY))
             levelTheme = Gdx.audio.newMusic(Gdx.files.internal("audio/music/" + level.getMap().getProperties().get(THEME_KEY).toString()));
-        else
-            throw new Error("this map does not have a theme");
+        else throw new Error("this map does not have a theme");
 
         playOnLoop(levelTheme);
     }

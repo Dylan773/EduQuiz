@@ -12,7 +12,9 @@ import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.Utilities;
 
-
+/**
+ * <h1>This application's controllable player</h1>
+ */
 public class Player extends Sprite {
     public World world; // The Box2D world.
     public Body body; // The Box2D body.
@@ -29,6 +31,8 @@ public class Player extends Sprite {
      * The movement speed for this player, 100 pixels/second.
      */
     public float speed = 100f;
+
+    public Fixture playerFixture;
 
     /*
      * Constructor
@@ -73,7 +77,7 @@ public class Player extends Sprite {
 
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 10;
-        body.createFixture(fixtureDef);
+        playerFixture = body.createFixture(fixtureDef);
 
         return body;
     }
@@ -122,6 +126,7 @@ public class Player extends Sprite {
         if (Gdx.input.isKeyPressed(Input.Keys.D) && boundCheck(1, 0)) {
             pos.x += Gdx.graphics.getDeltaTime() * speed();
         }
+
         setPosition(x, y); // Sets the player position
         body.setTransform(pos.x + (getWidth()/ 2), pos.y  + (getHeight()/2), 0);
     }
@@ -149,16 +154,13 @@ public class Player extends Sprite {
     /**
      * <h2> Stops the player's ability to move.</h2>
      * Should only be called when the game session is in a paused state.
+     * // TODO - stop the controls not his feet
      */
-    public void pauseMovement() {
-        speed = 0f;
-    }
+    public void pauseMovement() { speed = 0f; }
 
     /**
      * <h2>Enables the player's ability to move, at the default speed.</h2>
      * Should be called when the game sessions has left the paused state.
      */
-    public void resumeMovement() {
-        speed = 100f;
-    }
+    public void resumeMovement() { speed = 100f; }
 }

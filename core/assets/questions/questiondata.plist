@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>history</key>
+	<dict>
+		<key>en</key>
+		<array>
+			<dict>
+				<key>q</key>
+				<string>Who was the first english monarch</string>
+				<key>a</key>
+				<array>
+					<string>John</string>
+					<string>Bob</string>
+					<string>Pat</string>
+					<string>Lizzy</string>
+					<string>Liz III</string>
+				</array>
+				<key>i</key>
+				<integer>2</integer>
+			</dict>
+			<dict>
+				<key>q</key>
+				<string>Who was that highway man</string>
+				<key>a</key>
+				<array>
+					<string>John</string>
+					<string>Bob</string>
+					<string>Pat</string>
+					<string>steve</string>
+					<string>Queen Liz</string>
+				</array>
+				<key>i</key>
+				<integer>3</integer>
+			</dict>
+		</array>
+	</dict>
+	<key>science</key>
+	<dict>
+		<key>en</key>
+		<array>
+			<dict>
+				<key>q</key>
+				<string>What is the chemical composition of water</string>
+				<key>a</key>
+				<array>
+					<string>H2O</string>
+					<string>H202</string>
+					<string>NO2</string>
+					<string>PO2</string>
+				</array>
+				<key>i</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>q</key>
+				<string>What is the elemental symbol of gold</string>
+				<key>a</key>
+				<array>
+					<string>Go</string>
+					<string>Au</string>
+					<string>Lu</string>
+					<string>steve</string>
+					<string>Ca</string>
+				</array>
+				<key>i</key>
+				<integer>1</integer>
+			</dict>
+		</array>
+	</dict>
+</dict>
+</plist>

@@ -5,14 +5,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
@@ -20,13 +21,11 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.render.windows.GameBar;
 import com.dylan773.finalyearproject.render.windows.OptionsWindow;
-import com.dylan773.finalyearproject.utilities.AudioController;
+import com.dylan773.finalyearproject.render.windows.QuestionWindow;
 import com.dylan773.finalyearproject.utilities.Utilities;
-
-
 import java.util.Objects;
-
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -41,14 +40,11 @@ public class GameLevel extends ScreenAdapter {
 
     // FIELDS
     private OrthogonalTiledMapRenderer tiledMapRenderer;
-
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     public boolean renderHitBoxes = false;
-
     private OrthographicCamera camera;
     public Vector3 desiredCamPos = new Vector3();
     public Float desiredCamZoom = .5f;
-
     private FillViewport viewport;
 
     private static Stage stage;
@@ -57,26 +53,30 @@ public class GameLevel extends ScreenAdapter {
     protected TiledMap map;
     protected World world;
     protected RectangleMapObject spawn;
-
     protected InputMultiplexer inputHandlers = new InputMultiplexer();
-
     protected Player player;
+
+    private InputAdapter keyListener;
 
     //TODO
     //private QuestionWindow questionWindow = new QuestionWindow();
-    private static OptionsWindow optionsWindow = new OptionsWindow(); // TODO
     private GameBar gameBar = new GameBar();
 
-
     //#region construction
+
+    /**
+     *
+     * @param mapPath
+     */
     public GameLevel(String mapPath) {
         loadWorld(mapPath);
         playerInit();
         renderInit();
         stageInit();
         inputInit();
+        collisionInit();
 
-        AudioController.playLevelTheme(this);
+        playLevelTheme(this);
     }
 
     /**
@@ -101,6 +101,9 @@ public class GameLevel extends ScreenAdapter {
         playerToSpawn();
     }
 
+    /**
+     *
+     */
     private void stageInit() {
         stage = new Stage();
 
@@ -118,16 +121,66 @@ public class GameLevel extends ScreenAdapter {
         pause.setAlignment(Align.center);
         table.add(pause).padBottom(Value.percentHeight(10f));
 
-
         stage.addActor(table);
-        stage.addActor(new OptionsWindow()); // TODO - here?
-        stage.addActor(optionsWindow);
     }
 
+    private void collisionInit() {
+        // Box2D variables
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fixtureDef = new FixtureDef();
+        Body body;
+
+        //TiledMapObject.parseTiledObjectLayer(world, map.getLayers().get(4).getObjects());
+
+        for (RectangleMapObject object : map.getLayers().get("trigger-zone").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = object.getRectangle();
+
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
+
+            body = world.createBody(bodyDef);
+            shape.setAsBox(rectangle.getWidth() / 2, rectangle.getHeight() / 2);
+            fixtureDef.shape = shape;
+            body.createFixture(fixtureDef);
+        }
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                stage.addActor(new QuestionWindow());
+                // TODO - look at postRunnable and fully understand + box2d contacts
+                if (contact.getFixtureA() != player.playerFixture)
+                    Gdx.app.postRunnable(() -> contact.getFixtureA().getBody().destroyFixture(contact.getFixtureA()));
+                else
+                    Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+
+        });
+    }
+
+    /**
+     *
+     */
     private void inputInit() {
         inputHandlers.addProcessor(stage);
 
-        inputHandlers.addProcessor(new InputAdapter() {
+        keyListener = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
@@ -138,8 +191,12 @@ public class GameLevel extends ScreenAdapter {
                         Utilities.debugMod(-0.1f);
                         break;
                     case Input.Keys.ESCAPE:
-                        gameBar.setVisible(!gameBar.isVisible()); //Invert settings
+                        gameBar.setVisible(!gameBar.isVisible()); //Invert settings - look into that
                         table.setVisible(gameBar.isVisible());
+
+                        if (gameBar.isVisible()) pause();
+                        else resume();
+
                         break;
                 }
 
@@ -179,14 +236,28 @@ public class GameLevel extends ScreenAdapter {
                 desiredCamZoom = clamp(0.1f,0.8f, camera.zoom + (amountY * 0.1f)); // amount reduced to reduce how much it zooms when scrolling
                 return true;    // Indicate that the scroll has been handled.
             }
-        });
-
+        };
+        enableUserInput();
         Gdx.input.setInputProcessor(inputHandlers);
     }
     //#endregion construction
 
 
     //#region general methods
+
+    public void disableUserInput() {
+        inputHandlers.removeProcessor(keyListener);
+        player.pauseMovement();
+    }
+
+    /**
+     *
+     */
+    public void enableUserInput() {
+        inputHandlers.addProcessor(keyListener);
+        player.resumeMovement();
+    }
+
     /**
      * Moves the player to {@link GameLevel#world}
      */
@@ -252,10 +323,7 @@ public class GameLevel extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
 
-        if (gameBar.isVisible())
-            pause();
-        else
-            resume();
+        debugRenderer.render(world, getCamera().combined);
     }
 
     /**
@@ -305,13 +373,11 @@ public class GameLevel extends ScreenAdapter {
     }
 
 
-    //============================================================================
     /**
      * Use this to pause the game when the user views options/how to play?
      */
     @Override
     public void pause() {
-        //super.pause();
         player.pauseMovement();
     }
 
@@ -320,16 +386,18 @@ public class GameLevel extends ScreenAdapter {
      */
     @Override
     public void resume() {
-        //super.resume();
         player.resumeMovement();
     }
-    //===============================================================================
 
     @Override
     public void dispose() {
        tiledMapRenderer.dispose();
        map.dispose();
        world.dispose();
+    }
+
+    public void detectBox2dCollision() {
+        // if collision happens, display question
     }
 
     //#endregion
@@ -363,14 +431,5 @@ public class GameLevel extends ScreenAdapter {
         return camera;
     }
 
-    //TODO - move this
-
-    /**
-     * Sets the {@link OptionsWindow}'s visibility in the game screen.
-     * @param value The boolean value that determines the window's visibility.
-     */
-    public static void setOptionWindowVisibility(boolean value) {
-        optionsWindow.setVisible(value);
-    }
     //#endregion get
 }
