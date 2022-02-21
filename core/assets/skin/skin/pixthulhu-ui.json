@@ -254,10 +254,14 @@ com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: {
 		background: window
-		titleFont: font
+		titleFont: title
 	}
 	round: {
 		background: window-round
+		titleFont: title
+	}
+	noBG: {
+		background: null
 		titleFont: font
 	}
 }

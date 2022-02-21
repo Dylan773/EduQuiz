@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject.level;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,22 +9,24 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
-import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.render.windows.GameBar;
+import com.dylan773.finalyearproject.render.windows.QuestionWindow;
 import com.dylan773.finalyearproject.utilities.Utilities;
-
-import java.io.InputStream;
 import java.util.Objects;
 
-import static com.dylan773.finalyearproject.EducationGame.CLIENT;
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
 import static com.dylan773.finalyearproject.utilities.Utilities.clamp;
 import static com.dylan773.finalyearproject.utilities.Utilities.lerp;
 
@@ -39,37 +42,66 @@ public class GameLevel extends ScreenAdapter {
 
     // FIELDS
     private OrthogonalTiledMapRenderer tiledMapRenderer;
-
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     public boolean renderHitBoxes = false;
-
     private OrthographicCamera camera;
     public Vector3 desiredCamPos = new Vector3();
     public Float desiredCamZoom = .5f;
-
     private FillViewport viewport;
 
-    private Stage stage;
-    Table table;
-    private GameBar gameBar = new GameBar();
+    private static Stage stage;
+    Table table; // the table only has the text in
 
     protected TiledMap map;
     protected World world;
     protected RectangleMapObject spawn;
-
+    protected RectangleMapObject exit;
     protected InputMultiplexer inputHandlers = new InputMultiplexer();
-
     protected Player player;
 
+    private InputAdapter keyListener;
+
+
+    public int questionIndex = 0;
+    public LevelFactory.Level currentLevel;
+
+
+    //TODO
+    //private QuestionWindow questionWindow = new QuestionWindow();
+    private GameBar gameBar = new GameBar();
 
     //#region construction
-    public GameLevel(String mapPath) {
+
+    /**
+     *
+     * @param mapPath
+     */
+    public GameLevel(String mapPath, LevelFactory.Level level) {
         loadWorld(mapPath);
         playerInit();
         renderInit();
         stageInit();
         inputInit();
+
+        // Collisions
+        collisionInit();
+//        initEndZone(); // TODO - change this implementation
+
+        currentLevel = level;
+        playLevelTheme(this);
     }
+
+    //===================================
+    public void setQuestion() {
+        new QuestionWindow();
+
+
+
+    }
+
+
+
+    //================================
 
     /**
      * Loads the map and stores it in {@link GameLevel#map}
@@ -83,6 +115,11 @@ public class GameLevel extends ScreenAdapter {
                 (RectangleMapObject) map.getLayers().get("objects").getObjects().get("spawn"),
                 "The world loaded did not have a spawnpoint!"
         );
+
+        exit = Objects.requireNonNull(
+                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
+                "The world loaded did not have a exit point."
+        );
     }
 
     /**
@@ -93,15 +130,88 @@ public class GameLevel extends ScreenAdapter {
         playerToSpawn();
     }
 
+    /**
+     *
+     */
     private void stageInit() {
         stage = new Stage();
-        //stage.addActor(menuBar); // TODO - menu bar
+
+        // Table config
+        table = new Table();
+        table.setVisible(false);
+        table.setFillParent(true);
+
+        // GameBar config
+        stage.addActor(gameBar);
+        gameBar.setY(50f); // Changes the Y position of the window's bottom edge.
+
+        // Label config
+        Label pause = new Label("Paused\nESC to resume", SKIN, "subtitle", Color.ORANGE);
+        pause.setAlignment(Align.center);
+        table.add(pause).padBottom(Value.percentHeight(10f));
+
+        stage.addActor(table);
     }
 
+    private void collisionInit() {
+        // Box2D variables
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fixtureDef = new FixtureDef();
+        Body body;
+
+        for (RectangleMapObject object : map.getLayers().get("trigger-zone").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = object.getRectangle();
+
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
+
+            body = world.createBody(bodyDef);
+            shape.setAsBox(rectangle.getWidth() / 2, rectangle.getHeight() / 2);
+            fixtureDef.shape = shape;
+            body.createFixture(fixtureDef);
+        }
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                // TODO - detect collision with end zone
+//                    if (player.playerFixture.getBody())
+
+                stage.addActor(new QuestionWindow());
+                // TODO - look at postRunnable and fully understand + box2d contacts
+                if (contact.getFixtureA() != player.playerFixture)
+                    Gdx.app.postRunnable(() -> contact.getFixtureA().getBody().destroyFixture(contact.getFixtureA()));
+                else
+                    Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+
+        });
+    }
+
+
+    /**
+     *
+     */
     private void inputInit() {
         inputHandlers.addProcessor(stage);
 
-        inputHandlers.addProcessor(new InputAdapter() {
+        keyListener = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
@@ -112,7 +222,12 @@ public class GameLevel extends ScreenAdapter {
                         Utilities.debugMod(-0.1f);
                         break;
                     case Input.Keys.ESCAPE:
-                        CLIENT.setScreen(new MenuScreen());
+                        gameBar.setVisible(!gameBar.isVisible()); //Invert settings - look into that
+                        table.setVisible(gameBar.isVisible());
+
+                        if (gameBar.isVisible()) pause();
+                        else resume();
+
                         break;
                 }
 
@@ -152,14 +267,28 @@ public class GameLevel extends ScreenAdapter {
                 desiredCamZoom = clamp(0.1f,0.8f, camera.zoom + (amountY * 0.1f)); // amount reduced to reduce how much it zooms when scrolling
                 return true;    // Indicate that the scroll has been handled.
             }
-        });
-
+        };
+        enableUserInput();
         Gdx.input.setInputProcessor(inputHandlers);
     }
     //#endregion construction
 
 
     //#region general methods
+
+    public void disableUserInput() {
+        inputHandlers.removeProcessor(keyListener);
+        player.pauseMovement();
+    }
+
+    /**
+     *
+     */
+    public void enableUserInput() {
+        inputHandlers.addProcessor(keyListener);
+        player.resumeMovement();
+    }
+
     /**
      * Moves the player to {@link GameLevel#world}
      */
@@ -177,10 +306,12 @@ public class GameLevel extends ScreenAdapter {
      * in order to render it.
      */
     private void renderInit() {
-        //TODO - Create a stage with a TiledMap and menu bar
+
+        // TODO - look this up
+        // RGB number / 255
+        Gdx.gl.glClearColor(0.07843137255f,0.04705882353f,0.1098039216f, 0f);
 
         // Create the renderer
-        // Resize is called after this method, camera is updated there
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
         // Configure the camera
@@ -219,27 +350,43 @@ public class GameLevel extends ScreenAdapter {
 
         processCollisions();
         processCameraMovement();
+
+        stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
+        stage.draw();
+
+        debugRenderer.render(world, getCamera().combined);
     }
 
+    /**
+     *
+     */
     private void renderWorld() {
         tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight);
         // renders the map, can also render certain layers
         tiledMapRenderer.render();
     }
 
-    private void renderPlayer() {
-        drawSprite(player);
-    }
+    /**
+     *
+     */
+    private void renderPlayer() { drawSprite(player); }
 
-    private void processCollisions() {
-        world.step(1 / 60f, 6, 2);
-    }
+    /**
+     *
+     */
+    private void processCollisions() { world.step(1 / 60f, 6, 2); }
 
+    /**
+     *
+     */
     private void renderDebug() {
         if (renderHitBoxes)
             debugRenderer.render(world, getCamera().combined);
     }
 
+    /**
+     *
+     */
     private void processCameraMovement() {
         desiredCamPos.set(player.pos, 0);
         // linear interoperation - Moves the camera towards the desired position by a percentage every frame.
@@ -262,7 +409,7 @@ public class GameLevel extends ScreenAdapter {
      */
     @Override
     public void pause() {
-        //super.pause();
+        player.pauseMovement();
     }
 
     /**
@@ -270,7 +417,7 @@ public class GameLevel extends ScreenAdapter {
      */
     @Override
     public void resume() {
-        //super.resume();
+        player.resumeMovement();
     }
 
     @Override
@@ -283,7 +430,7 @@ public class GameLevel extends ScreenAdapter {
     //#endregion
     //#region get
 
-    public Stage getStage() {
+    public static Stage getStage() {
         return stage;
     }
 
@@ -310,5 +457,6 @@ public class GameLevel extends ScreenAdapter {
     public OrthographicCamera getCamera() {
         return camera;
     }
+
     //#endregion get
 }

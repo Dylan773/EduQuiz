@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+
+		<!-- HISTORY QUESTIONS -->
+		<key>History</key>
+
+		<dict>
+			<key>en</key>
+			<array> <!-- Array of dictionaries (questions) -->
+
+				<!-- Q1 -->
+				<dict> <!-- dictionary represents a HashMap -->
+					<key>q</key>
+					<string>Who was caught trying to blow up parliament in 1605?</string>
+					<key>a</key>
+					<array>
+						<string>p</string>
+						<string>p</string>
+						<string>Guy Fawkes</string>
+						<string>p</string>
+					</array>
+					<key>i</key>
+					<integer>2</integer>
+				</dict>
+
+				<!-- Q2 -->
+				<dict>
+					<key>q</key>
+					<string>In what year did the battle of hastings occur?</string>
+					<key>a</key>
+					<array>
+						<string>1059</string>
+						<string>1066</string>
+						<string>1064</string>
+						<string>1081</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q3 -->
+				<dict>
+					<key>q</key>
+					<string>Officially, how many wives did Henry VIII have?</string>
+					<key>a</key>
+					<array>
+						<string>6</string>
+						<string>1</string>
+						<string>4</string>
+						<string>8</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q4 -->
+				<dict>
+					<key>q</key>
+					<string>Approximately, how many years ago did dinosaurs become exinct?</string>
+					<key>a</key>
+					<array>
+						<string>70 million</string>
+						<string>80 million</string>
+						<string>65 million</string>
+						<string>59 million</string>
+					</array>
+					<key>i</key>
+					<integer>2</integer>
+				</dict>
+
+				<!-- Q5 -->
+				<dict>
+					<key>q</key>
+					<string>In what year did the first world war start?</string>
+					<key>a</key>
+					<array>
+						<string>1909</string>
+						<string>1916</string>
+						<string>1914</string>
+						<string>1918</string>
+					</array>
+					<key>i</key>
+					<integer>2</integer>
+				</dict>
+
+				<!-- Q6 -->
+				<dict>
+					<key>q</key>
+					<string>In what year did the Titanic sink?</string>
+					<key>a</key>
+					<array>
+						<string>1910</string>
+						<string>1914</string>
+						<string>1911</string>
+						<string>1912</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q7 -->
+				<dict>
+					<key>q</key>
+					<string>Which country gifted the Statue of Liberty to the USA?</string>
+					<key>a</key>
+					<array>
+						<string>France</string>
+						<string>Canada</string>
+						<string>Netherlands</string>
+						<string>United Kingdom</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q8 -->
+				<dict>
+					<key>q</key>
+					<string>Which US president was assassinated by John Wilkes Booth in 1865?  </string>
+					<key>a</key>
+					<array>
+						<string>Abraham Lincoln</string>
+						<string>John F Kennedy</string>
+						<string>George Washington</string>
+						<string>Woodrow Wilson</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q9 -->
+				<dict>
+					<key>q</key>
+					<string>In 1919 the treaty of ______ was signed, bringing the first world war
+to an end.</string>
+					<key>a</key>
+					<array>
+						<string>Toulouse</string>
+						<string>Marseille</string>
+						<string>Versailles</string>
+						<string>Bordeaux</string>
+					</array>
+					<key>i</key>
+					<integer>2</integer>
+				</dict>
+
+				<!-- Q10 -->
+				<dict>
+					<key>q</key>
+					<string>Which vitamin deficiency was the main cause of scurvy amongst
+priates and sailors during the 15th and 16th century?</string>
+					<key>a</key>
+					<array>
+						<string>Vitamin D</string>
+						<string>Vitamin C</string>
+						<string>Vitamin E</string>
+						<string>Vitamin B</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+			</array>
+		</dict>
+
+
+		<!-- SCIENCE QUESTIONS -->
+		<key>science</key>
+		<dict>
+			<key>en</key>
+			<array>
+
+				<!-- Q1 -->
+				<dict>
+					<key>q</key>
+					<string>What is the boiling point of water?</string>
+					<key>a</key>
+					<array>
+						<string>25c</string>
+						<string>75c</string>
+						<string>50c</string>
+						<string>100c</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q2 -->
+				<dict>
+					<key>q</key>
+					<string>When you push something, you apply ____.</string>
+					<key>a</key>
+					<array>
+						<string>Force</string>
+						<string>Acceleration</string>
+						<string>Mass</string>
+						<string>Compression</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q3 -->
+				<dict>
+					<key>q</key>
+					<string>What part of the skeletal system protects the brain?</string>
+					<key>a</key>
+					<array>
+						<string>Pelvis</string>
+						<string>Femur</string>
+						<string>Spine</string>
+						<string>Skull</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q4 -->
+				<dict>
+					<key>q</key>
+					<string>Which energy emerges from motion?</string>
+					<key>a</key>
+					<array>
+						<string>Electrical</string>
+						<string>Kinetic</string>
+						<string>Potential</string>
+						<string>Gravitational</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q5 -->
+				<dict>
+					<key>q</key>
+					<string>What season is known for being cold?</string>
+					<key>a</key>
+					<array>
+						<string>Autumn</string>
+						<string>Spring</string>
+						<string>Summer</string>
+						<string>Winter</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q6 -->
+				<dict>
+					<key>q</key>
+					<string>Mercury is the smallest planet in the solar system.</string>
+					<key>a</key>
+					<array>
+						<string>True</string>
+						<string>False</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q7 -->
+				<dict>
+					<key>q</key>
+					<string>What is the chemical composition of water?</string>
+					<key>a</key>
+					<array>
+						<string>H2O</string>
+						<string>H202</string>
+						<string>K</string>
+						<string>W</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q8 -->
+				<dict>
+					<key>q</key>
+					<string>What is the elemental symbol of gold</string>
+					<key>a</key>
+					<array>
+						<string>GO</string>
+						<string>AU</string>
+						<string>LU</string>
+						<string>K</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q9 -->
+				<dict>
+					<key>q</key>
+					<string>Which planet is known as the Red Planet?</string>
+					<key>a</key>
+					<array>
+						<string>Mercury</string>
+						<string>Mars</string>
+						<string>Pluto</string>
+						<string>Neptune</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q10 -->
+				<dict>
+					<key>q</key>
+					<string>Litter is a form of pollution.</string>
+					<key>a</key>
+					<array>
+						<string>True</string>
+						<string>False</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+			</array>
+		</dict>
+	</dict>
+</plist>

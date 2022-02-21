@@ -5,6 +5,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.dylan773.finalyearproject.level.Question;
+import com.dylan773.finalyearproject.level.QuestionData;
+import xmlwise.Plist;
+import xmlwise.XmlParseException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <h1>Assets for this application</h1>
@@ -25,20 +32,32 @@ public class Assets {
 
     // Music
     public static final Music
-            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3"));
-    //MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Cleyton RX - Underwater.mp3"));
+            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3")),
+//            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Track 2 (Party Tonight).wav")),
+            MUSEUM_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/End credits Lofi .mp3"));
 
-    // Sound
+    // Sound Effects
     public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
 
+    // uhh, idk 100%
+    public static QuestionData questions;
 
-     // METHODS
+    static {
+        try {
+            questions = QuestionData.constructTree((HashMap<String, ?>) Plist.fromXml(Gdx.files.internal("questions/questiondata.plist").readString()));
+        } catch (XmlParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // METHODS
+
     /**
      * <h2>Disposes all assets in this application.</h2>
      * Memory management method that is called to dispose all loaded resources and free up any memory
      * that inactive resources were using. Also reduces memory leak.
-     * <br>
-     *
+     * <p>
      * This method SHOULD only be called when the application is closed.
      */
     public static void disposeAssets() {
@@ -52,5 +71,7 @@ public class Assets {
         // Audio
         MAIN_MENU_MUSIC.dispose();
         SFX_BUTTON.dispose();
+
+        // TODO - call the GameLevel dispose etc
     }
 }
