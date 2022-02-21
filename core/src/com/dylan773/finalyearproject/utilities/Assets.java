@@ -5,9 +5,12 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.dylan773.finalyearproject.level.Question;
+import com.dylan773.finalyearproject.level.QuestionData;
 import xmlwise.Plist;
 import xmlwise.XmlParseException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,18 +36,21 @@ public class Assets {
 //            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Track 2 (Party Tonight).wav")),
             MUSEUM_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/End credits Lofi .mp3"));
 
-    // Sound
+    // Sound Effects
     public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
 
-    public static Map<String, ?> questions;
+    // uhh, idk 100%
+    public static QuestionData questions;
 
     static {
         try {
-            questions = Plist.fromXml(Gdx.files.internal("questions/questiondata.plist").readString());
+            questions = QuestionData.constructTree((HashMap<String, ?>) Plist.fromXml(Gdx.files.internal("questions/questiondata.plist").readString()));
         } catch (XmlParseException e) {
             e.printStackTrace();
         }
     }
+
+
     // METHODS
 
     /**
@@ -65,5 +71,7 @@ public class Assets {
         // Audio
         MAIN_MENU_MUSIC.dispose();
         SFX_BUTTON.dispose();
+
+        // TODO - call the GameLevel dispose etc
     }
 }

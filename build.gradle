@@ -19,6 +19,7 @@ apply plugin: 'kotlin'
 
 allprojects {
     apply plugin: "eclipse"
+    apply plugin: 'kotlin'
 
     version = '1.0'
     ext {

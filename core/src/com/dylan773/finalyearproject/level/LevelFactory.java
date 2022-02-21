@@ -15,6 +15,6 @@ public class LevelFactory {
     };
 
     public static GameLevel newLevel(Level l) {
-        return new GameLevel(LevelPaths[l.ordinal()]);
+        return new GameLevel(LevelPaths[l.ordinal()], l);
     }
 }

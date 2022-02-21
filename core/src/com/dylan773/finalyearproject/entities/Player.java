@@ -146,10 +146,6 @@ public class Player extends Sprite {
     }
 
 
-    //TODO - change collision layer from terrain?
-    private boolean abstractBoundCheck(int x, int y, TiledMap tiledMap) {
-        return ((TiledMapTileLayer) tiledMap.getLayers().get("Terrain")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
-    }
 
     /**
      * <h2> Stops the player's ability to move.</h2>

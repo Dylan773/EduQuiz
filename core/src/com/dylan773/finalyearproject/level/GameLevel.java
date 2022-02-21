@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -15,18 +14,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.render.windows.GameBar;
-import com.dylan773.finalyearproject.render.windows.OptionsWindow;
 import com.dylan773.finalyearproject.render.windows.QuestionWindow;
 import com.dylan773.finalyearproject.utilities.Utilities;
 import java.util.Objects;
+
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
-import static com.dylan773.finalyearproject.utilities.Utilities.*;
+import static com.dylan773.finalyearproject.utilities.Utilities.clamp;
+import static com.dylan773.finalyearproject.utilities.Utilities.lerp;
 
 /**
  * Abstract view of a level.
@@ -53,10 +55,16 @@ public class GameLevel extends ScreenAdapter {
     protected TiledMap map;
     protected World world;
     protected RectangleMapObject spawn;
+    protected RectangleMapObject exit;
     protected InputMultiplexer inputHandlers = new InputMultiplexer();
     protected Player player;
 
     private InputAdapter keyListener;
+
+
+    public int questionIndex = 0;
+    public LevelFactory.Level currentLevel;
+
 
     //TODO
     //private QuestionWindow questionWindow = new QuestionWindow();
@@ -68,16 +76,32 @@ public class GameLevel extends ScreenAdapter {
      *
      * @param mapPath
      */
-    public GameLevel(String mapPath) {
+    public GameLevel(String mapPath, LevelFactory.Level level) {
         loadWorld(mapPath);
         playerInit();
         renderInit();
         stageInit();
         inputInit();
-        collisionInit();
 
+        // Collisions
+        collisionInit();
+//        initEndZone(); // TODO - change this implementation
+
+        currentLevel = level;
         playLevelTheme(this);
     }
+
+    //===================================
+    public void setQuestion() {
+        new QuestionWindow();
+
+
+
+    }
+
+
+
+    //================================
 
     /**
      * Loads the map and stores it in {@link GameLevel#map}
@@ -90,6 +114,11 @@ public class GameLevel extends ScreenAdapter {
         spawn = Objects.requireNonNull(
                 (RectangleMapObject) map.getLayers().get("objects").getObjects().get("spawn"),
                 "The world loaded did not have a spawnpoint!"
+        );
+
+        exit = Objects.requireNonNull(
+                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
+                "The world loaded did not have a exit point."
         );
     }
 
@@ -131,8 +160,6 @@ public class GameLevel extends ScreenAdapter {
         FixtureDef fixtureDef = new FixtureDef();
         Body body;
 
-        //TiledMapObject.parseTiledObjectLayer(world, map.getLayers().get(4).getObjects());
-
         for (RectangleMapObject object : map.getLayers().get("trigger-zone").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
 
@@ -148,6 +175,9 @@ public class GameLevel extends ScreenAdapter {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
+                // TODO - detect collision with end zone
+//                    if (player.playerFixture.getBody())
+
                 stage.addActor(new QuestionWindow());
                 // TODO - look at postRunnable and fully understand + box2d contacts
                 if (contact.getFixtureA() != player.playerFixture)
@@ -173,6 +203,7 @@ public class GameLevel extends ScreenAdapter {
 
         });
     }
+
 
     /**
      *
@@ -394,10 +425,6 @@ public class GameLevel extends ScreenAdapter {
        tiledMapRenderer.dispose();
        map.dispose();
        world.dispose();
-    }
-
-    public void detectBox2dCollision() {
-        // if collision happens, display question
     }
 
     //#endregion
