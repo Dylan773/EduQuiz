@@ -118,7 +118,7 @@
 				<!-- Q8 -->
 				<dict>
 					<key>q</key>
-					<string>Which US president was assassinated by John Wilkes Booth in 1865?  </string>
+					<string>Which US president was assassinated by John Wilkes Booth in 1865?</string>
 					<key>a</key>
 					<array>
 						<string>Abraham Lincoln</string>
@@ -133,8 +133,8 @@
 				<!-- Q9 -->
 				<dict>
 					<key>q</key>
-					<string>In 1919 the treaty of ______ was signed, bringing the first world war
-to an end.</string>
+					<string>In 1919 the treaty of ______ was signed, following the end
+of the first world war.</string>
 					<key>a</key>
 					<array>
 						<string>Toulouse</string>

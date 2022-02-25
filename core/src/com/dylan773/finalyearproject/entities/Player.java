@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -14,14 +13,14 @@ import com.dylan773.finalyearproject.utilities.Utilities;
 
 /**
  * <h1>This application's controllable player</h1>
+ *
+ * @author Dylan Brand
  */
 public class Player extends Sprite {
     public World world; // The Box2D world.
     public Body body; // The Box2D body.
     public GameLevel level;
-    /*
-     * Fields
-     */
+
     /**
      * The x and y position for this sprite (player).
      */
@@ -32,10 +31,16 @@ public class Player extends Sprite {
      */
     public float speed = 100f;
 
+    /**
+     * The player's Box2D fixture.
+     */
     public Fixture playerFixture;
 
-    /*
-     * Constructor
+
+    /**
+     * <h2>Player Constructor</h2>
+     *
+     * @param level The current {@link GameLevel}.
      */
     public Player(GameLevel level) {
         super(Assets.KNIGHT_SPRITE);
@@ -49,13 +54,16 @@ public class Player extends Sprite {
         definePlayer();
     }
 
-    /**
-     *
-     */
-    public void definePlayer() { body = createBox2DPlayerBody(world, getWidth(), getWidth()); }
 
     /**
-     *
+     * Defines the player's Box2D body.
+     */
+    public void definePlayer() {
+        body = createBox2DPlayerBody(world, getWidth(), getWidth());
+    }
+
+
+    /**
      * @param w
      * @param width
      * @param height
@@ -68,7 +76,6 @@ public class Player extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
 
         Body body = w.createBody(bdef);
-
         FixtureDef fixtureDef = new FixtureDef();
 
         // Box around the player
@@ -82,9 +89,10 @@ public class Player extends Sprite {
         return body;
     }
 
+
     /**
      * <h2>Draws the player sprite</h2>
-     * Accepts a batch, to draw a Texture and calls the {@link #update(float, float)} method that is responsible for player movement controls.
+     * Accepts a batch, to draw a Texture and calls the {@link #update} method that is responsible for player movement controls.
      * <p>
      *
      * @param batch - Draws a 2D rectangle that references a Texture.
@@ -128,35 +136,50 @@ public class Player extends Sprite {
         }
 
         setPosition(x, y); // Sets the player position
-        body.setTransform(pos.x + (getWidth()/ 2), pos.y  + (getHeight()/2), 0);
+        body.setTransform(pos.x + (getWidth() / 2), pos.y + (getHeight() / 2), 0);
     }
 
+
+    /**
+     * @return
+     */
     private float speed() {
         return (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) ? speed * Utilities.debugValue : speed;
     }
 
+
     /**
+     * <h2>Collision detection</h2>
+     * <p>
+     * Checks the corresponding {@link #level}'s TiledMap properties for the specified ("Floor") tile layer.
+     * <p>
+     * If the player's desired position (+/- 1 of their current X or Y co-ordinate), does not intersect with the
+     * specified layer, a false value will be returned. Thus, rejecting the position change.
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x The player's desired X position, +/- 1 of their current X co-ordinate.
+     * @param y The player's desired Y position, +/- 1 of their current Y co-ordinate.
+     * @return Boolean result, indicating whether the desired position change will be intersecting with the "Floor"
+     * tile layer.
      */
     private boolean boundCheck(int x, int y) {
         return ((TiledMapTileLayer) level.getMap().getLayers().get("Floor")).getCell(Math.round((pos.x + (getWidth() * .5f)) + x) / 16, Math.round(pos.y + y) / 16) != null;
     }
 
 
-
     /**
-     * <h2> Stops the player's ability to move.</h2>
+     * Set's the player's speed to 0, stopping the player's ability to move.
      * Should only be called when the game session is in a paused state.
-     * // TODO - stop the controls not his feet
      */
-    public void pauseMovement() { speed = 0f; }
+    public void pauseMovement() {
+        speed = 0f;
+    }
+
 
     /**
      * <h2>Enables the player's ability to move, at the default speed.</h2>
-     * Should be called when the game sessions has left the paused state.
+     * Should be called when the game session has left the paused state.
      */
-    public void resumeMovement() { speed = 100f; }
+    public void resumeMovement() {
+        speed = 100f;
+    }
 }

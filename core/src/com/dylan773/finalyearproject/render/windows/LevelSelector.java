@@ -1,7 +1,5 @@
 package com.dylan773.finalyearproject.render.windows;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -9,27 +7,37 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.dylan773.finalyearproject.level.LevelFactory;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
-
 import java.util.ArrayList;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 
+
+// TODO - refactor class further
+
+/**
+ * <h1>Window that allows the user to select the desired game levels</h1>
+ *
+ * @author Dylan Brand
+ */
 public class LevelSelector extends WindowBuilder {
     private static final ArrayList<LevelFactory.Level> LEVEL_LIST = new ArrayList<>();
 
+    /** Constructor. */
     public LevelSelector() {
         super(1000f, 600f);
         initWindow();
     }
 
 
+    /**
+     * Content to be displayed on the window.
+     */
     @Override
     protected void initWindow() {
         setVisible(true);
         Label lblTitle = new Label("Level Selector", SKIN, "subtitle");
-//        add(lblTitle).padBottom(20f).padTop(20f).center();
 
         TextButton btnClose = new TextButton("X", SKIN, "arcade");
         btnClose.addListener(new ChangeListener() {
@@ -39,7 +47,6 @@ public class LevelSelector extends WindowBuilder {
                 setVisible(false);
             }
         });
-//        add(btnClose).row();
 
         Table table = new Table();
         table.add(btnClose);
@@ -84,20 +91,17 @@ public class LevelSelector extends WindowBuilder {
 
                 if (LEVEL_LIST.size() == 0)
                     lblError.setText("Select at least one level");
+                //TODO - delay event
                 else
                     CLIENT.setScreen(LevelFactory.newLevel(LEVEL_LIST.get(0)));
                 playButtonSound();
             }
         });
 
-//        add(lblError).expandY().bottom().row();
-//        add(textButton).expandY().bottom();
-
         add(textButton).expandY().bottom().row();
         //debug();
         add(lblError).padTop(10f);
     }
-
 
     /**
      * @return

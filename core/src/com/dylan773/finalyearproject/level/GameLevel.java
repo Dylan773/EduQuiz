@@ -13,26 +13,29 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.render.windows.GameBar;
 import com.dylan773.finalyearproject.render.windows.QuestionWindow;
+import com.dylan773.finalyearproject.render.windows.RestartLevel;
+import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.Utilities;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
-import static com.dylan773.finalyearproject.utilities.Utilities.clamp;
-import static com.dylan773.finalyearproject.utilities.Utilities.lerp;
+import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
  * Abstract view of a level.
- *
+ * <p>
  * It can display and handle player movement, objects and rendering
  * of any tmx valid for this game.
  *
@@ -43,14 +46,14 @@ public class GameLevel extends ScreenAdapter {
     // FIELDS
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
-    public boolean renderHitBoxes = false;
     private OrthographicCamera camera;
-    public Vector3 desiredCamPos = new Vector3();
-    public Float desiredCamZoom = .5f;
     private FillViewport viewport;
+    private InputAdapter keyListener;
+    private GameBar gameBar = new GameBar();
 
     private static Stage stage;
-    Table table; // the table only has the text in
+    private static ProgressBar healthBar;
+    private static Sprite heart = Assets.spritesheet.createSprite("love_heart");
 
     protected TiledMap map;
     protected World world;
@@ -59,21 +62,19 @@ public class GameLevel extends ScreenAdapter {
     protected InputMultiplexer inputHandlers = new InputMultiplexer();
     protected Player player;
 
-    private InputAdapter keyListener;
-
-
+    // TODO - can these be converted to private?
+    public Float desiredCamZoom = .5f;
+    public Vector3 desiredCamPos = new Vector3();
+    public boolean renderHitBoxes = false;
     public int questionIndex = 0;
-    public LevelFactory.Level currentLevel;
+    public static LevelFactory.Level currentLevel;
 
-
-    //TODO
-    //private QuestionWindow questionWindow = new QuestionWindow();
-    private GameBar gameBar = new GameBar();
+    Table table; // the table only has the text in
+    Table tableTopRow;
 
     //#region construction
 
     /**
-     *
      * @param mapPath
      */
     public GameLevel(String mapPath, LevelFactory.Level level) {
@@ -82,29 +83,24 @@ public class GameLevel extends ScreenAdapter {
         renderInit();
         stageInit();
         inputInit();
-
-        // Collisions
         collisionInit();
 //        initEndZone(); // TODO - change this implementation
 
+
         currentLevel = level;
+
+        Assets.questions.shuffleLevels();
+
         playLevelTheme(this);
     }
 
-    //===================================
-    public void setQuestion() {
-        new QuestionWindow();
 
 
 
-    }
-
-
-
-    //================================
 
     /**
      * Loads the map and stores it in {@link GameLevel#map}
+     *
      * @param mapPath The path of the map to load
      */
     private void loadWorld(String mapPath) {
@@ -118,7 +114,7 @@ public class GameLevel extends ScreenAdapter {
 
         exit = Objects.requireNonNull(
                 (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
-                "The world loaded did not have a exit point."
+                "The world loaded did not have an exit point."
         );
     }
 
@@ -141,18 +137,53 @@ public class GameLevel extends ScreenAdapter {
         table.setVisible(false);
         table.setFillParent(true);
 
-        // GameBar config
-        stage.addActor(gameBar);
-        gameBar.setY(50f); // Changes the Y position of the window's bottom edge.
+        // Table top row config
+        tableTopRow = new Table();
+        tableTopRow.setFillParent(true);
 
         // Label config
         Label pause = new Label("Paused\nESC to resume", SKIN, "subtitle", Color.ORANGE);
         pause.setAlignment(Align.center);
-        table.add(pause).padBottom(Value.percentHeight(10f));
+        table.add(pause).padBottom(Value.percentHeight(10f)); // addLabel??
 
+        Label lblMenu = new Label("Menu (ESC)", SKIN, "subtitle", Color.ORANGE); // same here?
+
+        // Health Bar inti
+        healthBar = new ProgressBar(0f, 12f, 3f, false, SKIN);
+        healthBar.setValue(12f);
+
+        // Top of stage icons
+        tableTopRow.add(lblMenu).pad(50f, 0f, 0f, Gdx.graphics.getWidth() * 0.4f);
+        tableTopRow.add(healthBar).width(400f).padTop(50f);
+        tableTopRow.top();
+
+        // Adding the actors to the stage.
+        stage.addActor(gameBar);
         stage.addActor(table);
+        stage.addActor(tableTopRow);
+
+        // TODO -  figure a better way to do this
+        heart.setPosition(Gdx.graphics.getWidth() * 0.64f, Gdx.graphics.getHeight() * 0.93f);
     }
 
+
+    // TODO - move
+    //=====================================
+
+    public static void decreasePlayerLives(Actor actor) {
+        if ((healthBar.getValue() - healthBar.getStepSize()) == 0f) {
+            healthBar.setValue(0f);
+            stage.addActor(new RestartLevel());
+            stage.getActors().removeValue(actor, true);
+        } else healthBar.setValue(healthBar.getValue() - healthBar.getStepSize());
+    }
+
+
+    //======================================
+
+    /**
+     *
+     */
     private void collisionInit() {
         // Box2D variables
         BodyDef bodyDef = new BodyDef();
@@ -176,7 +207,6 @@ public class GameLevel extends ScreenAdapter {
             @Override
             public void beginContact(Contact contact) {
                 // TODO - detect collision with end zone
-//                    if (player.playerFixture.getBody())
 
                 stage.addActor(new QuestionWindow());
                 // TODO - look at postRunnable and fully understand + box2d contacts
@@ -246,7 +276,8 @@ public class GameLevel extends ScreenAdapter {
                         playerToSpawn();
                         break;
 
-                    default: return super.keyTyped(character);
+                    default:
+                        return super.keyTyped(character);
                 }
 
                 return false;
@@ -264,7 +295,7 @@ public class GameLevel extends ScreenAdapter {
 
             @Override
             public boolean scrolled(float amountX, float amountY) {
-                desiredCamZoom = clamp(0.1f,0.8f, camera.zoom + (amountY * 0.1f)); // amount reduced to reduce how much it zooms when scrolling
+                desiredCamZoom = clamp(0.1f, 0.8f, camera.zoom + (amountY * 0.1f)); // amount reduced to reduce how much it zooms when scrolling
                 return true;    // Indicate that the scroll has been handled.
             }
         };
@@ -309,7 +340,7 @@ public class GameLevel extends ScreenAdapter {
 
         // TODO - look this up
         // RGB number / 255
-        Gdx.gl.glClearColor(0.07843137255f,0.04705882353f,0.1098039216f, 0f);
+        Gdx.gl.glClearColor(0.07843137255f, 0.04705882353f, 0.1098039216f, 0f);
 
         // Create the renderer
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -327,6 +358,7 @@ public class GameLevel extends ScreenAdapter {
         tiledMapRenderer.getBatch().setProjectionMatrix(camera.combined);
     }
 
+
     /**
      * Draws the sprite using the {@link #tiledMapRenderer}.
      * Calls the player's draw method...
@@ -338,6 +370,7 @@ public class GameLevel extends ScreenAdapter {
         sprite.draw(tiledMapRenderer.getBatch());
         tiledMapRenderer.getBatch().end();
     }
+
 
     @Override
     public void render(float delta) {
@@ -355,7 +388,13 @@ public class GameLevel extends ScreenAdapter {
         stage.draw();
 
         debugRenderer.render(world, getCamera().combined);
+
+        // TODO - this isnt ideal? being rendered every frame
+        stage.getBatch().begin();
+        heart.draw(stage.getBatch());
+        stage.getBatch().end();
     }
+
 
     /**
      *
@@ -369,12 +408,21 @@ public class GameLevel extends ScreenAdapter {
     /**
      *
      */
-    private void renderPlayer() { drawSprite(player); }
+    private void renderPlayer() {
+        drawSprite(player);
+    }
+
+    private void renderHeartIcon() {
+
+    }
 
     /**
-     *
+     * why do we need this??? research it
      */
-    private void processCollisions() { world.step(1 / 60f, 6, 2); }
+    private void processCollisions() {
+        world.step(1 / 60f, 6, 2);
+    }
+
 
     /**
      *
@@ -383,6 +431,7 @@ public class GameLevel extends ScreenAdapter {
         if (renderHitBoxes)
             debugRenderer.render(world, getCamera().combined);
     }
+
 
     /**
      *
@@ -396,11 +445,16 @@ public class GameLevel extends ScreenAdapter {
     //#endregion
     //#region engine screen calls
 
+
     @Override
     public void resize(int width, int height) {
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
+
+        stage.getBatch().begin();
+        heart.draw(stage.getBatch());
+        stage.getBatch().end();
     }
 
 
@@ -422,9 +476,9 @@ public class GameLevel extends ScreenAdapter {
 
     @Override
     public void dispose() {
-       tiledMapRenderer.dispose();
-       map.dispose();
-       world.dispose();
+        tiledMapRenderer.dispose();
+        map.dispose();
+        world.dispose();
     }
 
     //#endregion
@@ -456,6 +510,14 @@ public class GameLevel extends ScreenAdapter {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public static LevelFactory.Level getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void disposeLevel() {
+        this.dispose();
     }
 
     //#endregion get
