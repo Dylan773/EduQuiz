@@ -8,29 +8,33 @@ import com.dylan773.finalyearproject.level.GameLevel;
 import static com.dylan773.finalyearproject.utilities.Assets.*;
 
 /**
+ * <h1>Audio handler for this application</h1>
  *
+ * @author Dylan Brand
  */
 public class AudioController {
-    /*
-     * Fields
-     */
+
+    // ======
+    // FIELDS
+    // ======
+
     /**
      * Default volumes for music and sfx.
      */
     private static float
             musicVolume = 0.2f,
             sfxVolume = 0.2f; // Default values. Can be overridden in game.
-    private static boolean isMuted = false;
-    private static Music nowPlaying = MAIN_MENU_MUSIC; // This applications Main Menu music.
-    private static Sound buttonSound = SFX_BUTTON; // SFX Sound for button click.
 
+    private static Sound buttonSound = SFX_BUTTON; // SFX Sound for button click.
+    private static Music nowPlaying = MAIN_MENU_MUSIC; // This applications Main Menu music.
+    public static Music levelTheme;
+    private static boolean isMuted = false;
     public static final String THEME_KEY = "theme";
 
-    public static Music levelTheme;
 
-    /*
-     * Methods
-     */
+    // =======
+    // METHODS
+    // =======
 
     /**
      * Pauses the currently playing song and sets {@link #isMuted} to true.
@@ -40,6 +44,7 @@ public class AudioController {
         isMuted = true;
     }
 
+
     /**
      * Resumes playing the current song and sets {@link #isMuted} to false.
      */
@@ -48,23 +53,26 @@ public class AudioController {
         resumeMusic();
     }
 
+
     /**
-     * Pauses the current song, {@link #nowPlaying}.
+     * Pauses the currently playing music, {@link #nowPlaying}.
      */
     public static void pauseMusic() {
         nowPlaying.pause();
     }
 
+
     /**
-     * Resumes playing the current song, only if the application is not muted.
+     * Resumes playing the current music, only if the application is not muted.
      */
     public static void resumeMusic() {
         if (!isMuted)
             nowPlaying.play();
     }
 
+
     /**
-     * Sets this applications mute status.
+     * Sets the applications mute status.
      *
      * @param mute The boolean value to set this applications mute status.
      */
@@ -73,8 +81,8 @@ public class AudioController {
             muteAudio(); // If mute is set to true, mute all audio
         else
             unmuteAudio(); // If mute is set to false, un-mute all audio
-
     }
+
 
     /**
      * Returns a boolean result, indicating whether this application is muted or not.
@@ -84,6 +92,7 @@ public class AudioController {
     public static Boolean getIsMuted() {
         return isMuted;
     }
+
 
     /**
      * Accepts a Music object and plays that audio file at {@link #musicVolume}.
@@ -101,14 +110,11 @@ public class AudioController {
         return nowPlaying;
     }
 
-    public static void stopNowPlaying() {
-        nowPlaying.stop();
-    }
 
     /**
      * Accepts a Music object and plays that audio file on loop if the application is not muted.
      *
-     * @param music The music object to be played.
+     * @param music The music object to be played, from the beginning of the file.
      */
     public static void playOnLoop(Music music) {
         if (!isMuted) {
@@ -117,6 +123,7 @@ public class AudioController {
             play(music);
         }
     }
+
 
     /**
      * Sets the SFX volume for this application.
@@ -127,6 +134,7 @@ public class AudioController {
         sfxVolume = volume;
     }
 
+
     /**
      * Returns a float value indicating the sound effects volume.
      *
@@ -135,6 +143,7 @@ public class AudioController {
     public static float getSFXVolume() {
         return sfxVolume;
     }
+
 
     /**
      * Sets the Music volume for this application.
@@ -146,6 +155,7 @@ public class AudioController {
         assertCorrectVolume();
     }
 
+
     /**
      * Returns a float value indicating the Music volume.
      *
@@ -155,12 +165,14 @@ public class AudioController {
         return musicVolume;
     }
 
+
     /**
      * Sets {@link #nowPlaying} volume to the current music volume.
      */
     public static void assertCorrectVolume() {
         nowPlaying.setVolume(musicVolume);
     }
+
 
     /**
      * Plays this applications Main Menu Music, only if the application is not muted.
@@ -172,6 +184,7 @@ public class AudioController {
             playOnLoop(MAIN_MENU_MUSIC);
     }
 
+
     /**
      * Plays a button click sound effect at the {@link #sfxVolume} only if this application is not muted.
      */
@@ -180,16 +193,11 @@ public class AudioController {
             buttonSound.play(sfxVolume);
     }
 
-    /**
-     * Played when user enters a game
-     */
-    public static void playHistoryLevel() {
-        if (!isMuted)
-            playOnLoop(MUSEUM_MUSIC);
-    }
 
     /**
-     * @param level
+     * Plays a {@link Music} file, whose file path matches {@link GameLevel}'s {@link #THEME_KEY}.
+     *
+     * @param level The level that the music file will be played throughout.
      */
     public static void playLevelTheme(GameLevel level) {
         if (levelTheme != null)

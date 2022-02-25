@@ -5,12 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.utilities.AudioController;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
+
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.*;
-import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
 
 /**
  * <h1>This applications Options Window</h1>
@@ -28,12 +27,12 @@ public class OptionsWindow extends WindowBuilder {
      */
     public OptionsWindow() {
         super(1000f, 600f);
-//        super(GAME_WIDTH, GAME_HEIGHT);
         initWindow();
     }
 
+
     /**
-     * Overrides the abstract buildWindow() method from the {@link #WindowBuilder}  parent class.
+     * Overrides the abstract initWindow method from the {@link #WindowBuilder} parent class.
      */
     @Override
     protected void initWindow() {
@@ -89,12 +88,5 @@ public class OptionsWindow extends WindowBuilder {
         add(sfxSlider).fillX().padBottom(5f).row();
         add(muteCheck).colspan(2).padBottom(70f).row();
         add(btnClose).colspan(2);
-
     }
-
-    public void setV() {
-
-    }
-
-
 }

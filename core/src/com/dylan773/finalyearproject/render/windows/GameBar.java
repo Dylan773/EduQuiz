@@ -29,6 +29,7 @@ public class GameBar extends Window {
         initWindow();
     }
 
+
     /**
      * Constructs the GameBar window.
      */
@@ -82,6 +83,7 @@ public class GameBar extends Window {
 
         add(group);
     }
+
 
     /**
      * <h2>Private inner class for the game exit dialog.</h2>

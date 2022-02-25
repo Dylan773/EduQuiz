@@ -10,37 +10,28 @@ import com.dylan773.finalyearproject.utilities.WindowBuilder;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 
-//TODO - commit in gamebar branch
-// add labels - use the addLabel method
-// rectify (do research) about label text and centering - its currently shit/dont like it
-// a button to close the window is repeated a lot, create a method in util that multiple windows can use?
-
 /**
- *
+ * <h1>Window that shows basic level information and controls on the {@link GameBar}</h1>
  */
 public class GameControls extends WindowBuilder {
 
-    /**
-     *
-     */
+    /** <h2>Constructor</h2> */
     public GameControls() {
         super(1000f, 600f); // TODO - change to screensize percentage?
         initWindow();
     }
 
+    /** Content to be displayed on the window. */
     @Override
     protected void initWindow() {
         setVisible(true);
         pad(20f, 0f, 20f, 0f);
 
-        // Textarea - disable input/ make it read-only + max-width?
-
-        // TODO - create an add label method! (one in utilities?)
-        // Game Objective and controls  sub-titles
+        // Game Objective and controls subtitles
         Label lblObjectiveTitle = new Label("Objective", SKIN, "subtitle");
         Label lblControlsTitle = new Label("Controls", SKIN, "subtitle");
 
-        // TODO - text goes off screen if too long
+        // Main content label
         Label lblObjectiveText = new Label("", SKIN);
         lblObjectiveText.setAlignment(Align.center);
         lblObjectiveText.setText("Your task is simple. " +
@@ -48,14 +39,12 @@ public class GameControls extends WindowBuilder {
                 "BUT that wont be easy, certain areas require a correct answer for entry.\n" +
                 "Correctly answer each question to unlock new areas. ");
 
-
-
+        // Key control label
         Label lblKeyControls = new Label("", SKIN);
         lblKeyControls.setText("W - UP\nA - LEFT\nS - DOWN\nD - RIGHT");
 
-
         // Window close button
-        TextButton btnClose = new TextButton("Close", SKIN); // TODO - this is duplicated A LOT!
+        TextButton btnClose = new TextButton("Close", SKIN); // TODO - change to click listener
         btnClose.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -64,13 +53,11 @@ public class GameControls extends WindowBuilder {
             }
         });
 
+        // Adding the actors to the window.
         add(lblObjectiveTitle).row();
         add(lblObjectiveText).row();
-
         add(lblControlsTitle).padTop(30f).row();
-
         add(lblKeyControls).row();
         add(btnClose).expandY().bottom();
-        //debug();
     }
 }

@@ -3,8 +3,8 @@ package com.dylan773.finalyearproject.utilities
 /**
  * TODO
  *
- * @property delay The time delay before the [targetEvent] is executed
- * @property targetEvent The event to be executed
+ * @property delay The time delay before the [targetEvent] is executed.
+ * @property targetEvent The event to be executed.
  *
  * @author Dylan Brand
  */

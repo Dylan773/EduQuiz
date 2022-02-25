@@ -4,18 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.dylan773.finalyearproject.level.Question;
 import com.dylan773.finalyearproject.level.QuestionData;
 import xmlwise.Plist;
 import xmlwise.XmlParseException;
-
 import java.util.HashMap;
-import java.util.Map;
 
 /**
- * <h1>Assets for this application</h1>
- * Stores the necessary assets for this application, whilst providing classes with easy access to the relevant assets.
+ * <h1>Asset management for this application</h1>
+ * Obtains the location of all required assets, storing and providing easy access to those assets throughout this application.
  *
  * @author Dylan Brand
  */
@@ -29,6 +27,11 @@ public class Assets {
             MAIN_MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png"),
             OPTIONS_BACKGROUND = new Texture("images/background.png"),
             KNIGHT_SPRITE = new Texture("images/spellun-sprite.png");
+
+    // Sprites/SpriteSheets
+    public static TextureAtlas spritesheet = new TextureAtlas("images/spritesheet.atlas");
+
+
 
     // Music
     public static final Music
@@ -44,14 +47,16 @@ public class Assets {
 
     static {
         try {
-            questions = QuestionData.constructTree((HashMap<String, ?>) Plist.fromXml(Gdx.files.internal("questions/questiondata.plist").readString()));
+            questions = QuestionData.constructTree((HashMap<String, ?>) Plist.fromXml(Gdx.files.internal("questions/questiondata.plist").readString())); //cast to HashMap<String, ?>
         } catch (XmlParseException e) {
             e.printStackTrace();
         }
     }
 
 
+    // =======
     // METHODS
+    // =======
 
     /**
      * <h2>Disposes all assets in this application.</h2>
