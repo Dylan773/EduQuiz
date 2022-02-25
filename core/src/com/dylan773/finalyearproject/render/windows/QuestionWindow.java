@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.level.GameLevel.decreasePlayerLives;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
 
 // TODO - dispose the window on window close?
 
@@ -71,7 +72,8 @@ public class QuestionWindow extends WindowBuilder {
                     lblError.setText("You have not selected an option.");
                     new DelayEvent(2000, () -> lblError.setText(""));
                 } else if (buttonGroup.getChecked().getText().toString().equals(answers().get(correctAnsIndex()))) {
-                    getStage().getActors().removeValue(QuestionWindow.this, true); // TODO - this could be useful for others
+//                    getStage().getActors().removeValue(QuestionWindow.this, true); // TODO - this could be useful for others
+                    destroyActor(QuestionWindow.this); // TODO - w'heyyyy
                     ((GameLevel) CLIENT.getScreen()).enableUserInput(); // re-enable user input
                     incrementQuestionIndex();
                 } else {

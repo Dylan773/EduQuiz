@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
+import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
 
 
 // TODO - refactor class further
@@ -44,7 +45,7 @@ public class LevelSelector extends WindowBuilder {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
-                setVisible(false);
+                destroyActor(LevelSelector.this);
             }
         });
 
@@ -61,9 +62,6 @@ public class LevelSelector extends WindowBuilder {
         group.addActor(btnClose.right());
 
         add(group).padTop(20f).row();
-
-
-        //TODO - play correct audio dynamically
 
         ArrayList<CheckBox> selectedLevels = new ArrayList();
 

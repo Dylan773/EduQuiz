@@ -10,6 +10,7 @@ import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.*;
+import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
 
 /**
  * <h1>This applications Options Window</h1>
@@ -75,7 +76,7 @@ public class OptionsWindow extends WindowBuilder {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
-                setVisible(false);
+                destroyActor(OptionsWindow.this);
             }
         });
 
