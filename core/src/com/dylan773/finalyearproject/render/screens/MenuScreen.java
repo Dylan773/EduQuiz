@@ -1,7 +1,6 @@
 package com.dylan773.finalyearproject.render.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,13 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.dylan773.finalyearproject.level.LevelFactory;
-import com.dylan773.finalyearproject.render.windows.OptionsWindow;
+import com.dylan773.finalyearproject.render.windows.*;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
-import com.dylan773.finalyearproject.EducationGame;
 
-import static com.dylan773.finalyearproject.EducationGame.CLIENT;
+import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -34,25 +32,24 @@ public class MenuScreen extends ScreenAdapter {
     private OptionsWindow optionsWindow = new OptionsWindow();
 
 
-    /*
-     * Constructor
-     */
-    /**
-     * <h2>Main Menu Constructor</h2>
-     */
+    /** <h2>Constructor</h2> */
     public MenuScreen() { // No create method in screen so use a constructor instead
         table = new Table();
         table.setFillParent(true);
 
         stage = new Stage();
         stage.addActor(table);
-        stage.addActor(optionsWindow); // Add the option window to the stage
+        //stage.addActor(optionsWindow); // Add the option window to the stage
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
         //table.setDebug(true);
         initialiseScreen(); // Constructs the table to be displayed
         AudioController.playMainMenu(); // Plays the main menu music on loop
+
+        // Clears the previously loaded game levels everytime the user visits this main menu
+        getLevelList().clear();
     }
+
 
     /**
      * <h2>Constructs the content to be displayed on this applications main menu</h2>
@@ -66,8 +63,7 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.History));
-                CLIENT.setScreen(LevelFactory.newLevel(LevelFactory.Level.Museum));
+                stage.addActor(new LevelSelector()); // Gets created upon button activation.
             }
         });
 
@@ -75,7 +71,7 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Options").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                optionsWindow.setVisible(true); // Displays the options window to the user
+                stage.addActor(new OptionsWindow());
                 AudioController.playButtonSound();
             }
         });
@@ -93,8 +89,11 @@ public class MenuScreen extends ScreenAdapter {
                 "default")).padTop(20f);
 
         // Game Info Button - Added directly to the stage, not table
-        stage.addActor(gameInfoButton());
+//        stage.addActor(gameInfoButton());
+        table.row();
+        table.add(gameInfoButton()).right().bottom();
     }
+
 
     /**
      * <h2>Instantiates a new TextButton to be used on this application's Main Menu</h2>
@@ -105,11 +104,11 @@ public class MenuScreen extends ScreenAdapter {
      * @return The TextButton.
      */
     private TextButton addMenuButton(String name) {
-        TextButton button = new TextButton(name, Assets.SKIN);
+        TextButton button = new TextButton(name, SKIN);
         table.add(button).width(400f).padBottom(20f).row();
-
         return button;
     }
+
 
     /**
      * Disables all input events and stops the Menu Screen music when this screen is hidden.
@@ -120,45 +119,29 @@ public class MenuScreen extends ScreenAdapter {
         //TODO - this may need to be changed/moved if the constructor doesnt play re-play this track when the main menu is revisited
     }
 
-//    @Override
-//    public void show() {
-//        super.show();
-//        AudioController.playMainMenu();
-//    }
 
+    /**
+     *
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clears the screen so it can draw from fresh
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
-
-        // Whilst the options window is visible, if the user has pressed the ESC key, the window will be closed/hidden.
-        if (optionsWindow.isVisible()) {
-            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-                optionsWindow.setVisible(false);
-        }
     }
+
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-//    //TODO - not sure if this is required
-//    @Override
-//    public void dispose() {
-//        stage.dispose();
-//    }
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
 
     /**
      * A TextButton that will display a game info window once clicked.
      */
     private TextButton gameInfoButton() {
-        TextButton infoButton = new TextButton("?", Assets.SKIN);
+        TextButton infoButton = new TextButton("?", SKIN);
         infoButton.setSize(100f, 100f);
-        infoButton.setPosition(1150, 25);
-        //infoButton.setDisabled(true);
         infoButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

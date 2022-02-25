@@ -1,5 +1,5 @@
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
@@ -7,4 +7,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 eclipse.project.name = appName + "-core"
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    compile 'xmlwise:xmlwise:1.2.11'                                // Xml and Plist loading library.
 }
