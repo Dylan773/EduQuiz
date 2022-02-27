@@ -9,6 +9,7 @@ import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
+import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
 
 /**
  * <h1>Window that shows basic level information and controls on the {@link GameBar}</h1>
@@ -49,7 +50,8 @@ public class GameControls extends WindowBuilder {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
-                setVisible(false);
+//                setVisible(false);
+                destroyActor(GameControls.this);
             }
         });
 

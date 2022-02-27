@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
 import com.dylan773.finalyearproject.render.windows.GameBar;
 import com.dylan773.finalyearproject.render.windows.QuestionWindow;
@@ -26,7 +25,6 @@ import com.dylan773.finalyearproject.render.windows.RestartLevel;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.Utilities;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
@@ -55,8 +53,8 @@ public class GameLevel extends ScreenAdapter {
     private static ProgressBar healthBar;
     private static Sprite heart = Assets.spritesheet.createSprite("love_heart");
 
-    protected TiledMap map;
-    protected World world;
+    protected static TiledMap map;
+    protected static World world;
     protected RectangleMapObject spawn;
     protected RectangleMapObject exit;
     protected InputMultiplexer inputHandlers = new InputMultiplexer();
@@ -78,6 +76,8 @@ public class GameLevel extends ScreenAdapter {
      * @param mapPath
      */
     public GameLevel(String mapPath, LevelFactory.Level level) {
+        currentLevel = level;
+
         loadWorld(mapPath);
         playerInit();
         renderInit();
@@ -86,16 +86,9 @@ public class GameLevel extends ScreenAdapter {
         collisionInit();
 //        initEndZone(); // TODO - change this implementation
 
-
-        currentLevel = level;
-
         Assets.questions.shuffleLevels();
-
         playLevelTheme(this);
     }
-
-
-
 
 
     /**
@@ -118,16 +111,18 @@ public class GameLevel extends ScreenAdapter {
         );
     }
 
+
     /**
-     * Creates the player
+     * {@link #player} initialisation
      */
     private void playerInit() {
         player = new Player(this);
         playerToSpawn();
     }
 
+
     /**
-     *
+     * {@link #stage} initialisation
      */
     private void stageInit() {
         stage = new Stage();
@@ -167,22 +162,8 @@ public class GameLevel extends ScreenAdapter {
     }
 
 
-    // TODO - move
-    //=====================================
-
-    public static void decreasePlayerLives(Actor actor) {
-        if ((healthBar.getValue() - healthBar.getStepSize()) == 0f) {
-            healthBar.setValue(0f);
-            stage.addActor(new RestartLevel());
-            stage.getActors().removeValue(actor, true);
-        } else healthBar.setValue(healthBar.getValue() - healthBar.getStepSize());
-    }
-
-
-    //======================================
-
     /**
-     *
+     * Collision initialisation
      */
     private void collisionInit() {
         // Box2D variables
@@ -236,7 +217,7 @@ public class GameLevel extends ScreenAdapter {
 
 
     /**
-     *
+     * Input initialisation for user input
      */
     private void inputInit() {
         inputHandlers.addProcessor(stage);
@@ -251,6 +232,8 @@ public class GameLevel extends ScreenAdapter {
                     case Input.Keys.DOWN:
                         Utilities.debugMod(-0.1f);
                         break;
+                    case Input.Keys.NUM_1:
+                        stage.addActor(new RestartLevel());
                     case Input.Keys.ESCAPE:
                         gameBar.setVisible(!gameBar.isVisible()); //Invert settings - look into that
                         table.setVisible(gameBar.isVisible());
@@ -307,24 +290,47 @@ public class GameLevel extends ScreenAdapter {
 
     //#region general methods
 
+    /**
+     * Restricts user input by removing the {@link #keyListener}'s from the {@link #inputHandlers}. At the same time,
+     * stopping the {@link Player}'s ability to move.
+     */
     public void disableUserInput() {
         inputHandlers.removeProcessor(keyListener);
         player.pauseMovement();
     }
 
+
     /**
-     *
+     * Re-enables user input by adding the {@link #keyListener}'s to the {@link #inputHandlers}. At the same time,
+     * enabling the {@link  Player}'s ability to move.
      */
     public void enableUserInput() {
         inputHandlers.addProcessor(keyListener);
         player.resumeMovement();
     }
 
+
     /**
-     * Moves the player to {@link GameLevel#world}
+     * Moves the player to {@link GameLevel#spawn}.
      */
     public void playerToSpawn() {
         spawn.getRectangle().getPosition(player.pos);
+    }
+
+
+    /**
+     * Decreases the {@link #player}'s health upon incorrect answer input to the current question, and displays the
+     * {@link RestartLevel} window to the user.
+     *
+     * @param actor The actor to be removed from the {@link #stage}, typically, this should be the question window that
+     *              is no longer required.
+     */
+    public static void decreasePlayerLives(Actor actor) {
+        if ((healthBar.getValue() - healthBar.getStepSize()) == 0f) {
+            healthBar.setValue(0f);
+            stage.getActors().removeValue(actor, true);
+            stage.addActor(new RestartLevel());
+        } else healthBar.setValue(healthBar.getValue() - healthBar.getStepSize());
     }
 
     //#endregion
@@ -338,9 +344,7 @@ public class GameLevel extends ScreenAdapter {
      */
     private void renderInit() {
 
-        // TODO - look this up
-        // RGB number / 255
-        Gdx.gl.glClearColor(0.07843137255f, 0.04705882353f, 0.1098039216f, 0f);
+        Gdx.gl.glClearColor(0.07843137255f, 0.04705882353f, 0.1098039216f, 0f); // RGB number / 255
 
         // Create the renderer
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -397,24 +401,22 @@ public class GameLevel extends ScreenAdapter {
 
 
     /**
-     *
+     * Instructs the {@link OrthogonalTiledMapRenderer} to begin rendering
      */
     private void renderWorld() {
-        tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight);
+        tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight); // TODO - experiment and fully understand
         // renders the map, can also render certain layers
         tiledMapRenderer.render();
     }
 
+
     /**
-     *
+     * Renders the {@link Player}
      */
     private void renderPlayer() {
         drawSprite(player);
     }
 
-    private void renderHeartIcon() {
-
-    }
 
     /**
      * why do we need this??? research it
@@ -492,11 +494,11 @@ public class GameLevel extends ScreenAdapter {
         return desiredCamPos;
     }
 
-    public TiledMap getMap() {
+    public static TiledMap getMap() {
         return map;
     }
 
-    public World getWorld() {
+    public static World getWorld() {
         return world;
     }
 

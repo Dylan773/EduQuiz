@@ -1,9 +1,12 @@
 package com.dylan773.finalyearproject.utilities;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
- * <h1>A utility class that provides general helper methods for the entire scope of the application</h1>
+ * <h1>Utility class that provides general helper methods for the entire scope of the application</h1>
+ *
+ * These methods typically reduce the repetition and volume of code within this application.
  *
  * @author Dylan Brand
  */
@@ -27,7 +30,7 @@ public class Utilities {
 
 
     /**
-     * <h2>Positions an Object at the centre of the display screen</h2>
+     * <h2>Positions an Object at the centre of the screen</h2>
      * This method can be called to set the position of an object to the centre of the current display. Ideally,
      * this method would called inside an object's set position method, for the X and Y axis.
      *
@@ -60,6 +63,15 @@ public class Utilities {
         return a + f * (b - a);
     }
 
+
+    /**
+     * Removes an {@link Actor} from its parent. Typically, this method should be called when an actor is no longer required.
+     *
+     * @param actor - The actor to be removed from its parent.
+     */
+    public static void destroyActor(Actor actor) {
+        actor.remove();
+    }
 
 
     public static float debugValue = 1f;
