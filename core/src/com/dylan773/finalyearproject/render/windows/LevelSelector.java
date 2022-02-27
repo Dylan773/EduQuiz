@@ -6,7 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.dylan773.finalyearproject.level.LevelFactory;
+import com.dylan773.finalyearproject.utilities.DelayEvent;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
+
 import java.util.ArrayList;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
@@ -87,12 +89,13 @@ public class LevelSelector extends WindowBuilder {
                         LEVEL_LIST.add(LevelFactory.Level.valueOf(it.getText().toString()));
                 });
 
-                if (LEVEL_LIST.size() == 0)
-                    lblError.setText("Select at least one level");
-                //TODO - delay event
-                else
+                if (LEVEL_LIST.size() == 0) {
+                    lblError.setText("You need to select at least one level.");
+                    new DelayEvent(2000, () -> lblError.setText("")); // TODO - why the hell does it need an empty lambda??
+                } else {
                     CLIENT.setScreen(LevelFactory.newLevel(LEVEL_LIST.get(0)));
-                playButtonSound();
+                    playButtonSound(); // a bit redundant
+                }
             }
         });
 
@@ -104,5 +107,7 @@ public class LevelSelector extends WindowBuilder {
     /**
      * @return
      */
-    public static ArrayList<LevelFactory.Level> getLevelList() { return LEVEL_LIST; }
+    public static ArrayList<LevelFactory.Level> getLevelList() {
+        return LEVEL_LIST;
+    }
 }

@@ -61,7 +61,7 @@ public class GameLevel extends ScreenAdapter {
     protected Player player;
 
     // TODO - can these be converted to private?
-    public Float desiredCamZoom = .5f;
+    public Float desiredCamZoom = .3f;
     public Vector3 desiredCamPos = new Vector3();
     public boolean renderHitBoxes = false;
     public int questionIndex = 0;
@@ -105,10 +105,10 @@ public class GameLevel extends ScreenAdapter {
                 "The world loaded did not have a spawnpoint!"
         );
 
-        exit = Objects.requireNonNull(
-                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
-                "The world loaded did not have an exit point."
-        );
+//        exit = Objects.requireNonNull(
+//                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
+//                "The world loaded did not have an exit point."
+//        );
     }
 
 
@@ -195,6 +195,9 @@ public class GameLevel extends ScreenAdapter {
                     Gdx.app.postRunnable(() -> contact.getFixtureA().getBody().destroyFixture(contact.getFixtureA()));
                 else
                     Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
+
+                // Hides the currently visited "laser" TiledMap layer.
+                map.getLayers().get("laser" + questionIndex).setVisible(false);
             }
 
             @Override

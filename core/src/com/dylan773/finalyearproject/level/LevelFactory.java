@@ -7,13 +7,15 @@ public class LevelFactory {
 
     public enum Level {
         History,
+        Maths
     }
 
     /**
      *
      */
     private static String[] LevelPaths = {
-            "levels/museum.tmx"
+            "levels/museum.tmx",
+            "levels/school.tmx"
     };
 
     /**

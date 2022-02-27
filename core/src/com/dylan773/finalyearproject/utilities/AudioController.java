@@ -22,13 +22,16 @@ public class AudioController {
      * Default volumes for music and sfx.
      */
     private static float
-            musicVolume = 0.2f,
-            sfxVolume = 0.2f; // Default values. Can be overridden in game.
+            musicVolume = .2f,
+            sfxVolume = .4f; // Default values. Can be overridden in game.
 
-    private static Sound buttonSound = SFX_BUTTON; // SFX Sound for button click.
+    private static Sound buttonSFX = SFX_BUTTON; // SFX Sound for button click.
+    private static Sound correctAnsSFX = CORRECT_ANS; // SFX Sound for button click.
+    private static Sound incorrectAnsSFX = INCORRECT_ANS; // SFX Sound for button click.
     private static Music nowPlaying = MAIN_MENU_MUSIC; // This applications Main Menu music.
-    public static Music levelTheme;
     private static boolean isMuted = false;
+
+    public static Music levelTheme;
     public static final String THEME_KEY = "theme";
 
 
@@ -190,7 +193,26 @@ public class AudioController {
      */
     public static void playButtonSound() {
         if (!isMuted)
-            buttonSound.play(sfxVolume);
+            buttonSFX.play(sfxVolume);
+    }
+
+
+    /**
+     * Plays a brief sound effect sound, alerting the user of a correct answer input.
+     */
+    public static void playCorrectAns() {
+        if (!isMuted)
+            correctAnsSFX.play(sfxVolume);
+
+    }
+
+
+    /**
+     * Plays a brief sound effect sound, alerting the user of an incorrect answer input.
+     */
+    public static void playIncorrectAns() {
+        if (!isMuted)
+            incorrectAnsSFX.play(sfxVolume);
     }
 
 
