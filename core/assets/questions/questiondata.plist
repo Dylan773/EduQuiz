@@ -5,21 +5,22 @@
 
 		<!-- HISTORY QUESTIONS -->
 		<key>History</key>
-
 		<dict>
 			<key>en</key>
-			<array> <!-- Array of dictionaries (questions) -->
+			<array>
+				<!-- Array of dictionaries (questions) -->
 
 				<!-- Q1 -->
-				<dict> <!-- dictionary represents a HashMap -->
+				<dict>
+					<!-- dictionary represents a HashMap -->
 					<key>q</key>
 					<string>Who was caught trying to blow up parliament in 1605?</string>
 					<key>a</key>
 					<array>
-						<string>p</string>
-						<string>p</string>
+						<string>John and Christopher Wright</string>
+						<string>Thomas Percy</string>
 						<string>Guy Fawkes</string>
-						<string>p</string>
+						<string>Robert Catesby</string>
 					</array>
 					<key>i</key>
 					<integer>2</integer>
@@ -162,12 +163,91 @@ priates and sailors during the 15th and 16th century?</string>
 					<integer>1</integer>
 				</dict>
 
+				<!-- Q11 -->
+				<dict>
+					<key>q</key>
+					<string>In what year, did the attack on pearl harbor occur?</string>
+					<key>a</key>
+					<array>
+						<string>1943</string>
+						<string>1939</string>
+						<string>1940</string>
+						<string>1941</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q12 -->
+				<dict>
+					<key>q</key>
+					<string>When did the vietnam war end?</string>
+					<key>a</key>
+					<array>
+						<string>1979</string>
+						<string>1975</string>
+						<string>1964</string>
+						<string>1971</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q13-->
+				<dict>
+					<key>q</key>
+					<string>Before its name change in 1664, what was
+New York called?
+					</string>
+					<key>a</key>
+					<array>
+						<string>New Amsterdam</string>
+						<string>East York</string>
+						<string>New Rotterdam</string>
+						<string>New Hamburg</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q14 -->
+				<dict>
+					<key>q</key>
+					<string>In what year, did the Wall Street crash occur?</string>
+					<key>a</key>
+					<array>
+						<string>1919</string>
+						<string>1929</string>
+						<string>1931</string>
+						<string>1928</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q15 -->
+				<dict>
+					<key>q</key>
+					<string>Which street did the the great fire of London
+start on?
+					</string>
+					<key>a</key>
+					<array>
+						<string>Baker Ave</string>
+						<string>Pudding Lane</string>
+						<string>Pastry Road</string>
+						<string>Dough Street</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
 			</array>
 		</dict>
 
 
 		<!-- SCIENCE QUESTIONS -->
-		<key>science</key>
+		<key>Science</key>
 		<dict>
 			<key>en</key>
 			<array>
@@ -319,6 +399,170 @@ priates and sailors during the 15th and 16th century?</string>
 				</dict>
 
 			</array>
+		</dict>
+
+
+		<!-- MATH QUESTIONS -->
+		<key>Maths</key>
+		<dict>
+			<key>en</key>
+			<array>
+
+				<!-- Q1 -->
+				<dict>
+					<key>q</key>
+					<string>What is the smallest of the following numbers?</string>
+					<key>a</key>
+					<array>
+						<string>0.001</string>
+						<string>0.1</string>
+						<string>0.01</string>
+						<string>0.011</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q2 -->
+				<dict>
+					<key>q</key>
+					<string>What is 0.7 divided by 100?</string>
+					<key>a</key>
+					<array>
+						<string>0.77</string>
+						<string>0.07</string>
+						<string>0.17</string>
+						<string>0.007</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q3 -->
+				<dict>
+					<key>q</key>
+					<string>7 + _ = 20</string>
+					<key>a</key>
+					<array>
+						<string>11</string>
+						<string>12</string>
+						<string>15</string>
+						<string>13</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q4 -->
+				<dict>
+					<key>q</key>
+					<string>What is 17 - 9?</string>
+					<key>a</key>
+					<array>
+						<string>7</string>
+						<string>5</string>
+						<string>9</string>
+						<string>8</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q5 -->
+				<dict>
+					<key>q</key>
+					<string>What is 75 - 45?</string>
+					<key>a</key>
+					<array>
+						<string>30</string>
+						<string>35</string>
+						<string>40</string>
+						<string>45</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q6 -->
+				<dict>
+					<key>q</key>
+					<string>What does the digit 1 in 15,212 represent?</string>
+					<key>a</key>
+					<array>
+						<string>1000</string>
+						<string>10,000</string>
+						<string>100,000</string>
+						<string>100</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q7 -->
+				<dict>
+					<key>q</key>
+					<string>Which number is equivelant to
+three hundred and seventy-eight thousand?
+					</string>
+					<key>a</key>
+					<array>
+						<string>3,780,000</string>
+						<string>3780</string>
+						<string>378</string>
+						<string>378,000</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q8 -->
+				<dict>
+					<key>q</key>
+					<string>Which compass point is on the left?</string>
+					<key>a</key>
+					<array>
+						<string>North</string>
+						<string>East</string>
+						<string>South</string>
+						<string>West</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+				<!-- Q9 -->
+				<dict>
+					<key>q</key>
+					<string>Which compass point is on the top?</string>
+					<key>a</key>
+					<array>
+						<string>North</string>
+						<string>East</string>
+						<string>South</string>
+						<string>West</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q10 -->
+				<dict>
+					<key>q</key>
+					<string>What is the smalles common factor of 6 and 15?</string>
+					<key>a</key>
+					<array>
+						<string>2</string>
+						<string>5</string>
+						<string>6</string>
+						<string>3</string>
+					</array>
+					<key>i</key>
+					<integer>3</integer>
+				</dict>
+
+			</array>
+
+
 		</dict>
 	</dict>
 </plist>
