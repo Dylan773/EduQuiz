@@ -10,6 +10,8 @@ import com.dylan773.finalyearproject.utilities.DelayEvent;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
@@ -26,6 +28,8 @@ import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
  */
 public class LevelSelector extends WindowBuilder {
     private static final ArrayList<LevelFactory.Level> LEVEL_LIST = new ArrayList<>();
+
+    private static Iterator<LevelFactory.Level> levelsIterated;
 
     /** Constructor. */
     public LevelSelector() {
@@ -93,14 +97,14 @@ public class LevelSelector extends WindowBuilder {
                     lblError.setText("You need to select at least one level.");
                     new DelayEvent(2000, () -> lblError.setText("")); // TODO - why the hell does it need an empty lambda??
                 } else {
-                    CLIENT.setScreen(LevelFactory.newLevel(LEVEL_LIST.get(0)));
-                    playButtonSound(); // a bit redundant
+                    Collections.shuffle(LEVEL_LIST); // shuffles the levels before iteration
+                    levelsIterated = LEVEL_LIST.iterator(); // Iteration of the ArrayList
+                    CLIENT.setScreen(LevelFactory.newLevel(levelsIterated.next()));
                 }
             }
         });
 
         add(textButton).expandY().bottom().row();
-        //debug();
         add(lblError).padTop(10f);
     }
 
@@ -109,5 +113,9 @@ public class LevelSelector extends WindowBuilder {
      */
     public static ArrayList<LevelFactory.Level> getLevelList() {
         return LEVEL_LIST;
+    }
+
+    public static Iterator<LevelFactory.Level> getLevelsIterated() {
+        return levelsIterated;
     }
 }

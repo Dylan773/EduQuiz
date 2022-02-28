@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -19,14 +20,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.entities.Player;
+import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.render.windows.GameBar;
+import com.dylan773.finalyearproject.render.windows.LevelSelector;
 import com.dylan773.finalyearproject.render.windows.QuestionWindow;
 import com.dylan773.finalyearproject.render.windows.RestartLevel;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.Utilities;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.dylan773.finalyearproject.EducationGame.CLIENT;
+import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
+import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelsIterated;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
@@ -69,6 +76,7 @@ public class GameLevel extends ScreenAdapter {
 
     Table table; // the table only has the text in
     Table tableTopRow;
+    Fixture endZoneFixture;
 
     //#region construction
 
@@ -84,7 +92,7 @@ public class GameLevel extends ScreenAdapter {
         stageInit();
         inputInit();
         collisionInit();
-//        initEndZone(); // TODO - change this implementation
+        initEndZone();
 
         Assets.questions.shuffleLevels();
         playLevelTheme(this);
@@ -105,10 +113,35 @@ public class GameLevel extends ScreenAdapter {
                 "The world loaded did not have a spawnpoint!"
         );
 
-//        exit = Objects.requireNonNull(
-//                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
-//                "The world loaded did not have an exit point."
-//        );
+        exit = Objects.requireNonNull(
+                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
+                "The world loaded did not have an exit point."
+        );
+    }
+
+
+    /**
+     * this is disgusting, but for now, it works.
+     * i need to figure out a better solution/implementation
+     */
+    public void initEndZone() {
+        // TODO - this is disgusting, dont look
+        RectangleMapObject gameExit = (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit");
+        Rectangle rectangle = gameExit.getRectangle();
+
+        Body body;
+        PolygonShape shape = new PolygonShape();
+        BodyDef bodyDef = new BodyDef();
+        FixtureDef fixtureDef = new FixtureDef();
+
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
+
+        body = world.createBody(bodyDef);
+        shape.setAsBox(rectangle.getWidth() / 2, rectangle.getHeight() / 2);
+        fixtureDef.shape = shape;
+
+        endZoneFixture = body.createFixture(fixtureDef);
     }
 
 
@@ -161,6 +194,16 @@ public class GameLevel extends ScreenAdapter {
         heart.setPosition(Gdx.graphics.getWidth() * 0.64f, Gdx.graphics.getHeight() * 0.93f);
     }
 
+    /**
+     *
+     */
+    public void determineGameEnd() {
+        if (getLevelsIterated().hasNext())
+            CLIENT.setScreen(LevelFactory.newLevel(getLevelsIterated().next()));
+        else
+            CLIENT.setScreen(new MenuScreen());
+    }
+
 
     /**
      * Collision initialisation
@@ -171,6 +214,8 @@ public class GameLevel extends ScreenAdapter {
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
         Body body;
+
+        RectangleMapObject gameExit = exit;
 
         for (RectangleMapObject object : map.getLayers().get("trigger-zone").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
@@ -187,17 +232,21 @@ public class GameLevel extends ScreenAdapter {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                // TODO - detect collision with end zone
 
-                stage.addActor(new QuestionWindow());
-                // TODO - look at postRunnable and fully understand + box2d contacts
-                if (contact.getFixtureA() != player.playerFixture)
-                    Gdx.app.postRunnable(() -> contact.getFixtureA().getBody().destroyFixture(contact.getFixtureA()));
-                else
-                    Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
+                if (contact.getFixtureA() == endZoneFixture || contact.getFixtureB() == endZoneFixture)
+                    determineGameEnd();
+                else {
 
-                // Hides the currently visited "laser" TiledMap layer.
-                map.getLayers().get("laser" + questionIndex).setVisible(false);
+                    stage.addActor(new QuestionWindow());
+                    // TODO - look at postRunnable and fully understand + box2d contacts
+                    if (contact.getFixtureA() != player.playerFixture)
+                        Gdx.app.postRunnable(() -> contact.getFixtureA().getBody().destroyFixture(contact.getFixtureA()));
+                    else
+                        Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
+
+                    // Hides the currently visited "laser" TiledMap layer.
+                    map.getLayers().get("laser" + questionIndex).setVisible(false);
+                }
             }
 
             @Override

@@ -33,9 +33,9 @@ class RestartLevel : WindowBuilder(1000f, 600f) {
         pad(30f)
 
         // TODO - improve the position of children
-        addLabel("Uh-oh", "subtitle").table.top().row()
-        addLabel("You ran out of lives!", "default").pad(50f, 0f, 10f, 0f).row()
-        addLabel("Ready to try again? Click the button below to restart the level.", "default").padBottom(250f).row()
+        addWindowLabel("Uh-oh", "subtitle").table.top().row()
+        addWindowLabel("You ran out of lives!", "default").pad(50f, 0f, 10f, 0f).row()
+        addWindowLabel("Ready to try again? Click the button below to restart the level.", "default").padBottom(250f).row()
 //        addLabel("Ready to try again? Click the button below to restart the level.", "default").expandY().row()
 
 

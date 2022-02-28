@@ -89,9 +89,9 @@ public class QuestionWindow extends WindowBuilder {
         });
 
         // Adding actors to the parent.
-        addLabel("Question", "subtitle").padTop(0f).row();
-        addLabel("----------", "subtitle").row();
-        addLabel(questionText(), "default").padBottom(30f).row();
+        addWindowLabel("Question", "subtitle").padTop(0f).row();
+        addWindowLabel("----------", "subtitle").row();
+        addWindowLabel(questionText(), "default").padBottom(30f).row();
 
         buttonGroup.getButtons().forEach(verticalGroup::addActor);
 

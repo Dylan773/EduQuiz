@@ -486,7 +486,7 @@ start on?
 				<!-- Q6 -->
 				<dict>
 					<key>q</key>
-					<string>What does the digit 1 in 15,212 represent?</string>
+					<string>What does the digit 1 in 15,232 represent?</string>
 					<key>a</key>
 					<array>
 						<string>1000</string>
@@ -548,7 +548,7 @@ three hundred and seventy-eight thousand?
 				<!-- Q10 -->
 				<dict>
 					<key>q</key>
-					<string>What is the smalles common factor of 6 and 15?</string>
+					<string>What is the smallest common factor of 6 and 15?</string>
 					<key>a</key>
 					<array>
 						<string>2</string>
@@ -558,6 +558,79 @@ three hundred and seventy-eight thousand?
 					</array>
 					<key>i</key>
 					<integer>3</integer>
+				</dict>
+
+				<!-- Q11 -->
+				<dict>
+					<key>q</key>
+					<string>What is one tenth of 30?</string>
+					<key>a</key>
+					<array>
+						<string>13</string>
+						<string>3</string>
+						<string>0.3</string>
+						<string>0.03</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
+				</dict>
+
+				<!-- Q12 -->
+				<dict>
+					<key>q</key>
+					<string>What is one quarter of 16?</string>
+					<key>a</key>
+					<array>
+						<string>4</string>
+						<string>5</string>
+						<string>6</string>
+						<string>3</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q13 -->
+				<dict>
+					<key>q</key>
+					<string>What is 8x8?</string>
+					<key>a</key>
+					<array>
+						<string>72</string>
+						<string>56</string>
+						<string>64</string>
+						<string>80</string>
+					</array>
+					<key>i</key>
+					<integer>2</integer>
+				</dict>
+
+				<!-- Q14 -->
+				<dict>
+					<key>q</key>
+					<string>The "MODE" represents the most common
+frequency of data?
+					</string>
+					<key>a</key>
+					<array>
+						<string>True</string>
+						<string>False</string>
+					</array>
+					<key>i</key>
+					<integer>0</integer>
+				</dict>
+
+				<!-- Q15 -->
+				<dict>
+					<key>q</key>
+					<string>The value of pie is approximately 3.18.</string>
+					<key>a</key>
+					<array>
+						<string>True</string>
+						<string>False</string>
+					</array>
+					<key>i</key>
+					<integer>1</integer>
 				</dict>
 
 			</array>

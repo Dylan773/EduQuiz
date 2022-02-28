@@ -1,7 +1,11 @@
 package com.dylan773.finalyearproject.utilities;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 
 /**
  * <h1>Utility class, providing helper methods for the entire scope of the application</h1>
@@ -28,6 +32,20 @@ public class Utilities {
     }
 
 
+    public static TextButton addButton(String text, Sound sfx) {
+        TextButton button = new TextButton(text, SKIN);
+//        button.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                playSFX(sfx);
+//                inputEvent();
+//                //TODO - event???
+//            }
+//        });
+        return button;
+    }
+
+
     /**
      * <h2>Positions an Object at the centre of the screen</h2>
      * This method can be called to set the position of an object to the centre of the current display. Ideally,
@@ -43,7 +61,7 @@ public class Utilities {
 
 
     /**
-     * If value is greater than max, returns max. If less than mix, returns min. If neither, returns value.
+     * If value is greater than max, returns max. If less than min, returns min. If neither, returns value.
      */
     public static float clamp(float min, float max, float value) {
         return value > max ? max : value < min ? min : value;
@@ -63,15 +81,18 @@ public class Utilities {
 
     /**
      * <h2>Removes an {@link Actor} from its parent.</h2>
-     * This method should be called when an actor is no longer required. If the {@link Actor}'s parent is NULL,
-     * the Actor remains unaffected by this call.
+     * This method should be called when an actor is no longer required.
+     * <p>
      *
-     * @see Actor#remove()
+     * If the {@link Actor}'s parent is NULL, the Actor remains unaffected by this method call. Typically, an actor's
+     * parent would be a  {@link com.badlogic.gdx.scenes.scene2d.Stage} or {@link com.badlogic.gdx.scenes.scene2d.ui.Table}.
+     *
      * @param actor - The actor to be removed from its parent.
-     *
+     * @see Actor#remove()
      */
     public static void destroyActor(Actor actor) {
-        actor.remove();
+        actor.clear(); // Removes all listeners and actions from the actor.
+        actor.remove(); // Then, removes the actor from its parent.
     }
 
 

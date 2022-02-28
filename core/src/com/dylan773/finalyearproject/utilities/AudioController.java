@@ -18,20 +18,21 @@ public class AudioController {
     // FIELDS
     // ======
 
-    /**
-     * Default volumes for music and sfx.
-     */
+    // Default values. Can be overridden in game.
     private static float
             musicVolume = .2f,
-            sfxVolume = .4f; // Default values. Can be overridden in game.
+            sfxVolume = .4f;
 
-    private static Sound buttonSFX = SFX_BUTTON; // SFX Sound for button click.
-    private static Sound correctAnsSFX = CORRECT_ANS; // SFX Sound for button click.
-    private static Sound incorrectAnsSFX = INCORRECT_ANS; // SFX Sound for button click.
-    private static Music nowPlaying = MAIN_MENU_MUSIC; // This applications Main Menu music.
+    private static Sound
+            buttonSFX = SFX_BUTTON, // SFX Sound for button click.
+            correctAnsSFX = CORRECT_ANS,
+            incorrectAnsSFX = INCORRECT_ANS;
+
+    private static Music
+            nowPlaying = MAIN_MENU_MUSIC, // This applications Main Menu music.
+            levelTheme;
+
     private static boolean isMuted = false;
-
-    public static Music levelTheme;
     public static final String THEME_KEY = "theme";
 
 
@@ -81,9 +82,9 @@ public class AudioController {
      */
     public static void setMute(boolean mute) {
         if (mute)
-            muteAudio(); // If mute is set to true, mute all audio
+            muteAudio(); // If mute is true, mute all audio
         else
-            unmuteAudio(); // If mute is set to false, un-mute all audio
+            unmuteAudio(); // If mute is false, un-mute all audio
     }
 
 
@@ -115,16 +116,24 @@ public class AudioController {
 
 
     /**
-     * Accepts a Music object and plays that audio file on loop if the application is not muted.
+     * <h2>PLays a {@link Music} file on loop.</h2>
+     * <p>
+     * Sets {@link #nowPlaying} to the music file passed as a parameter. The previously {@link #nowPlaying} file is
+     * disposed, while the new file's looping is set to true, from the beginning of its source.
+     * <p>
+     * It is worth noting, that the music file will not audibly play while {@link #isMuted} is true.
      *
-     * @param music The music object to be played, from the beginning of the file.
+     * @param music The music object to be played, from the beginning of its source.
      */
     public static void playOnLoop(Music music) {
-        if (!isMuted) {
-            music.setLooping(true); // Will continuously loop until interrupted.
-            music.setPosition(0f); // Starts the music track from the beginning
-            play(music);
-        }
+        nowPlaying.dispose(); // Dispose the old Music file.
+        nowPlaying = music; // Set nowPlaying to the provided Music file for playing.
+
+        nowPlaying.setLooping(true); // Will continuously loop until interrupted.
+        nowPlaying.setPosition(0f); // Positions the music track from the beginning.
+
+        if (!isMuted)
+            play(nowPlaying);
     }
 
 
@@ -170,7 +179,7 @@ public class AudioController {
 
 
     /**
-     * Sets {@link #nowPlaying} volume to the current music volume.
+     * Sets {@link #nowPlaying} volume to the current {@link #musicVolume}.
      */
     public static void assertCorrectVolume() {
         nowPlaying.setVolume(musicVolume);
@@ -179,7 +188,7 @@ public class AudioController {
 
     /**
      * Plays this applications Main Menu Music, only if the application is not muted.
-     * <br><br/>
+     * <p>
      * Calls {@link #playOnLoop(Music)} to loop the song object.
      */
     public static void playMainMenu() {
@@ -195,6 +204,14 @@ public class AudioController {
         if (!isMuted)
             buttonSFX.play(sfxVolume);
     }
+
+    //================================
+
+    public static void playSFX(Sound sound) {
+        sound.play(sfxVolume);
+    }
+
+    //=============================
 
 
     /**

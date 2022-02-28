@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.1" orientation="orthogonal" renderorder="right-down" width="120" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="9">
+<map version="1.8" tiledversion="1.8.1" orientation="orthogonal" renderorder="right-down" width="120" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="11">
  <properties>
   <property name="theme" value="Track 2 (Party Tonight).wav"/>
  </properties>
@@ -751,6 +751,8 @@
   <object id="1" name="spawn" x="277.694" y="942.817">
    <point/>
   </object>
+  <object id="9" name="exit" x="1692.33" y="334" width="34.6667" height="60"/>
+  <object id="10" x="1637.33" y="350.667"/>
  </objectgroup>
  <objectgroup id="5" name="trigger-zone">
   <object id="5" x="422.341" y="735.557" width="2.10227" height="48.1364"/>

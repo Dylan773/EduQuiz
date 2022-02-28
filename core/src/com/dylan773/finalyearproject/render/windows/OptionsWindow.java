@@ -81,11 +81,11 @@ public class OptionsWindow extends WindowBuilder {
         });
 
         // Add each actor to the window
-        addLabel("OPTIONS", "title").colspan(2).row();
-        addLabel("Audio", "subtitle").padBottom(10f).colspan(2).row();
-        addLabel("Music Volume:", "default").right().padBottom(5f);
+        addWindowLabel("OPTIONS", "title").colspan(2).row();
+        addWindowLabel("Audio", "subtitle").padBottom(10f).colspan(2).row();
+        addWindowLabel("Music Volume:", "default").right().padBottom(5f);
         add(musicSlider).fillX().padBottom(5f).row();
-        addLabel("SFX Volume:", "default").right().padBottom(5f);
+        addWindowLabel("SFX Volume:", "default").right().padBottom(5f);
         add(sfxSlider).fillX().padBottom(5f).row();
         add(muteCheck).colspan(2).padBottom(70f).row();
         add(btnClose).colspan(2);

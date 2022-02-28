@@ -15,10 +15,12 @@ import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 public abstract class WindowBuilder extends Window {
 
     /**
-     * WindowBuilder constructor that determines the basic functionality and behaviour of ALL windows within this application.
+     * WindowBuilder constructor that determines the basic functionality and behaviour of ALL windows that extend
+     * this class.
      * <p>
-     *  Extending classes should inherit the behaviour and functionality, by calling super() in their respective constructor.
-     * @param width The width of the window.
+     * Extending classes should inherit the behaviour and functionality, by calling super() in their respective constructor.
+     *
+     * @param width  The width of the window.
      * @param height The height of the window.
      */
     public WindowBuilder(float width, float height) {
@@ -50,7 +52,7 @@ public abstract class WindowBuilder extends Window {
      * @param fontStyle The font style for this label's text.
      * @return A cell, with the created Label inside.
      */
-    public Cell<Label> addLabel(String text, String fontStyle) {
+    public Cell<Label> addWindowLabel(String text, String fontStyle) {
         return add(new Label(text, Assets.SKIN, fontStyle));
     }
 }

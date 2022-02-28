@@ -15,6 +15,7 @@ import com.dylan773.finalyearproject.utilities.AudioController;
 
 import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
 /**
@@ -28,21 +29,26 @@ public class MenuScreen extends ScreenAdapter {
      * Fields
      */
     private Stage stage;
-    private Table table;
-    private OptionsWindow optionsWindow = new OptionsWindow();
+    private Table table, infoButtonTable;
 
 
-    /** <h2>Constructor</h2> */
+    /**
+     * <h2>Constructor</h2>
+     */
     public MenuScreen() { // No create method in screen so use a constructor instead
         table = new Table();
         table.setFillParent(true);
 
+        // STOPSHIP: 27/02/2022 peen
+        infoButtonTable = new Table();
+        infoButtonTable.setFillParent(true);
+
         stage = new Stage();
         stage.addActor(table);
-        //stage.addActor(optionsWindow); // Add the option window to the stage
+        stage.addActor(infoButtonTable); // TODO - here
+
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
-        //table.setDebug(true);
         initialiseScreen(); // Constructs the table to be displayed
         AudioController.playMainMenu(); // Plays the main menu music on loop
 
@@ -63,6 +69,7 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                playButtonSound();
                 stage.addActor(new LevelSelector()); // Gets created upon button activation.
             }
         });
@@ -71,8 +78,8 @@ public class MenuScreen extends ScreenAdapter {
         addMenuButton("Options").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                playButtonSound();
                 stage.addActor(new OptionsWindow());
-                AudioController.playButtonSound();
             }
         });
 
@@ -88,10 +95,9 @@ public class MenuScreen extends ScreenAdapter {
         table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
                 "default")).padTop(20f);
 
-        // Game Info Button - Added directly to the stage, not table
-//        stage.addActor(gameInfoButton());
-        table.row();
-        table.add(gameInfoButton()).right().bottom();
+        // Game Info Button
+        infoButtonTable.add(gameInfoButton()).pad(40f).expand().bottom().right();
+        infoButtonTable.debug();
     }
 
 
@@ -121,7 +127,6 @@ public class MenuScreen extends ScreenAdapter {
 
 
     /**
-     *
      * @param delta
      */
     @Override
@@ -133,7 +138,9 @@ public class MenuScreen extends ScreenAdapter {
 
 
     @Override
-    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 
 
     /**
