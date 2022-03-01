@@ -2,6 +2,7 @@ package com.dylan773.finalyearproject.render.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.render.windows.*;
-import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.AudioController;
 
 import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
+import static com.dylan773.finalyearproject.utilities.Assets.MAIN_MENU_BACKGROUND;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
@@ -62,8 +63,8 @@ public class MenuScreen extends ScreenAdapter {
      * Uses a {@link #table} to arrange actors to be displayed on the main menu screen.
      */
     public void initialiseScreen() {
-        table.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.MAIN_MENU_BACKGROUND)));
-        table.add(addLabel("Edu Quiz", "title")).padBottom(20f).row();
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(MAIN_MENU_BACKGROUND)));
+        table.add(addLabel("Edu Quiz", "title", Color.WHITE)).padBottom(20f).row();
 
         // Play Game Button Controls
         addMenuButton("Play Game").addListener(new ChangeListener() {
@@ -93,11 +94,10 @@ public class MenuScreen extends ScreenAdapter {
 
         // Game Author Label
         table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
-                "default")).padTop(20f);
+                "subtitle", Color.FOREST)).padTop(20f);
 
         // Game Info Button
         infoButtonTable.add(gameInfoButton()).pad(40f).expand().bottom().right();
-        infoButtonTable.debug();
     }
 
 
@@ -121,8 +121,7 @@ public class MenuScreen extends ScreenAdapter {
      */
     @Override
     public void hide() {
-        //AudioController.stopNowPlaying();
-        //TODO - this may need to be changed/moved if the constructor doesnt play re-play this track when the main menu is revisited
+
     }
 
 

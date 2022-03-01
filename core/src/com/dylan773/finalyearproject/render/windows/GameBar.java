@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject.render.windows;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -87,7 +88,7 @@ public class GameBar extends Window {
      * <h2>Private inner class for the level exit dialog.</h2>
      * Prompts the user with a dialog, confirming if they want to exit the current game session.
      */
-    private static class ExitDialog extends Dialog {
+    private class ExitDialog extends Dialog {
 
         /**
          * A round dialog window, displaying two buttons with a YES or NO option.
@@ -99,10 +100,11 @@ public class GameBar extends Window {
             super("", SKIN, "round");
             setMovable(false);
             setResizable(false);
-            getBackground().setMinWidth(370f);
+            getBackground().setMinWidth(450f);
 
             // Text to be displayed on the dialog.
-            text(addLabel("Are you sure?", "subtitle"));
+            text(addLabel("Are you sure?", "subtitle", Color.WHITE)).row();
+            add(addLabel("progress will not be saved", "font", Color.CORAL)).padTop(10f);
 
             // Dialog buttons
             button("Yes", true);
