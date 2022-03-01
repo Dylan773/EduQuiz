@@ -411,7 +411,7 @@ start on?
 				<!-- Q1 -->
 				<dict>
 					<key>q</key>
-					<string>What is the smallest of the following numbers?</string>
+					<string>Which is the smallest of the following numbers?</string>
 					<key>a</key>
 					<array>
 						<string>0.001</string>

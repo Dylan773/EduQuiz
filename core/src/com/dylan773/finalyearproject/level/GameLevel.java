@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
@@ -88,11 +89,11 @@ public class GameLevel extends ScreenAdapter {
         stageInit();
         inputInit();
         collisionInit();
-        endZoneInit(); //hmmm, replace?
+        endZoneInit(); //hmmm, this needs replacing?
 
         showGameInfo(); // Determines the visibility of the level info window.
 
-        Assets.questions.shuffleLevels();
+        Assets.questions.shuffleLevels(); // Shuffle the loaded level's questions
         playLevelTheme(this);
     }
 
@@ -117,6 +118,7 @@ public class GameLevel extends ScreenAdapter {
 //        );
     }
 
+
     /**
      * {@link #player} initialisation
      */
@@ -132,38 +134,39 @@ public class GameLevel extends ScreenAdapter {
     private void stageInit() {
         stage = new Stage();
 
-        // Table config
+        // Table config for the game paused label
         table = new Table();
         table.setVisible(false);
         table.setFillParent(true);
 
-        // Table top row config
+        // Table config for the top row
         tableTopRow = new Table();
         tableTopRow.setFillParent(true);
 
-        // Label config
+        // Adding the label to the table
         Label pause = new Label("Paused\nESC to resume", SKIN, "subtitle", Color.ORANGE);
         pause.setAlignment(Align.center);
-        table.add(pause).padBottom(Value.percentHeight(10f)); // addLabel??
+        table.add(pause).padBottom(Value.percentHeight(5f)); // addLabel??
 
-        Label lblMenu = new Label("Menu (ESC)", SKIN, "subtitle", Color.ORANGE); // same here?
-
-        // Health Bar inti
+        // Health bar init
         healthBar = new ProgressBar(0f, 12f, 3f, false, SKIN);
         healthBar.setValue(12f);
 
-        // Top of stage icons
-        tableTopRow.add(lblMenu).pad(50f, 0f, 0f, Gdx.graphics.getWidth() * 0.4f);
-        tableTopRow.add(healthBar).width(400f).padTop(50f);
-        tableTopRow.top();
+        // Top row init
+        tableTopRow.add(addLabel("Menu (ESC)", "subtitle", Color.WHITE)).expandX().right();
+        tableTopRow.add(addLabel("<-" + currentLevel.name().toUpperCase() + "->", "subtitle", Color.WHITE)).center().expandX();
+        tableTopRow.add(healthBar).width(300f).expandX().left().row();
+        tableTopRow.add(addLabel("|--------------------------------------------------------------------|", "subtitle", Color.ORANGE)).colspan(3);
+        tableTopRow.top().padTop(35f); // sets the alignment of this table in it's
 
         // Adding the actors to the stage.
         stage.addActor(gameBar);
-        stage.addActor(table);
         stage.addActor(tableTopRow);
+        stage.addActor(table);
 
-        // TODO -  figure a better way to do this
-        heart.setPosition(Gdx.graphics.getWidth() * 0.64f, Gdx.graphics.getHeight() * 0.93f);
+        // DEBUG - TODO - look into the .top method (160) and better understand its implementation/how it works
+//        tableTopRow.debug();
+//        heart.setPosition(Gdx.graphics.getWidth() * 0.64f, Gdx.graphics.getHeight() * 0.93f);
     }
 
 
@@ -232,7 +235,7 @@ public class GameLevel extends ScreenAdapter {
                         Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
 
                     // Hides the currently visited "laser" TiledMap layer.
-                    map.getLayers().get("laser" + questionIndex).setVisible(false);
+                    map.getLayers().get("obstacle" + questionIndex).setVisible(false);
                 }
             }
 
@@ -296,8 +299,13 @@ public class GameLevel extends ScreenAdapter {
                     case Input.Keys.DOWN:
                         Utilities.debugMod(-0.1f);
                         break;
-                    case Input.Keys.NUM_1:
+                    case Input.Keys.NUM_1: // TODO - remove once done
                         stage.addActor(new RestartLevel());
+                        break;
+                    case Input.Keys.NUM_2:
+                        if (!world.isLocked())
+                            disableQuestionBodies();
+                        break;
                     case Input.Keys.ESCAPE:
                         gameBar.setVisible(!gameBar.isVisible()); //Invert settings - look into that
                         table.setVisible(gameBar.isVisible());
@@ -409,7 +417,9 @@ public class GameLevel extends ScreenAdapter {
     }
 
 
-    /**  Determines if the game should load the next level (if exists) or return to the main menu. */
+    /**
+     * Determines if the game should load the next level (if exists) or return to the main menu.
+     */
     public void determineGameEnd() {
         if (getLevelsIterated().hasNext())
             CLIENT.setScreen(new LoadingScreen());
@@ -451,9 +461,9 @@ public class GameLevel extends ScreenAdapter {
         debugRenderer.render(world, getCamera().combined);
 
         // TODO - this isnt ideal? being rendered every frame
-        stage.getBatch().begin();
-        heart.draw(stage.getBatch());
-        stage.getBatch().end();
+//        stage.getBatch().begin();
+//        heart.draw(stage.getBatch());
+//        stage.getBatch().end();
     }
 
 
@@ -530,6 +540,26 @@ public class GameLevel extends ScreenAdapter {
         tiledMapRenderer.dispose();
         map.dispose();
         world.dispose();
+        stage.dispose();
+
+    }
+
+    //======
+    // DEBUG
+    // =====
+
+    /**
+     * Debug purposes.
+     */
+    public void disableQuestionBodies() {
+        Array<Body> bodies = new Array<>();
+        world.getBodies(bodies);
+
+        bodies.removeValue(endZoneFixture.getBody(), false);
+        bodies.removeValue(player.body, false);
+
+        // Disable all remaining bodies in the array.
+        bodies.forEach(it -> it.setActive(false));
     }
 
     //#endregion

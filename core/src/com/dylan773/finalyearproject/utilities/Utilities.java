@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 
@@ -29,7 +30,11 @@ public class Utilities {
      * @return The Label.
      */
     public static Label addLabel(String text, String fontName, Color textColor) {
-        return new Label(text, SKIN, fontName, textColor);
+        Label label = new Label(text, SKIN, fontName, textColor);
+        label.setAlignment(Align.center);
+
+        return label;
+//        return new Label(text, SKIN, fontName, textColor);
     }
 
 
