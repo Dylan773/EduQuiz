@@ -93,7 +93,7 @@ public class MenuScreen extends ScreenAdapter {
         });
 
         // Game Author Label
-        table.add(addLabel("\tCreated by Dylan Brand.\nStudent at De Montfort University.",
+        table.add(addLabel("Created by Dylan Brand.\nStudent at De Montfort University.",
                 "subtitle", Color.FOREST)).padTop(20f);
 
         // Game Info Button
