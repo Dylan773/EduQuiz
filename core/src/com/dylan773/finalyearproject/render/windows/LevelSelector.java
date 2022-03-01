@@ -6,25 +6,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.dylan773.finalyearproject.level.LevelFactory;
+import com.dylan773.finalyearproject.utilities.DelayEvent;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
-
-
-// TODO - refactor class further
+import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
 
 /**
- * <h1>Window that allows the user to select the desired game levels</h1>
+ * <h1>Window that allows the user to select the desired game levels.</h1>
  *
  * @author Dylan Brand
  */
 public class LevelSelector extends WindowBuilder {
-    private static final ArrayList<LevelFactory.Level> LEVEL_LIST = new ArrayList<>();
 
-    /** Constructor. */
+    private static final ArrayList<LevelFactory.Level> LEVEL_LIST = new ArrayList<>();
+    private static Iterator<LevelFactory.Level> levelsIterated;
+
+    /**
+     * Constructor.
+     */
     public LevelSelector() {
         super(1000f, 600f);
         initWindow();
@@ -37,47 +43,33 @@ public class LevelSelector extends WindowBuilder {
     @Override
     protected void initWindow() {
         setVisible(true);
-        Label lblTitle = new Label("Level Selector", SKIN, "subtitle");
 
-        TextButton btnClose = new TextButton("X", SKIN, "arcade");
-        btnClose.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                playButtonSound();
-                setVisible(false);
-            }
-        });
+        // Table for absolute positioning of the button that closes this window
+        Table btnCloseTable = new Table();
+        btnCloseTable.setFillParent(true);
 
-        Table table = new Table();
-        table.add(btnClose);
-        table.top().right();
+        // Vertical group for level (checkbox) positioning
+        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup.columnAlign(Align.left);
+        verticalGroup.space(3f);
 
-        // Horizontal Group
-        HorizontalGroup group = new HorizontalGroup();
-        group.center(); // Centre elements.
-//        group.space(150f); // Space between elements.
+        // Level selection error label
+        Label lblError = new Label("", SKIN, "font", Color.SALMON);
+        lblError.setAlignment(Align.center);
 
-        group.addActor(lblTitle);
-        group.addActor(btnClose.right());
+        // Adding the info labels to the window
+        addWindowLabel("Level Selector", "subtitle").padTop(50f).row();
+        addWindowLabel("Select the topics you wish to practice.", "default").pad(15f, 0f, 10f, 0f).row();
 
-        add(group).padTop(20f).row();
-
-
-        //TODO - play correct audio dynamically
-
-        ArrayList<CheckBox> selectedLevels = new ArrayList();
-
-        //for every level in all levels
+        // Populating the vertical group with CheckBox's for level selection
+        ArrayList<CheckBox> selectedLevels = new ArrayList<>();
         for (LevelFactory.Level l : LevelFactory.Level.values()) {
+            //for every level in all levels
             CheckBox c = new CheckBox(l.name(), SKIN);
-            add(c).row();
+            verticalGroup.addActor(c);
 
             selectedLevels.add(c); // Add each CheckBox to the ArrayList
         }
-
-        // Level error label
-        Label lblError = new Label("", SKIN, "font", Color.SALMON);
-        lblError.setAlignment(Align.center);
 
         // Button for level confirmation
         TextButton textButton = new TextButton("Confirm", SKIN);
@@ -89,22 +81,52 @@ public class LevelSelector extends WindowBuilder {
                         LEVEL_LIST.add(LevelFactory.Level.valueOf(it.getText().toString()));
                 });
 
-                if (LEVEL_LIST.size() == 0)
-                    lblError.setText("Select at least one level");
-                //TODO - delay event
-                else
-                    CLIENT.setScreen(LevelFactory.newLevel(LEVEL_LIST.get(0)));
-                playButtonSound();
+                if (LEVEL_LIST.size() == 0) {
+                    lblError.setText("You need to select at least one level.");
+                    new DelayEvent(2000, () -> lblError.setText("")); // TODO - why the hell does it need an empty lambda??
+                } else {
+                    //Collections.shuffle(LEVEL_LIST); // shuffles the levels before iteration
+                    levelsIterated = LEVEL_LIST.iterator(); // Iteration of the ArrayList
+                    CLIENT.setScreen(LevelFactory.newLevel(levelsIterated.next()));
+                }
             }
         });
 
-        add(textButton).expandY().bottom().row();
-        //debug();
+        // Button for window closing
+        TextButton btnClose = new TextButton("X", SKIN, "default");
+        btnClose.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                playButtonSound();
+                destroyActor(LevelSelector.this);
+            }
+        });
+
+        // Adding actors to the window
+        add(verticalGroup).expandY().top().row();
+        add(textButton).row();
         add(lblError).padTop(10f);
+
+        // window close button config
+        btnCloseTable.add(btnClose);
+        addActor(btnCloseTable.top().right().pad(20f));
+
+        // Debug
+//        btnCloseTable.debug();
+//        debug();
     }
 
     /**
-     * @return
+     * @return an ArrayList of {@link LevelFactory} levels.
      */
-    public static ArrayList<LevelFactory.Level> getLevelList() { return LEVEL_LIST; }
+    public static ArrayList<LevelFactory.Level> getLevelList() {
+        return LEVEL_LIST;
+    }
+
+    /**
+     * @return {@link #LEVEL_LIST} iterated.
+     */
+    public static Iterator<LevelFactory.Level> getLevelsIterated() {
+        return levelsIterated;
+    }
 }

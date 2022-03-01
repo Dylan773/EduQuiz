@@ -17,12 +17,29 @@ public class EducationGame extends Game {
 	 */
 	public static EducationGame CLIENT;
 
+	// TODO - imporve javadoc
+	/**
+	 * A cheap fix for a global variable.
+	 * <p>
+	 *
+	 * This variable determines whether an info window is shown upon a {@link com.dylan773.finalyearproject.level.GameLevel} start.
+	 */
+	private boolean hideLevelWindows = false;
+
+	public void setLevelInfoVisibility(Boolean value) { // TODO - static wont let me obtain in other classes???
+		hideLevelWindows = value;
+	}
+
+	public boolean isLevelWindowsHidden() {
+		return hideLevelWindows;
+	}
+
 	@Override
 	public void create () {
 		CLIENT = this;
 		setScreen(new MenuScreen());
 		//TODO - Create a loading scree that transitions into the main menu
-//		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode()); // TODO - activate when finished
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode()); // TODO - activate when finished
 	}
 
 	@Override

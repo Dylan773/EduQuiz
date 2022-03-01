@@ -9,10 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.dylan773.finalyearproject.level.QuestionData;
 import xmlwise.Plist;
 import xmlwise.XmlParseException;
+
 import java.util.HashMap;
 
 /**
- * <h1>Asset management for this application</h1>
+ * <h1>Asset manager for this application</h1>
  * Obtains the location of all required assets, storing and providing easy access to those assets throughout this application.
  *
  * @author Dylan Brand
@@ -26,21 +27,22 @@ public class Assets {
     public static final Texture
             MAIN_MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png"),
             OPTIONS_BACKGROUND = new Texture("images/background.png"),
+            LOADING_SCREEN_BACKGROUND = new Texture("images/walterlicinio-ccby4.jpg"),
             KNIGHT_SPRITE = new Texture("images/spellun-sprite.png");
 
     // Sprites/SpriteSheets
     public static TextureAtlas spritesheet = new TextureAtlas("images/spritesheet.atlas");
 
 
-
     // Music
     public static final Music
-            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3")),
-//            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Track 2 (Party Tonight).wav")),
-            MUSEUM_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/End credits Lofi .mp3"));
+            MAIN_MENU_MUSIC = Gdx.audio.newMusic(Gdx.files.internal("audio/music/Next to You.mp3"));
 
     // Sound Effects
-    public static Sound SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav"));
+    public static final Sound
+            SFX_BUTTON = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/keypress-001.wav")),
+            CORRECT_ANS = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/correct_sound_effect.mp3")),
+            INCORRECT_ANS = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/wrong_sound_effect.mp3"));
 
     // uhh, idk 100%
     public static QuestionData questions;
