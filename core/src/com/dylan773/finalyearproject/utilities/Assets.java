@@ -27,6 +27,7 @@ public class Assets {
     public static final Texture
             MAIN_MENU_BACKGROUND = new Texture("images/Hidden Canyon_b.png"),
             OPTIONS_BACKGROUND = new Texture("images/background.png"),
+            LOADING_SCREEN_BACKGROUND = new Texture("images/walterlicinio-ccby4.jpg"),
             KNIGHT_SPRITE = new Texture("images/spellun-sprite.png");
 
     // Sprites/SpriteSheets

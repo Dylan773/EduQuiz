@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject.utilities;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,11 +25,11 @@ public class Utilities {
      * where creating a Label within a variable is the most suitable approach.
      *
      * @param text      The text to be displayed on the label.
-     * @param fontStyle The font style for this label's text.
+     * @param fontName The font style for this label's text.
      * @return The Label.
      */
-    public static Label addLabel(String text, String fontStyle) {
-        return new Label(text, Assets.SKIN, fontStyle);
+    public static Label addLabel(String text, String fontName, Color textColor) {
+        return new Label(text, SKIN, fontName, textColor);
     }
 
 

@@ -97,7 +97,7 @@ public class LevelSelector extends WindowBuilder {
                     lblError.setText("You need to select at least one level.");
                     new DelayEvent(2000, () -> lblError.setText("")); // TODO - why the hell does it need an empty lambda??
                 } else {
-                    Collections.shuffle(LEVEL_LIST); // shuffles the levels before iteration
+//                    Collections.shuffle(LEVEL_LIST); // shuffles the levels before iteration
                     levelsIterated = LEVEL_LIST.iterator(); // Iteration of the ArrayList
                     CLIENT.setScreen(LevelFactory.newLevel(levelsIterated.next()));
                 }
