@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.dylan773.finalyearproject.level.GameLevel;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
+import com.dylan773.finalyearproject.utilities.TabPane;
+import com.dylan773.finalyearproject.utilities.WindowBuilder;
+import kotlin.Pair;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
@@ -60,8 +63,31 @@ public class GameBar extends Window {
         btnOptions.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+//                playButtonSound();
+//                GameLevel.getStage().addActor(new OptionsWindow());
+
                 playButtonSound();
-                GameLevel.getStage().addActor(new OptionsWindow());
+
+                GameLevel.getStage().addActor(new WindowBuilder(0f, 0f) {
+
+                    {
+                        initWindow();
+
+                    }
+
+                    @Override
+                    protected void initWindow() {
+                        add(new TabPane(
+                                this,
+                                new Pair("general", new OptionsWindow()),
+                                new Pair("admin", new Table()),
+                                new Pair("pref", new Table())
+                        ))
+                                .expand()
+                                .fill();
+                        pack();
+                    }
+                });
             }
         });
 
@@ -84,11 +110,12 @@ public class GameBar extends Window {
     }
 
 
+    // TODO - change to non static and private after
     /**
      * <h2>Private inner class for the level exit dialog.</h2>
      * Prompts the user with a dialog, confirming if they want to exit the current game session.
      */
-    private class ExitDialog extends Dialog {
+    public static class ExitDialog extends Dialog {
 
         /**
          * A round dialog window, displaying two buttons with a YES or NO option.

@@ -16,6 +16,8 @@ import com.dylan773.finalyearproject.utilities.WindowBuilder
  *
  * @author Dylan Brand
  */
+
+// TODO - make this extend dialog?
 class RestartLevel : WindowBuilder(1000f, 600f) {
 
     // Window initialisation
@@ -34,7 +36,7 @@ class RestartLevel : WindowBuilder(1000f, 600f) {
 
         // TODO - improve the position of children
         addWindowLabel("Uh-oh", "subtitle").table.top().row()
-        addWindowLabel("You ran out of lives!", "default").pad(50f, 0f, 10f, 0f).row()
+        addWindowLabel("You ran out of lives!", "default").pad(25f, 0f, 10f, 0f).row()
         addWindowLabel("Ready to try again? Click the button below to restart the level.", "default").padBottom(250f).row()
 //        addLabel("Ready to try again? Click the button below to restart the level.", "default").expandY().row()
 

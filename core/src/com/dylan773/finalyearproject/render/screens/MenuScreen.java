@@ -4,18 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.render.windows.*;
 import com.dylan773.finalyearproject.utilities.AudioController;
+import com.dylan773.finalyearproject.utilities.TabPane;
+import com.dylan773.finalyearproject.utilities.WindowBuilder;
+import kotlin.Pair;
 
 import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
-import static com.dylan773.finalyearproject.utilities.Assets.MAIN_MENU_BACKGROUND;
-import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.Assets.*;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
@@ -40,7 +45,6 @@ public class MenuScreen extends ScreenAdapter {
         table = new Table();
         table.setFillParent(true);
 
-        // STOPSHIP: 27/02/2022 peen
         infoButtonTable = new Table();
         infoButtonTable.setFillParent(true);
 
@@ -55,6 +59,8 @@ public class MenuScreen extends ScreenAdapter {
 
         // Clears the previously loaded game levels everytime the user visits this main menu
         getLevelList().clear();
+
+
     }
 
 
@@ -66,12 +72,22 @@ public class MenuScreen extends ScreenAdapter {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(MAIN_MENU_BACKGROUND)));
         table.add(addLabel("Edu Quiz", "title", Color.WHITE)).padBottom(20f).row();
 
+
+
         // Play Game Button Controls
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
-                stage.addActor(new LevelSelector()); // Gets created upon button activation.
+                //stage.addActor(new LevelSelector()); // Gets created upon button activation.
+
+//                stage.addAction(Actions.alpha(0));
+                stage.addAction(Actions.sequence(Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        stage.addActor(new LevelSelector());
+                    }
+                }), Actions.fadeIn(1)));
             }
         });
 
@@ -80,7 +96,29 @@ public class MenuScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 playButtonSound();
-                stage.addActor(new OptionsWindow());
+
+                stage.addActor(new WindowBuilder(0f, 0f) {
+
+                    {
+                        initWindow();
+
+                    }
+
+                    @Override
+                    protected void initWindow() {
+                        add(new TabPane(
+                                this,
+                                new Pair("general", new OptionsWindow()),
+                                new Pair("admin", new Table()),
+                                new Pair("pref", new Table())
+                        ))
+                                .expand()
+                                .fill();
+                                pack();
+                    }
+
+
+                });
             }
         });
 
@@ -94,7 +132,7 @@ public class MenuScreen extends ScreenAdapter {
 
         // Game Author Label
         table.add(addLabel("Created by Dylan Brand.\nStudent at De Montfort University.",
-                "subtitle", Color.FOREST)).padTop(20f);
+                "subtitle", Color.CORAL)).padTop(20f);
 
         // Game Info Button
         infoButtonTable.add(gameInfoButton()).pad(40f).expand().bottom().right();
@@ -103,7 +141,7 @@ public class MenuScreen extends ScreenAdapter {
 
     /**
      * <h2>Instantiates a new TextButton to be used on this application's Main Menu</h2>
-     * Creates a new TextButton, setting it's width to 400f, bottom padding of 20f and calls the row() method
+     * Creates a new TextButton, setting it's width to 400f, bottom padding of 20f and calls .row()
      * to separate this button to the next actor. And adds this button to the {@link #table}.
      *
      * @param name The text to be displayed on the TextButton.
@@ -148,6 +186,7 @@ public class MenuScreen extends ScreenAdapter {
     private TextButton gameInfoButton() {
         TextButton infoButton = new TextButton("?", SKIN);
         infoButton.setSize(100f, 100f);
+//        infoButton.setTouchable(Touchable.disabled);
         infoButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -155,6 +194,9 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
+
         return infoButton;
     }
+
+
 }

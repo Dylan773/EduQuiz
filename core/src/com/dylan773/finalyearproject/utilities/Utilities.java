@@ -1,10 +1,9 @@
 package com.dylan773.finalyearproject.utilities;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
@@ -25,7 +24,7 @@ public class Utilities {
      * Instantiating a Label with: Label label = new Label(...) is unnecessary. However, there may be select cases
      * where creating a Label within a variable is the most suitable approach.
      *
-     * @param text      The text to be displayed on the label.
+     * @param text     The text to be displayed on the label.
      * @param fontName The font style for this label's text.
      * @return The Label.
      */
@@ -34,21 +33,6 @@ public class Utilities {
         label.setAlignment(Align.center);
 
         return label;
-//        return new Label(text, SKIN, fontName, textColor);
-    }
-
-
-    public static TextButton addButton(String text, Sound sfx) {
-        TextButton button = new TextButton(text, SKIN);
-//        button.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                playSFX(sfx);
-//                inputEvent();
-//                //TODO - event???
-//            }
-//        });
-        return button;
     }
 
 
@@ -87,18 +71,25 @@ public class Utilities {
 
     /**
      * <h2>Removes an {@link Actor} from its parent.</h2>
-     * This method should be called when an actor is no longer required.
+     * This method should be called when an actor is no longer required. If the actor's parent is NULL,
+     * the actor remains unaffected by this method call. Typically, an actor's parent would be a
+     * {@link com.badlogic.gdx.scenes.scene2d.Stage} or {@link com.badlogic.gdx.scenes.scene2d.ui.Table}.
      * <p>
+     * The actor is removed from its parent with a {@link Actions#fadeOut(float)} transition.
+     * <p>
+     * {@link System#gc} is then
+     * called to notify the JVM that a garbage collection should be performed to remove unused resources.
      *
-     * If the {@link Actor}'s parent is NULL, the Actor remains unaffected by this method call. Typically, an actor's
-     * parent would be a  {@link com.badlogic.gdx.scenes.scene2d.Stage} or {@link com.badlogic.gdx.scenes.scene2d.ui.Table}.
-     *
-     * @param actor - The actor to be removed from its parent.
-     * @see Actor#remove()
+     * @param actor - The actor to be removed.
      */
     public static void destroyActor(Actor actor) {
-        actor.clear(); // Removes all listeners and actions from the actor.
-        actor.remove(); // Then, removes the actor from its parent.
+        // Fades out the actor, and then removes it.
+        actor.addAction(Actions.sequence(
+                Actions.fadeOut(0.3f),
+                Actions.removeActor())
+        );
+
+        System.gc(); // java garbage collection
     }
 
 

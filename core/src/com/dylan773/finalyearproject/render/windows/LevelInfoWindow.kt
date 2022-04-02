@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject.render.windows
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -59,7 +60,7 @@ class LevelInfoWindow : WindowBuilder(1000f, 600f) {
         addWindowLabel("-----------------", "subtitle").row() // kotlin .row calls getRow?
         add(lblInfo).padBottom(15f).row()
         add(lblLives).padBottom(15f).row()
-        addWindowLabel("ARE YOU READY?", "default").row()
+        addWindowLabel("READY?", "default").row()
         add(checkBox).expandY().row()
         add(button)
     }

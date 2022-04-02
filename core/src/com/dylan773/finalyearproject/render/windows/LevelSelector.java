@@ -2,6 +2,7 @@ package com.dylan773.finalyearproject.render.windows;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -73,7 +74,7 @@ public class LevelSelector extends WindowBuilder {
 
         // Button for level confirmation
         TextButton textButton = new TextButton("Confirm", SKIN);
-        textButton.addListener(new ChangeListener() {
+        textButton.addListener(new ChangeListener() { // TODO - change to click listener
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 selectedLevels.forEach(it -> {
@@ -83,7 +84,7 @@ public class LevelSelector extends WindowBuilder {
 
                 if (LEVEL_LIST.size() == 0) {
                     lblError.setText("You need to select at least one level.");
-                    new DelayEvent(2000, () -> lblError.setText("")); // TODO - why the hell does it need an empty lambda??
+                    new DelayEvent(2000, () -> lblError.setText(""));
                 } else {
                     //Collections.shuffle(LEVEL_LIST); // shuffles the levels before iteration
                     levelsIterated = LEVEL_LIST.iterator(); // Iteration of the ArrayList
@@ -93,14 +94,14 @@ public class LevelSelector extends WindowBuilder {
         });
 
         // Button for window closing
-        TextButton btnClose = new TextButton("X", SKIN, "default");
-        btnClose.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                playButtonSound();
-                destroyActor(LevelSelector.this);
-            }
-        });
+//        TextButton btnClose = new TextButton("X", SKIN, "default");
+//        btnClose.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                playButtonSound();
+//                destroyActor(LevelSelector.this);
+//            }
+//        });
 
         // Adding actors to the window
         add(verticalGroup).expandY().top().row();
@@ -108,12 +109,13 @@ public class LevelSelector extends WindowBuilder {
         add(lblError).padTop(10f);
 
         // window close button config
-        btnCloseTable.add(btnClose);
-        addActor(btnCloseTable.top().right().pad(20f));
+//        btnCloseTable.add(btnClose);
+//        addActor(btnCloseTable.top().right().pad(20f));
 
         // Debug
 //        btnCloseTable.debug();
-//        debug();
+//        debug()
+
     }
 
     /**

@@ -2,6 +2,7 @@ package com.dylan773.finalyearproject;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.utilities.Assets;
@@ -12,10 +13,9 @@ import com.dylan773.finalyearproject.utilities.Assets;
 public class EducationGame extends Game {
 
 	// Fields
-	/**
-	 * Default height and width for this application.
-	 */
 	public static EducationGame CLIENT;
+
+
 
 	// TODO - imporve javadoc
 	/**
@@ -39,7 +39,7 @@ public class EducationGame extends Game {
 		CLIENT = this;
 		setScreen(new MenuScreen());
 		//TODO - Create a loading scree that transitions into the main menu
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode()); // TODO - activate when finished
+//		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode()); // TODO - activate when finished
 	}
 
 	@Override
@@ -60,6 +60,11 @@ public class EducationGame extends Game {
 	public void dispose () {
 		Assets.disposeAssets();
 		// level 1,2,3 dispose
+
+		Preferences showWindow = Gdx.app.getPreferences("EduQuizPreference");
+		showWindow.putBoolean("dontShowWelcome", true);
+		showWindow.flush();
+		showWindow.getBoolean("dontShowWelcome");
 	}
 
 	@Override

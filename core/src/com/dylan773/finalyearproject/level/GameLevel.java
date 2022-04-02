@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelsIterated;
+//import static com.dylan773.finalyearproject.render.windows.RestartLevelKt.disposeCurrentLevel;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
@@ -74,6 +75,10 @@ public class GameLevel extends ScreenAdapter {
     Table table; // the table only has the text in
     Table tableTopRow;
     Fixture endZoneFixture;
+
+
+
+    private GamePausedWindow gamePausedWindow = new GamePausedWindow();
 
     //#region construction
 
@@ -151,18 +156,22 @@ public class GameLevel extends ScreenAdapter {
         // Health bar init
         healthBar = new ProgressBar(0f, 12f, 3f, false, SKIN);
         healthBar.setValue(12f);
+        healthBar.setAnimateDuration(1f);
 
         // Top row init
         tableTopRow.add(addLabel("Menu (ESC)", "subtitle", Color.WHITE)).expandX().right();
         tableTopRow.add(addLabel("<-" + currentLevel.name().toUpperCase() + "->", "subtitle", Color.WHITE)).center().expandX();
         tableTopRow.add(healthBar).width(300f).expandX().left().row();
-        tableTopRow.add(addLabel("|--------------------------------------------------------------------|", "subtitle", Color.ORANGE)).colspan(3);
-        tableTopRow.top().padTop(35f); // sets the alignment of this table in it's
+        tableTopRow.add(addLabel("|-------------------------------------------------------|", "subtitle", Color.ORANGE)).colspan(3).fillX();
+        tableTopRow.top().padTop(35f); // sets the alignment (top) of this table in it's
 
         // Adding the actors to the stage.
         stage.addActor(gameBar);
         stage.addActor(tableTopRow);
         stage.addActor(table);
+
+
+        stage.addActor(gamePausedWindow);
 
         // DEBUG - TODO - look into the .top method (160) and better understand its implementation/how it works
 //        tableTopRow.debug();
@@ -302,13 +311,12 @@ public class GameLevel extends ScreenAdapter {
                     case Input.Keys.NUM_1: // TODO - remove once done
                         stage.addActor(new RestartLevel());
                         break;
-                    case Input.Keys.NUM_2:
-                        if (!world.isLocked())
-                            disableQuestionBodies();
-                        break;
                     case Input.Keys.ESCAPE:
-                        gameBar.setVisible(!gameBar.isVisible()); //Invert settings - look into that
-                        table.setVisible(gameBar.isVisible());
+//                        gameBar.setVisible(!gameBar.isVisible());
+//                        table.setVisible(gameBar.isVisible());
+
+                        gamePausedWindow.setVisible(!gamePausedWindow.isVisible());
+//                        table.setVisible(gameBar.isVisible());
 
                         if (gameBar.isVisible()) pause();
                         else resume();
@@ -544,23 +552,6 @@ public class GameLevel extends ScreenAdapter {
 
     }
 
-    //======
-    // DEBUG
-    // =====
-
-    /**
-     * Debug purposes.
-     */
-    public void disableQuestionBodies() {
-        Array<Body> bodies = new Array<>();
-        world.getBodies(bodies);
-
-        bodies.removeValue(endZoneFixture.getBody(), false);
-        bodies.removeValue(player.body, false);
-
-        // Disable all remaining bodies in the array.
-        bodies.forEach(it -> it.setActive(false));
-    }
 
     //#endregion
     //#region get
