@@ -8,7 +8,7 @@ package com.dylan773.finalyearproject.utilities
  *
  * @author Dylan Brand
  */
-class DelayEvent(val delay: Long, val targetEvent: Runnable) : Runnable {
+class DelayEvent(private val delay: Long, private val targetEvent: Runnable) : Runnable {
 
     init {
         Thread(this).start()

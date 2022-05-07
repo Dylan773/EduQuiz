@@ -1,10 +1,9 @@
 package com.dylan773.finalyearproject.utilities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
+import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 
 /**
@@ -12,26 +11,52 @@ import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
  *
  * @author Dylan Brand
  */
+
 public abstract class WindowBuilder extends Window {
 
     /**
      * WindowBuilder constructor that determines the basic functionality and behaviour of ALL windows that extend
      * this class.
-     * <p>
-     * Extending classes should inherit the behaviour and functionality, by calling super() in their respective constructor.
      *
      * @param width  The width of the window.
      * @param height The height of the window.
      */
     public WindowBuilder(float width, float height) {
-        super("", Assets.SKIN, "round");
-        //this.setBackground(new TextureRegionDrawable(new TextureRegion(Assets.OPTIONS_BACKGROUND)));
+        super("", SKIN, "round");
         setResizable(false);
         setMovable(false);
         setSize(width, height);
-        setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight()));
-        setVisible(false); // By default, this window is initially hidden
+        centreStage();
+
         padTop(0f);
+    }
+
+
+    /**
+     * Positions the window in the centre of the focused screen's stage.
+     */
+    private void centreStage() {
+        setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight()));
+    }
+
+
+    @Override
+    public void pack() {
+        super.pack();
+        centreStage();
+    }
+
+
+    @Override
+    public float getPrefWidth() {
+        return Math.max(super.getPrefWidth(), 1000f);
+    }
+
+
+    @Override
+    public float getPrefHeight() {
+        return Math.max(super.getPrefHeight(), 600f);
+
     }
 
 
@@ -39,20 +64,4 @@ public abstract class WindowBuilder extends Window {
      * Abstract method that MUST be overridden by child classes to construct the respective window.
      */
     protected abstract void initWindow();
-
-
-    /**
-     * <h2>Instantiates a new Label</h2>
-     * Heavily reduces repetition and volume of code across this application.
-     * Can be called to instantiate a new Label to a Table without having to create a new Label keyword each time.
-     * <p>
-     * Instantiating a Label with; Label label = new Label(...) is not necessary.
-     *
-     * @param text      The text to be displayed on the label.
-     * @param fontStyle The font style for this label's text.
-     * @return A cell, with the created Label inside.
-     */
-    public Cell<Label> addWindowLabel(String text, String fontStyle) {
-        return add(new Label(text, Assets.SKIN, fontStyle));
-    }
 }

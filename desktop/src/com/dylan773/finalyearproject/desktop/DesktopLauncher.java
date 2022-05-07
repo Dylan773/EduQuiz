@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.dylan773.finalyearproject.EducationGame;
 import java.awt.*;
 
-//TODO - fix screen sizing at different resolutions + min/max screen size
 public class DesktopLauncher {
 
 	public static void main (String[] arg) {

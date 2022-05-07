@@ -7,16 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.dylan773.finalyearproject.EducationGame.CLIENT
+import com.dylan773.finalyearproject.entities.Player
 import com.dylan773.finalyearproject.utilities.Assets.SKIN
+import com.dylan773.finalyearproject.utilities.Utilities.addWindowLabel
 import com.dylan773.finalyearproject.utilities.Utilities.destroyActor
 import com.dylan773.finalyearproject.utilities.WindowBuilder
 
-
 /**
- * ##A window providing brief, yet descriptive information regarding a typical game level cycle.
+ * # Level Information Window.
  *
- * This window will be shown at the start of the FIRST level in a game cycle. However, the user can
- * determine whether the visibility of this window is hidden until application re-start.
+ * This window will be shown at the start of the FIRST level in a game cycle, displaying basic game behaviour.
  *
  * @author Dylan Brand
  */
@@ -24,12 +24,11 @@ class LevelInfoWindow : WindowBuilder(1000f, 600f) {
 
     init {
         initWindow()
+        Player.pauseMovement()
     }
 
     /** The content for this window. */
     override fun initWindow() {
-        isVisible = true
-
         // Game info label
         val lblInfo = Label(
             "Each level consists of four questions from their respective topic.\n" +
@@ -45,37 +44,22 @@ class LevelInfoWindow : WindowBuilder(1000f, 600f) {
 
         val checkBox = CheckBox("Don't show again.", SKIN)
 
-        // TODO - better implementation
         val button = TextButton("OK!", SKIN)
         button.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (checkBox.isChecked) CLIENT.setLevelInfoVisibility(true)
                 destroyActor(this@LevelInfoWindow)
+                Player.resumeMovement()
             }
         })
 
         // Adding the actors to the window
-        addWindowLabel("Welcome to Edu Quiz!", "subtitle").table.top().padTop(30f).row()
-        addWindowLabel("-----------------", "subtitle").row() // kotlin .row calls getRow?
+        addWindowLabel("Welcome to Edu Quiz!", "subtitle", this).table.top().padTop(30f).row()
+        addWindowLabel("-----------------", "subtitle", this).row() // kotlin .row calls getRow?
         add(lblInfo).padBottom(15f).row()
         add(lblLives).padBottom(15f).row()
-        addWindowLabel("ARE YOU READY?", "default").row()
+        addWindowLabel("READY?", "default", this).row()
         add(checkBox).expandY().row()
         add(button)
     }
 }
-
-// TODO
-
-//               add(TextButton("OK!", SKIN)).apply {
-//
-//            addListener(object : ClickListener() {
-//                override fun clicked(event: InputEvent?, x: Float, y: Float) {
-//                    if (checkBox.isChecked)
-//                        CLIENT.setLevelInfoVisibility(false)
-//
-//                    destroyActor(this@LevelInfoWindow)
-//                }
-//            })
-//
-//        }

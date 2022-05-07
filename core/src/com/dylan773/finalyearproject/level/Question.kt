@@ -29,18 +29,16 @@ class Level : Questions() // A Level stores an ArrayList of Question
 
 /**
  * HashMap of Strings to Levels.
- *
  */
-class QuestionData : HashMap<String, Level>() { // HashMap of String to ArrayList<Question> (Level)
+class QuestionData : HashMap<String, Level>() {
     companion object {
 
         private const val QUESTION = "q"
-        const val ANSWERS = "a"
-        const val CORRECT_INDEX = "i"
-        const val LANG = "en"
+        private const val ANSWERS = "a"
+        private const val CORRECT_INDEX = "i"
+        private const val LANG = "en"
 
         /**
-         * TODO - change this Javadoc
          * - Provides the [constructTree] with the XML file in the assets.
          * - Iterates through all keys in the file ("en", "de", "fr" etc), constructing a [Level] with each key as a
          *   HasMap<String, Object>. A [Level] is just an ArrayList<Question>.
@@ -56,7 +54,7 @@ class QuestionData : HashMap<String, Level>() { // HashMap of String to ArrayLis
                 }
             }
 
-        // TODO - look at apply, let and also methods.
+
         /**
          * - Accepts a HashMap<String, Object> as a parameter.
          * - Uses the [LANG] and casts it to an ArrayList of HashMap<String, Object>
@@ -83,9 +81,9 @@ class QuestionData : HashMap<String, Level>() { // HashMap of String to ArrayLis
          */
         private fun constructQuestion(fromXML: HashMap<String, *>) =
             Question(
-                fromXML[QUESTION] as String, // .get("q") then casts it as a String
-                fromXML[ANSWERS] as ArrayList<String>, // .get("a") then casts it as an ArrayList<String>
-                fromXML[CORRECT_INDEX] as Int // .get("i") then casts it as a Int
+                fromXML[QUESTION] as String,
+                fromXML[ANSWERS] as ArrayList<String>,
+                fromXML[CORRECT_INDEX] as Int
             )
     }
 

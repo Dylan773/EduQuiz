@@ -4,9 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.dylan773.finalyearproject.EducationGame
+import com.dylan773.finalyearproject.entities.Player
 import com.dylan773.finalyearproject.level.GameLevel
 import com.dylan773.finalyearproject.level.LevelFactory
 import com.dylan773.finalyearproject.utilities.Assets.SKIN
+import com.dylan773.finalyearproject.utilities.Utilities.addWindowLabel
 import com.dylan773.finalyearproject.utilities.WindowBuilder
 
 /**
@@ -16,12 +18,11 @@ import com.dylan773.finalyearproject.utilities.WindowBuilder
  *
  * @author Dylan Brand
  */
-class RestartLevel : WindowBuilder(1000f, 600f) {
+class RestartLevel : WindowBuilder(700f, 400f) {
 
-    // Window initialisation
     init {
         initWindow()
-        this.debug = true
+        Player.pauseMovement()
     }
 
 
@@ -29,19 +30,14 @@ class RestartLevel : WindowBuilder(1000f, 600f) {
      * Content to be displayed on the window.
      */
     override fun initWindow() {
-        isVisible = true
         pad(30f)
 
-        // TODO - improve the position of children
-        addWindowLabel("Uh-oh", "subtitle").table.top().row()
-        addWindowLabel("You ran out of lives!", "default").pad(50f, 0f, 10f, 0f).row()
-        addWindowLabel("Ready to try again? Click the button below to restart the level.", "default").padBottom(250f).row()
-//        addLabel("Ready to try again? Click the button below to restart the level.", "default").expandY().row()
-
+        addWindowLabel("Uh-oh", "subtitle", this).table.top().row()
+        addWindowLabel("You ran out of lives!", "default", this).pad(25f, 0f, 10f, 0f).row()
+        addWindowLabel("Click the button below to restart the level.", "default", this).padBottom(70f).row()
 
         // Window close button
-        TextButton("Restart", SKIN).apply {
-
+        TextButton("Try Again!", SKIN).apply {
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     disposeCurrentLevel()
@@ -49,13 +45,12 @@ class RestartLevel : WindowBuilder(1000f, 600f) {
                 }
             })
 
-            this@RestartLevel.add(this)
+            this@RestartLevel.add(this).padBottom(0f)
         }
     }
 }
 
 
-// TODO - although this works to some extent - maybe find a better solution and location?
 /**
  * ## Memory management method
  * Disposes the current Level's [GameLevel.map], and the Box2D [GameLevel.world]. */
