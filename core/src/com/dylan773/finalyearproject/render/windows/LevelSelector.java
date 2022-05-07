@@ -1,6 +1,7 @@
 package com.dylan773.finalyearproject.render.windows;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -11,16 +12,18 @@ import com.dylan773.finalyearproject.utilities.DelayEvent;
 import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
+import static com.dylan773.finalyearproject.utilities.Utilities.addWindowLabel;
 import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
 
 /**
- * <h1>Window that allows the user to select the desired game levels.</h1>
+ * <h1>Level Selection Window.</h1>
+ *
+ * Presents the application's available levels to the user for selection.
  *
  * @author Dylan Brand
  */
@@ -30,7 +33,7 @@ public class LevelSelector extends WindowBuilder {
     private static Iterator<LevelFactory.Level> levelsIterated;
 
     /**
-     * Constructor.
+     * <h2>Constructor.</h2>
      */
     public LevelSelector() {
         super(1000f, 600f);
@@ -43,8 +46,6 @@ public class LevelSelector extends WindowBuilder {
      */
     @Override
     protected void initWindow() {
-        setVisible(true);
-
         // Table for absolute positioning of the button that closes this window
         Table btnCloseTable = new Table();
         btnCloseTable.setFillParent(true);
@@ -59,8 +60,8 @@ public class LevelSelector extends WindowBuilder {
         lblError.setAlignment(Align.center);
 
         // Adding the info labels to the window
-        addWindowLabel("Level Selector", "subtitle").padTop(50f).row();
-        addWindowLabel("Select the topics you wish to practice.", "default").pad(15f, 0f, 10f, 0f).row();
+        addWindowLabel("Level Selector", "subtitle", this).padTop(50f).row();
+        addWindowLabel("Select the topics you wish to practice.", "default", this).pad(15f, 0f, 10f, 0f).row();
 
         // Populating the vertical group with CheckBox's for level selection
         ArrayList<CheckBox> selectedLevels = new ArrayList<>();
@@ -94,29 +95,25 @@ public class LevelSelector extends WindowBuilder {
         });
 
         // Button for window closing
-//        TextButton btnClose = new TextButton("X", SKIN, "default");
-//        btnClose.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                playButtonSound();
-//                destroyActor(LevelSelector.this);
-//            }
-//        });
+        TextButton btnClose = new TextButton("X", SKIN, "default");
+        btnClose.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                playButtonSound();
+                destroyActor(LevelSelector.this);
+            }
+        });
 
         // Adding actors to the window
-        add(verticalGroup).expandY().top().row();
+        add(verticalGroup).expandY().top().padTop(40f).row();
         add(textButton).row();
         add(lblError).padTop(10f);
 
         // window close button config
-//        btnCloseTable.add(btnClose);
-//        addActor(btnCloseTable.top().right().pad(20f));
-
-        // Debug
-//        btnCloseTable.debug();
-//        debug()
-
+        btnCloseTable.add(btnClose);
+        addActor(btnCloseTable.top().right().pad(20f));
     }
+
 
     /**
      * @return an ArrayList of {@link LevelFactory} levels.
@@ -124,6 +121,7 @@ public class LevelSelector extends WindowBuilder {
     public static ArrayList<LevelFactory.Level> getLevelList() {
         return LEVEL_LIST;
     }
+
 
     /**
      * @return {@link #LEVEL_LIST} iterated.

@@ -29,7 +29,7 @@ public class Player extends Sprite {
     /**
      * The movement speed for this player, 100 pixels/second.
      */
-    public float speed = 100f;
+    private static float speed = 100f;
 
     /**
      * The player's Box2D fixture.
@@ -59,23 +59,23 @@ public class Player extends Sprite {
      * Defines the player's Box2D body.
      */
     public void definePlayer() {
-        body = createBox2DPlayerBody(world, getWidth(), getWidth());
+        body = createBox2DPlayerBody(world);
     }
 
 
     /**
-     * @param w
-     * @param width
-     * @param height
-     * @return
+     * Constructs the player's Box2D body for collision detection.
+     *
+     * @param w The Box2D world the player object will reside in.
+     * @return The Box2D body of the player.
      */
-    public Body createBox2DPlayerBody(World w, Float width, Float height) {
+    public Body createBox2DPlayerBody(World w) {
         // Create the main body
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(pos);
-        bdef.type = BodyDef.BodyType.DynamicBody;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(pos);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        Body body = w.createBody(bdef);
+        Body body = w.createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
 
         // Box around the player
@@ -170,7 +170,7 @@ public class Player extends Sprite {
      * Set's the player's speed to 0, stopping the player's ability to move.
      * Should only be called when the game session is in a paused state.
      */
-    public void pauseMovement() {
+    public static void pauseMovement() {
         speed = 0f;
     }
 
@@ -179,7 +179,9 @@ public class Player extends Sprite {
      * <h2>Enables the player's ability to move, at the default speed.</h2>
      * Should be called when the game session has left the paused state.
      */
-    public void resumeMovement() {
+    public static void resumeMovement() {
         speed = 100f;
     }
+
+
 }

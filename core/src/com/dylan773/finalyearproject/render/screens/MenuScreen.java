@@ -4,20 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.dylan773.finalyearproject.render.windows.*;
 import com.dylan773.finalyearproject.utilities.AudioController;
-import com.dylan773.finalyearproject.utilities.TabPane;
-import com.dylan773.finalyearproject.utilities.WindowBuilder;
-import kotlin.Pair;
 
 import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelList;
 import static com.dylan773.finalyearproject.utilities.Assets.*;
@@ -41,7 +36,7 @@ public class MenuScreen extends ScreenAdapter {
     /**
      * <h2>Constructor</h2>
      */
-    public MenuScreen() { // No create method in screen so use a constructor instead
+    public MenuScreen() {
         table = new Table();
         table.setFillParent(true);
 
@@ -50,7 +45,7 @@ public class MenuScreen extends ScreenAdapter {
 
         stage = new Stage();
         stage.addActor(table);
-        stage.addActor(infoButtonTable); // TODO - here
+        stage.addActor(infoButtonTable);
 
         Gdx.input.setInputProcessor(stage); // Enables user input on this stage
 
@@ -59,8 +54,6 @@ public class MenuScreen extends ScreenAdapter {
 
         // Clears the previously loaded game levels everytime the user visits this main menu
         getLevelList().clear();
-
-
     }
 
 
@@ -72,16 +65,11 @@ public class MenuScreen extends ScreenAdapter {
         table.setBackground(new TextureRegionDrawable(new TextureRegion(MAIN_MENU_BACKGROUND)));
         table.add(addLabel("Edu Quiz", "title", Color.WHITE)).padBottom(20f).row();
 
-
-
         // Play Game Button Controls
         addMenuButton("Play Game").addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 playButtonSound();
-                //stage.addActor(new LevelSelector()); // Gets created upon button activation.
-
-//                stage.addAction(Actions.alpha(0));
                 stage.addAction(Actions.sequence(Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -96,29 +84,7 @@ public class MenuScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
                 playButtonSound();
-
-                stage.addActor(new WindowBuilder(0f, 0f) {
-
-                    {
-                        initWindow();
-
-                    }
-
-                    @Override
-                    protected void initWindow() {
-                        add(new TabPane(
-                                this,
-                                new Pair("general", new OptionsWindow()),
-                                new Pair("admin", new Table()),
-                                new Pair("pref", new Table())
-                        ))
-                                .expand()
-                                .fill();
-                                pack();
-                    }
-
-
-                });
+                stage.addActor(new OptionsWindow());
             }
         });
 
@@ -186,7 +152,6 @@ public class MenuScreen extends ScreenAdapter {
     private TextButton gameInfoButton() {
         TextButton infoButton = new TextButton("?", SKIN);
         infoButton.setSize(100f, 100f);
-//        infoButton.setTouchable(Touchable.disabled);
         infoButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -194,9 +159,6 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
-
         return infoButton;
     }
-
-
 }

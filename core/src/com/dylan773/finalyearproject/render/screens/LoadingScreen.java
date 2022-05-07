@@ -47,14 +47,10 @@ public class LoadingScreen extends ScreenAdapter {
         stage.addActor(table);
 
         // Info labels
-        table.add(addLabel("Loading the next level.", "title", Color.CORAL)).row();
+        table.add(addLabel("Loading", "title", Color.CORAL)).row();
         table.add(addLabel("<-------------->", "title", Color.CORAL));
     }
 
-
-    private static void loadingEvent() {
-//        new DelayEvent(1000, () -> CLIENT.setScreen(LevelFactory.newLevel(getLevelsIterated().next())));
-    }
 
     @Override
     public void render(float delta) {
@@ -62,8 +58,7 @@ public class LoadingScreen extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
 
-        elapsedTime += delta; // this is not ideal
-        // extract to its own method?
+        elapsedTime += delta;
         if (elapsedTime > 2.5) {
             CLIENT.setScreen((LevelFactory.newLevel(getLevelsIterated().next())));
             dispose();

@@ -44,7 +44,6 @@ public class Assets {
             CORRECT_ANS = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/correct_sound_effect.mp3")),
             INCORRECT_ANS = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/wrong_sound_effect.mp3"));
 
-    // uhh, idk 100%
     public static QuestionData questions;
 
     static {
@@ -54,7 +53,6 @@ public class Assets {
             e.printStackTrace();
         }
     }
-
 
     // =======
     // METHODS
@@ -78,7 +76,5 @@ public class Assets {
         // Audio
         MAIN_MENU_MUSIC.dispose();
         SFX_BUTTON.dispose();
-
-        // TODO - call the GameLevel dispose etc
     }
 }

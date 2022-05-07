@@ -8,21 +8,22 @@ import com.dylan773.finalyearproject.render.screens.MenuScreen;
 import com.dylan773.finalyearproject.utilities.Assets;
 
 /**
+ * <h2>This application's initial starting point.</h2>
+ * <p>
+ * Upon application instantiation, the {@link #create()} method is called, setting the application's starting screen to the {@link MenuScreen}
  *
+ * @author Dylan Brand
  */
 public class EducationGame extends Game {
 
 	// Fields
 	public static EducationGame CLIENT;
 
-
-
-	// TODO - imporve javadoc
 	/**
 	 * A cheap fix for a global variable.
 	 * <p>
 	 *
-	 * This variable determines whether an info window is shown upon a {@link com.dylan773.finalyearproject.level.GameLevel} start.
+	 * This variable determines whether an info window is shown upon {@link com.dylan773.finalyearproject.level.GameLevel} start.
 	 */
 	private boolean hideLevelWindows = false;
 
@@ -38,14 +39,13 @@ public class EducationGame extends Game {
 	public void create () {
 		CLIENT = this;
 		setScreen(new MenuScreen());
-		//TODO - Create a loading scree that transitions into the main menu
-//		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode()); // TODO - activate when finished
+
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 	}
 
 	@Override
 	public void render () {
 		super.render();
-		//screen.render(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override

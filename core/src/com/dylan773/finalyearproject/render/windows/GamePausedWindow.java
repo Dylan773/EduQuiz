@@ -10,20 +10,22 @@ import com.dylan773.finalyearproject.render.screens.MenuScreen;
 
 import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
-import static com.dylan773.finalyearproject.utilities.AudioController.playButtonSound;
 import static com.dylan773.finalyearproject.utilities.Utilities.addLabel;
 import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 
+/**
+ * The application's in-game pause menu.
+ *
+ * Consists of three buttons, with each button allow the user to either view application options, view game controls or
+ * exit the game scene.
+ */
 public class GamePausedWindow extends Window {
 
     public GamePausedWindow() {
         super("", SKIN, "round");
         initWindow();
-
-        debug();
     }
 
-    // TODO - player can still move when visible
     // TODO - create a and button method that accepts a string and click listener and call that method
 
     private void initWindow() {
@@ -32,42 +34,21 @@ public class GamePausedWindow extends Window {
         setMovable(false);
         setSize(600f, 800f);
 
-
-
-
         pad(25f, 50f, 25f, 50f);
 
-
-//        TextButton btnExit = new TextButton("Exit", SKIN);
-//        btnExit.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                playButtonSound();
-//                new ExitDialog().show(GameLevel.getStage());
-//            }
-//        });
-
-//        VerticalGroup buttonGroup = new VerticalGroup();
-//        buttonGroup.space(15f);
-//
-//        buttonGroup.addActor(new TextButton("Options", SKIN));
-//        buttonGroup.addActor(new TextButton("Controls", SKIN));
-//        buttonGroup.addActor(btnExit);
-
         add(new Label("Paused", SKIN, "subtitle")).padBottom(50f).row();
-//        add(buttonGroup).expandY().row();
 
         newButton("Options").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                new ExitDialog().show(GameLevel.getStage());
+                GameLevel.getStage().addActor(new OptionsWindow());
             }
         });
 
         newButton("Controls").addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                new ExitDialog().show(GameLevel.getStage());
+                GameLevel.getStage().addActor(new GameControls());
             }
         });
 
@@ -87,12 +68,10 @@ public class GamePausedWindow extends Window {
     // TODO - dont like this, too many similar methods in different classes - create one single method
     public TextButton newButton(String text) {
         TextButton textButton = new TextButton(text, SKIN);
-
         add(textButton).width(350f).padBottom(20f).row();
 
         return textButton;
     }
-
 
 
     /**

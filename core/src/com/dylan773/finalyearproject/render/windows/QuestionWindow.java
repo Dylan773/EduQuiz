@@ -1,5 +1,6 @@
 package com.dylan773.finalyearproject.render.windows;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -10,7 +11,6 @@ import com.dylan773.finalyearproject.level.LevelFactory;
 import com.dylan773.finalyearproject.level.Question;
 import com.dylan773.finalyearproject.utilities.Assets;
 import com.dylan773.finalyearproject.utilities.DelayEvent;
-import com.dylan773.finalyearproject.utilities.WindowBuilder;
 
 import java.util.ArrayList;
 
@@ -19,22 +19,21 @@ import static com.dylan773.finalyearproject.level.GameLevel.decreasePlayerLives;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
 import static com.dylan773.finalyearproject.utilities.AudioController.playCorrectAns;
 import static com.dylan773.finalyearproject.utilities.AudioController.playIncorrectAns;
+import static com.dylan773.finalyearproject.utilities.Utilities.centreObject;
 import static com.dylan773.finalyearproject.utilities.Utilities.destroyActor;
-
-// TODO - dispose the window on window close?
 
 /**
  * <h1>Window that displays the in-game questions to the user</h1>
  *
  * @author Dylan Brand
  */
-public class QuestionWindow extends WindowBuilder {
+public class QuestionWindow extends Window {
 
     /**
      * Initialises the window upon instantiation.
      */
     public QuestionWindow() {
-        super(1000f, 600f);
+        super("", SKIN, "round");
         initWindow();
     }
 
@@ -42,9 +41,12 @@ public class QuestionWindow extends WindowBuilder {
     /**
      * Content to be displayed on the window.
      */
-    @Override
     protected void initWindow() {
-        this.setVisible(true);
+        setSize(1000f, 600f);
+        setMovable(false);
+        setResizable(false);
+
+        setPosition(centreObject(getWidth(), Gdx.graphics.getWidth()), centreObject(getHeight(), Gdx.graphics.getHeight()));
 
         // Disables user input whilst the window is active/visible
         ((GameLevel) CLIENT.getScreen()).disableUserInput();
@@ -80,7 +82,7 @@ public class QuestionWindow extends WindowBuilder {
                     incrementQuestionIndex();
                     ((GameLevel) CLIENT.getScreen()).enableUserInput(); // re-enable user input
                 } else {
-                    playIncorrectAns(); // Plays an incorrect answer notification.
+//                    playIncorrectAns(); // Plays an incorrect answer notification.
                     lblError.setText("Incorrect answer."); // Display a label, alerting the user of an incorrect answer.
                     decreasePlayerLives(QuestionWindow.this); // TODO - not great providing an actor as a parameter, find a better solution.
                     new DelayEvent(2000, () -> lblError.setText("")); // Sets the label's text to empty after 2 seconds.
@@ -89,14 +91,14 @@ public class QuestionWindow extends WindowBuilder {
         });
 
         // Adding actors to the parent.
-        addWindowLabel("Question", "subtitle").padTop(30f).row();
-        addWindowLabel("----------", "subtitle").row();
-        addWindowLabel(questionText(), "default").row();
+        add("QUESTION " + (getQuestionIndex() + 1), "subtitle").padTop(10f).row();
+        add("----------", "subtitle").row();
+        add(questionText(), "default").row();
 
         buttonGroup.getButtons().forEach(verticalGroup::addActor);
 
         add(verticalGroup).expandY().row();
-        add(btnSub).pad(10f, 0f, 15f, 0f).row();
+        add(btnSub).pad(15f, 0f, 15f, 0f).row();
         add(lblError);
     }
 

@@ -3,7 +3,9 @@ package com.dylan773.finalyearproject.utilities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
@@ -92,11 +94,31 @@ public class Utilities {
         System.gc(); // java garbage collection
     }
 
-
     public static float debugValue = 1f;
 
     public static void debugMod(float f) {
         debugValue += f;
         System.out.println("Debug value is now : " + debugValue);
     }
+
+    /**
+     * <h2>Instantiates a new Label</h2>
+     * Heavily reduces repetition and volume of code across this application.
+     * Can be called to instantiate a new Label to a Table without having to call a new Label keyword each time.
+     * <p>
+     * Instantiating a Label with Label label = new Label(...) is not necessary.
+     *
+     * @param text      The text to be displayed on the label.
+     * @param fontStyle The font style for this label's text.
+     * @return A cell, with the created Label inside.
+     */
+    public static Cell<Label> addWindowLabel(String text, String fontStyle, Window window) {
+        return window.add(new Label(text, SKIN, fontStyle));
+    }
+
+    public static <T extends Cell> T expandfill(T actor) {
+        actor.fill().expand();
+        return actor;
+    }
+
 }

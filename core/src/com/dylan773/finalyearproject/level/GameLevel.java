@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.dylan773.finalyearproject.EducationGame;
 import com.dylan773.finalyearproject.entities.Player;
@@ -33,6 +32,7 @@ import static com.dylan773.finalyearproject.EducationGame.CLIENT;
 import static com.dylan773.finalyearproject.render.windows.LevelSelector.getLevelsIterated;
 //import static com.dylan773.finalyearproject.render.windows.RestartLevelKt.disposeCurrentLevel;
 import static com.dylan773.finalyearproject.utilities.Assets.SKIN;
+import static com.dylan773.finalyearproject.utilities.AudioController.playIncorrectAns;
 import static com.dylan773.finalyearproject.utilities.AudioController.playLevelTheme;
 import static com.dylan773.finalyearproject.utilities.Utilities.*;
 
@@ -42,6 +42,7 @@ import static com.dylan773.finalyearproject.utilities.Utilities.*;
  * It can display and handle player movement, objects and rendering
  * of any tmx valid for this game.
  *
+ * @author Dylan Brand
  * @see LevelFactory Level Factory for creation of a level.
  */
 public class GameLevel extends ScreenAdapter {
@@ -52,20 +53,19 @@ public class GameLevel extends ScreenAdapter {
     private OrthographicCamera camera;
     private FillViewport viewport;
     private InputAdapter keyListener;
-    private GameBar gameBar = new GameBar();
+    private GamePausedWindow gamePausedWindow = new GamePausedWindow();
 
     private static Stage stage;
     private static ProgressBar healthBar;
-    private static Sprite heart = Assets.spritesheet.createSprite("love_heart");
 
     protected static TiledMap map;
     protected static World world;
+
     protected RectangleMapObject spawn;
     protected RectangleMapObject exit;
     protected InputMultiplexer inputHandlers = new InputMultiplexer();
     protected Player player;
 
-    // TODO - can these be converted to private?
     public Float desiredCamZoom = .3f;
     public Vector3 desiredCamPos = new Vector3();
     public boolean renderHitBoxes = false;
@@ -76,19 +76,18 @@ public class GameLevel extends ScreenAdapter {
     Table tableTopRow;
     Fixture endZoneFixture;
 
-
-
-    private GamePausedWindow gamePausedWindow = new GamePausedWindow();
-
     //#region construction
 
     /**
-     * @param mapPath
+     * <h1>Game Scene Constructor.</h1>
+     *
+     * @param mapPath the path location of the TMX TileMap to be loaded.
+     * @param level   The enum value of the level to be instantiated.
      */
     public GameLevel(String mapPath, LevelFactory.Level level) {
         currentLevel = level;
 
-        loadWorld(mapPath);
+        loadWorld(mapPath); // obtains the file location of
         playerInit();
         renderInit();
         stageInit();
@@ -104,7 +103,7 @@ public class GameLevel extends ScreenAdapter {
 
 
     /**
-     * Loads the map and stores it in {@link GameLevel#map}
+     * Loads the map and stores it in the {@link GameLevel#map} instance
      *
      * @param mapPath The path of the map to load
      */
@@ -116,11 +115,6 @@ public class GameLevel extends ScreenAdapter {
                 (RectangleMapObject) map.getLayers().get("objects").getObjects().get("spawn"),
                 "The world loaded did not have a spawnpoint!"
         );
-
-//        exit = Objects.requireNonNull(
-//                (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit"),
-//                "The world loaded did not have an exit point."
-//        );
     }
 
 
@@ -166,41 +160,32 @@ public class GameLevel extends ScreenAdapter {
         tableTopRow.top().padTop(35f); // sets the alignment (top) of this table in it's
 
         // Adding the actors to the stage.
-        stage.addActor(gameBar);
         stage.addActor(tableTopRow);
         stage.addActor(table);
-
-
         stage.addActor(gamePausedWindow);
-
-        // DEBUG - TODO - look into the .top method (160) and better understand its implementation/how it works
-//        tableTopRow.debug();
-//        heart.setPosition(Gdx.graphics.getWidth() * 0.64f, Gdx.graphics.getHeight() * 0.93f);
     }
 
 
     /**
      * <h2>Configures the world for rendering.</h2>
-     * Accepts a TiledMap object, and configures the {@link GameLevel#camera},
-     * {@link GameLevel#viewport}, and {@link GameLevel#tiledMapRenderer}
-     * in order to render it.
+     * Configures the {@link GameLevel#camera}, {@link GameLevel#viewport}, and {@link GameLevel#tiledMapRenderer}
+     * in order to render the TiledMap.
      */
     private void renderInit() {
-
         Gdx.gl.glClearColor(0.07843137255f, 0.04705882353f, 0.1098039216f, 0f); // RGB number / 255
 
-        // Create the renderer
+        // Create the renderer, providing the GameScene's TileMap instance as its argument
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        // Configure the camera
+        // Camera configuration
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 0.7f; // Sets the zoom of the game camera
 
-        // Assigns the viewport with the width/height of the screen and the camera
+        // Viewport that manages the camera's width and height, in the event of a resize
         viewport = new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 
-        // Set the renderer's view to the camera
+        // Set the view of the renderer to the camera's view
         tiledMapRenderer.setView((OrthographicCamera) viewport.getCamera());
         tiledMapRenderer.getBatch().setProjectionMatrix(camera.combined);
     }
@@ -231,19 +216,17 @@ public class GameLevel extends ScreenAdapter {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-
                 if (contact.getFixtureA() == endZoneFixture || contact.getFixtureB() == endZoneFixture)
-                    determineGameEnd();
+                    levelComplete();
                 else {
-
                     stage.addActor(new QuestionWindow());
-                    // TODO - look at postRunnable and fully understand + box2d contacts
+
                     if (contact.getFixtureA() != player.playerFixture)
                         Gdx.app.postRunnable(() -> contact.getFixtureA().getBody().destroyFixture(contact.getFixtureA()));
                     else
                         Gdx.app.postRunnable(() -> contact.getFixtureB().getBody().destroyFixture(contact.getFixtureB()));
 
-                    // Hides the currently visited "laser" TiledMap layer.
+                    // Hides the TileMap's tile "obstacle"
                     map.getLayers().get("obstacle" + questionIndex).setVisible(false);
                 }
             }
@@ -267,12 +250,7 @@ public class GameLevel extends ScreenAdapter {
     }
 
 
-    /**
-     * this is disgusting, but for now, it works.
-     * i need to figure out a better solution/implementation
-     */
     public void endZoneInit() {
-        // TODO - this is disgusting, dont look
         RectangleMapObject gameExit = (RectangleMapObject) map.getLayers().get("objects").getObjects().get("exit");
         Rectangle rectangle = gameExit.getRectangle();
 
@@ -312,13 +290,9 @@ public class GameLevel extends ScreenAdapter {
                         stage.addActor(new RestartLevel());
                         break;
                     case Input.Keys.ESCAPE:
-//                        gameBar.setVisible(!gameBar.isVisible());
-//                        table.setVisible(gameBar.isVisible());
-
                         gamePausedWindow.setVisible(!gamePausedWindow.isVisible());
-//                        table.setVisible(gameBar.isVisible());
 
-                        if (gameBar.isVisible()) pause();
+                        if (gamePausedWindow.isVisible()) pause();
                         else resume();
 
                         break;
@@ -365,9 +339,8 @@ public class GameLevel extends ScreenAdapter {
         enableUserInput();
         Gdx.input.setInputProcessor(inputHandlers);
     }
+
     //#endregion construction
-
-
     //#region general methods
 
     /**
@@ -376,7 +349,7 @@ public class GameLevel extends ScreenAdapter {
      */
     public void disableUserInput() {
         inputHandlers.removeProcessor(keyListener);
-        player.pauseMovement();
+        pause();
     }
 
 
@@ -386,7 +359,7 @@ public class GameLevel extends ScreenAdapter {
      */
     public void enableUserInput() {
         inputHandlers.addProcessor(keyListener);
-        player.resumeMovement();
+        resume();
     }
 
 
@@ -399,10 +372,9 @@ public class GameLevel extends ScreenAdapter {
 
 
     /**
-     * Decreases the {@link #player}'s health upon incorrect answer input to the current question, and displays the
-     * {@link RestartLevel} window to the user.
+     * Decreases the {@link #player}'s health upon incorrect answer input to the current question.
      *
-     * @param actor The actor to be removed from the {@link #stage}, typically, this should be the question window that
+     * @param actor The actor to be removed from the {@link #stage}, this should be the question window that
      *              is no longer required.
      */
     public static void decreasePlayerLives(Actor actor) {
@@ -411,6 +383,8 @@ public class GameLevel extends ScreenAdapter {
             stage.getActors().removeValue(actor, true);
             stage.addActor(new RestartLevel());
         } else healthBar.setValue(healthBar.getValue() - healthBar.getStepSize());
+
+        playIncorrectAns();
     }
 
 
@@ -420,7 +394,6 @@ public class GameLevel extends ScreenAdapter {
     private void showGameInfo() {
         if (!CLIENT.isLevelWindowsHidden()) {
             stage.addActor(new LevelInfoWindow());
-            //disableUserInput(); // TODO
         }
     }
 
@@ -428,7 +401,7 @@ public class GameLevel extends ScreenAdapter {
     /**
      * Determines if the game should load the next level (if exists) or return to the main menu.
      */
-    public void determineGameEnd() {
+    public void levelComplete() {
         if (getLevelsIterated().hasNext())
             CLIENT.setScreen(new LoadingScreen());
         else
@@ -440,11 +413,8 @@ public class GameLevel extends ScreenAdapter {
 
     /**
      * Draws the sprite using the {@link #tiledMapRenderer}.
-     * Calls the player's draw method...
      */
     private void drawSprite(Sprite sprite) {
-        //TODO ideally, begin / end should only be called once per frame.
-        //      If multiple sprites were drawn, it would restart the sprite batch.
         tiledMapRenderer.getBatch().begin();
         sprite.draw(tiledMapRenderer.getBatch());
         tiledMapRenderer.getBatch().end();
@@ -457,7 +427,6 @@ public class GameLevel extends ScreenAdapter {
 
         camera.update();
         renderWorld();
-        renderPlayer();
         renderDebug();
 
         processCollisions();
@@ -465,32 +434,32 @@ public class GameLevel extends ScreenAdapter {
 
         stage.act(Gdx.graphics.getDeltaTime()); // act - tells the ui to perfrom actions (checks for inputs)
         stage.draw();
-
-        debugRenderer.render(world, getCamera().combined);
-
-        // TODO - this isnt ideal? being rendered every frame
-//        stage.getBatch().begin();
-//        heart.draw(stage.getBatch());
-//        stage.getBatch().end();
-    }
-
-
-    /** Instructs the {@link OrthogonalTiledMapRenderer} to begin rendering */
-    private void renderWorld() {
-        tiledMapRenderer.setView(camera.combined, (camera.position.x - (camera.viewportWidth * .5f)), (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight); // TODO - experiment and fully understand
-        // renders the map, can also render certain layers
-        tiledMapRenderer.render();
-    }
-
-
-    /** Renders the {@link Player} */
-    private void renderPlayer() {
-        drawSprite(player);
     }
 
 
     /**
-     * why do we need this again? research it
+     * Instructs the {@link OrthogonalTiledMapRenderer} to begin rendering
+     */
+    private void renderWorld() {
+        tiledMapRenderer.setView
+                (camera.combined, (camera.position.x - (camera.viewportWidth * .5f)),
+                        (camera.position.y - (camera.viewportHeight * .5f)), camera.viewportWidth, camera.viewportHeight);
+        tiledMapRenderer.render();
+
+        drawSprite(player); // draw the player character
+    }
+
+
+    /**
+     * Renders the {@link Player}
+     */
+    private void renderPlayer() {
+//        drawSprite(player);
+    }
+
+
+    /**
+     * Updates the Box2D world.
      */
     private void processCollisions() {
         world.step(1 / 60f, 6, 2);
@@ -506,37 +475,43 @@ public class GameLevel extends ScreenAdapter {
     }
 
 
-    /** Determines the camera's behaviour and position. */
+    /**
+     * Determines the camera's behaviour and position.
+     */
     private void processCameraMovement() {
         desiredCamPos.set(player.pos, 0);
         // linear interoperation - Moves the camera towards the desired position by a percentage every frame.
         camera.position.lerp(desiredCamPos, 0.08f);
         camera.zoom = lerp(camera.zoom, desiredCamZoom, 0.1f);
     }
+
     //#endregion
     //#region engine screen calls
 
-
     @Override
     public void resize(int width, int height) {
+        // re-calculates and updates height and width of the camera's viewport
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
 
-        stage.getBatch().begin();
-        heart.draw(stage.getBatch());
-        stage.getBatch().end();
+        // updates the UI viewport
+        stage.getViewport().update(width, height);
     }
 
 
-    /** Pauses the {@link Player}'s movement. */
+    /**
+     * Pauses the {@link Player}'s movement.
+     */
     @Override
     public void pause() {
         player.pauseMovement();
     }
 
 
-    /** Resumes the {@link Player}'s movement. */
+    /**
+     * Resumes the {@link Player}'s movement.
+     */
     @Override
     public void resume() {
         player.resumeMovement();
@@ -549,7 +524,6 @@ public class GameLevel extends ScreenAdapter {
         map.dispose();
         world.dispose();
         stage.dispose();
-
     }
 
 

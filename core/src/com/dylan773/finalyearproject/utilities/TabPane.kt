@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.dylan773.finalyearproject.utilities.Assets.SKIN
-import com.dylan773.finalyearproject.utilities.WindowBuilder.expandfill
+
 
 open class TabPane @JvmOverloads constructor(
     val parentWindow: Window?,
@@ -27,7 +27,7 @@ open class TabPane @JvmOverloads constructor(
     } // add horizontal group to table
 
 
-    private val contentCell = expandfill(add()) // a blank cell for later
+//    private val contentCell = expandfill(add()) // a blank cell for later
     private val tabList = HashMap<TextButton, Table>()
 
     private val clickListener = object : ClickListener() {
@@ -50,7 +50,7 @@ open class TabPane @JvmOverloads constructor(
 //    fun showTab(tab: String) = showTab(tab.second)
 //    fun showTab(index: Integer) = showTab()
     fun showTab(tab: Table) {
-        contentCell.setActor(tab)
+//        contentCell.setActor(tab)
     }
 
 
